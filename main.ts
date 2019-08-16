@@ -11,8 +11,8 @@ namespace CW01_MQTT {
         serial.writeString("AT+CWMODE=1\r\n")
         basic.pause(100)
         serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"\r\n")
-        basic.pause(5000)
+        basic.pause(10000)
         res = serial.readString()
-        basic.showString(res)
+        serial.writeString(res)
     }
 } 
