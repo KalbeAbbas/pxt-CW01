@@ -1,4 +1,4 @@
-//% weight=6 color=#2699BF icon="\uf110" block="CW01_MQTT"
+
 namespace CW01_MQTT {
 
     let res: string = ""
@@ -13,6 +13,6 @@ namespace CW01_MQTT {
         serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"\r\n")
         basic.pause(5000)
         res = serial.readString()
-        console.log(res)
+        basic.showString(res)
     }
 } 
