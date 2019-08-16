@@ -7,13 +7,12 @@ namespace CW01_MQTT {
 
     //% weight=91
     //% blockId="connectToWifi" block="connect to WiFi SSID %SSID, Password %PSK"
-    export function connectToWifi(SSID: string, PSK: string): boolean {
+    export function connectToWifi(SSID: string, PSK: string): void {
         serial.writeString("AT+CWMODE=1\r\n")
         basic.pause(100)
         serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"\r\n")
         basic.pause(5000)
         res = serial.readString()
         console.log(res)
-        return true
     }
 } 
