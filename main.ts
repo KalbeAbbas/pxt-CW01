@@ -34,7 +34,7 @@ namespace CW01_HTTP {
     }
 
     //% weight=91
-    //% blockId="connectToWifi" block="Send String %value to ATT Asset %asset_name"
+    //% blockId="IoTSendStringToATT" block="Send String %value to ATT Asset %asset_name"
     export function IoTSendStringToATT(value: string, asset: string): void {
         asset_name = asset
         serial.writeString("AT+CIPMODE=0\r\n")
