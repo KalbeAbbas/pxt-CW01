@@ -30,7 +30,7 @@ namespace CW01_HTTP {
         TOKEN = TKN
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80\r\n")
 
-        basic.pause(100)
+        basic.pause(500)
     }
 
     //% weight=91
@@ -40,13 +40,16 @@ namespace CW01_HTTP {
         serial.writeString("AT+CIPMODE=0\r\n")
         basic.pause(100)
         let payload: string = "{\"value\":" + value + "}"
-        let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state\r\n" +
+        let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state HTTP/1.0\r\n" +
             "Authorization: Bearer " + TOKEN + "\r\n"+
         "Content-Type: application/json\r\n\r\n" + payload + "\r\n"
 
         serial.writeString("AT+CIPSEND=" +(request.length).toString()+ "\r\n")
         basic.pause(100)
         serial.writeString(request)
-        basic.pause(500)
+        basic.pause(1000)
+        
+        serial.writeString(request)
+        basic.pause(2000)
     }
 } 
