@@ -45,12 +45,12 @@ namespace CW01_HTTP {
             "Host: api.allthingstalk.io"+ NEWLINE+
             "User-Agent: curl/7.55.1" + NEWLINE +
             "Accept: */*" + NEWLINE
-            "Authorization: Bearer " + TOKEN + NEWLINE
+            "Authorization: Bearer maker:4TBZDG1N8fWRW1VeVm2yIZG9wr7UYBVLpMR3OY6" + NEWLINE+ NEWLINE
 
 
         serial.writeString("AT+CIPSEND=" + (request.length+2).toString() + NEWLINE)
         basic.pause(100)
-        serial.writeString(request + NEWLINE)
+        serial.writeString(request)
         basic.pause(1000)
     }
 } 
