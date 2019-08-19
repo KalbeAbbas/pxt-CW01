@@ -44,7 +44,7 @@ namespace CW01_HTTP {
         let request: string = "GET /device/" + DEVICE_ID + "/asset/" + asset_name + " HTTP/1.1" + NEWLINE +
             "Host: api.allthingstalk.io"+ NEWLINE+
             "User-Agent: curl/7.55.1" + NEWLINE +
-            "Accept: */*" + NEWLINE
+            "Accept: */*" + NEWLINE+
             "Authorization: Bearer maker:4TBZDG1N8fWRW1VeVm2yIZG9wr7UYBVLpMR3OY6" + NEWLINE+ NEWLINE
 
 
