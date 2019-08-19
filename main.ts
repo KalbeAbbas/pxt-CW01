@@ -48,7 +48,7 @@ namespace CW01_HTTP {
             "Authorization: Bearer " + TOKEN + NEWLINE
 
 
-        serial.writeString("AT+CIPSEND=" + (request.length).toString() + NEWLINE)
+        serial.writeString("AT+CIPSEND=" + (request.length+2).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(request + NEWLINE)
         basic.pause(1000)
