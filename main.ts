@@ -50,7 +50,7 @@ namespace CW01_HTTP {
 
         serial.writeString("AT+CIPSEND=" + (request.length+2).toString() + NEWLINE)
         basic.pause(100)
-        serial.writeString(request)
+        serial.writeString(request+NEWLINE)
         basic.pause(1000)
     }
 } 
