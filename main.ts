@@ -1,4 +1,4 @@
-
+//% weight=6 color=#2699BF icon="\uf110" block="CW01 HTTP"
 namespace CW01_HTTP {
 
     let res: string = ""
