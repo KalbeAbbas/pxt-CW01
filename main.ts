@@ -10,18 +10,18 @@ namespace CW01_HTTP {
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
 
     basic.pause(100)
-    serial.writeString("AT+TEST=0"+NEWLINE)
+    serial.writeString("AT+TEST=0" + NEWLINE)
     basic.pause(100)
-    serial.writeString("AT+TEST"+NEWLINE)
+    serial.writeString("AT+TEST" + NEWLINE)
     basic.pause(100)
-    serial.writeString("AT+TEST=1"+NEWLINE)
+    serial.writeString("AT+TEST=1" + NEWLINE)
 
     //% weight=91
     //% blockId="connectToWifi" block="connect to WiFi SSID %SSID, Password %PSK"
     export function connectToWifi(SSID: string, PSK: string): void {
-        serial.writeString("AT+CWMODE=1"+NEWLINE)
+        serial.writeString("AT+CWMODE=1" + NEWLINE)
         basic.pause(100)
-        serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK +"\""+ NEWLINE)
+        serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"" + NEWLINE)
         basic.pause(10000)
     }
     //% weight=91
@@ -29,7 +29,7 @@ namespace CW01_HTTP {
     export function connectToATT(TKN: string, ID: string): void {
         DEVICE_ID = ID
         TOKEN = TKN
-        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80"+NEWLINE)
+        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + NEWLINE)
 
         basic.pause(500)
     }
@@ -38,12 +38,15 @@ namespace CW01_HTTP {
     //% blockId="IoTSendStringToATT" block="Send String %value to ATT Asset %asset_name"
     export function IoTSendStringToATT(value: string, asset: string): void {
         asset_name = asset
-        serial.writeString("AT+CIPMODE=0"+NEWLINE)
+        serial.writeString("AT+CIPMODE=0" + NEWLINE)
         basic.pause(100)
         let payload: string = "{\"value\":" + value + "}"
-        let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state"+" HTTP/1.0"+ NEWLINE +
-            "Authorization: Bearer " + TOKEN + NEWLINE +
-            "Content-Type: application/json"+NEWLINE+NEWLINE + payload + NEWLINE
+        let request: string = "GET /device/" + DEVICE_ID + "/asset/" + asset_name + " HTTP/1.1" + NEWLINE +
+            "Host: api.allthingstalk.io"+ NEWLINE+
+            "User-Agent: curl/7.55.1" + NEWLINE +
+            "Accept: */*" + NEWLINE
+            "Authorization: Bearer " + TOKEN + NEWLINE + NEWLINE
+
 
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
