@@ -44,12 +44,9 @@ namespace CW01_HTTP {
             "Authorization: Bearer " + TOKEN + "\r\n" +
             "Content-Type: application/json\r\n\r\n" + payload + "\r\n"
 
-        serial.writeString("AT+CIPSEND=" + (request.length).toString() + "\r\n")
+        serial.writeString("AT+CIPSEND=" + (request.length+2).toString() + "\r\n")
         basic.pause(100)
-        serial.writeString(request)
+        serial.writeString(request+"\r\n")
         basic.pause(1000)
-
-        serial.writeString(request)
-        basic.pause(2000)
     }
 } 
