@@ -21,7 +21,7 @@ namespace CW01_HTTP {
     export function connectToWifi(SSID: string, PSK: string): void {
         serial.writeString("AT+CWMODE=1"+NEWLINE)
         basic.pause(100)
-        serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK+ NEWLINE)
+        serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK +"\""+ NEWLINE)
         basic.pause(10000)
     }
     //% weight=91
