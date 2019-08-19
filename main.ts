@@ -39,8 +39,8 @@ namespace CW01_HTTP {
         asset_name = asset
         serial.writeString("AT+CIPMODE=0\r\n")
         basic.pause(100)
-        let payload: string = "{\"value\":" + value + "}"
-        let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state HTTP/1.0\r\n" +
+        let payload: string = "{\"value\":" + "\""+ value+"\"" + "}"
+        let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state HTTP/1.1\r\n" +
             "Authorization: Bearer " + TOKEN + "\r\n"+
         "Content-Type: application/json\r\n\r\n" + payload + "\r\n"
 
