@@ -40,14 +40,14 @@ namespace CW01_HTTP {
         asset_name = asset
         serial.writeString("AT+CIPMODE=0" + NEWLINE)
         basic.pause(100)
-        let payload: string = "{\"value\": " + "8" + "}"
+        let payload: string = "{\"value\": " + value + "}"
         let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
             "Host: api.allthingstalk.io" + NEWLINE +
-            "User-Agent: curl/7.55.1" + NEWLINE +
+            "User-Agent: CW01/1.0" + NEWLINE +
             "Accept: */*" + NEWLINE +
             "Authorization: Bearer " + TOKEN + NEWLINE +
             "Content-Type:application/json" + NEWLINE +
-            "Content-Length: 12"+ NEWLINE+NEWLINE+payload+NEWLINE
+            "Content-Length: "(payload.length).toString()+ NEWLINE+NEWLINE+payload+NEWLINE
             
 
 
