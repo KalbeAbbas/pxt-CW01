@@ -47,7 +47,7 @@ namespace CW01_HTTP {
             "Accept: */*" + NEWLINE +
             "Authorization: Bearer " + TOKEN + NEWLINE +
             "Content-Type:application/json" + NEWLINE +
-            "Content-Length: "(payload.length).toString()+ NEWLINE+NEWLINE+payload+NEWLINE
+            "Content-Length: "+(payload.length).toString()+ NEWLINE+NEWLINE+payload+NEWLINE
             
 
 
