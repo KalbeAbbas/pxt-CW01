@@ -42,7 +42,9 @@ namespace CW01_HTTP {
 
             if (res.compare("WIFI CONNECTED\r") == 0) {
                 basic.showString("C")
+                res = ""
             }
+
 
         } else {
             basic.showString("Missed begin block!")
@@ -107,7 +109,7 @@ namespace CW01_HTTP {
         basic.pause(10)
         serial.readString()
         basic.pause(1000)
-        serial.onDataReceived("\n", function () {
+        serial.onDataReceived(serial.delimiters(Delimiters.NewLine), function () {
             res += serial.readString()
         })
         basic.showString(res)
