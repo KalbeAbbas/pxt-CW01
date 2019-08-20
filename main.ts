@@ -8,7 +8,7 @@ namespace CW01_HTTP {
     let asset_name: string = ""
     let NEWLINE: string = "\u000D\u000A"
     let start: boolean = false
-    let buf = control.createBuffer(20)
+    let buf = control.createBuffer(2)
 
     //% weight=91
     //% group="ATT"
@@ -37,11 +37,10 @@ namespace CW01_HTTP {
             serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"" + NEWLINE)
             basic.pause(200)
             serial.readString()
-            //basic.pause(10000)
+            basic.pause(10000)
             while (true) {
                 buf = serial.readBuffer(2)
-                if (buf.toString() == "OK")
-                {
+                if (buf.toString() == "OK") {
                     basic.showString(buf.toString())
                     break
                 }
