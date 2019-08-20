@@ -43,6 +43,8 @@ namespace CW01_HTTP {
             if (res.compare("WIFI CONNECTED\r") == 0) {
                 basic.showString("C")
                 res = ""
+            }else{
+                basic.showString("D")
             }
 
 
