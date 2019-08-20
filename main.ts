@@ -110,7 +110,7 @@ namespace CW01_HTTP {
         serial.readString()
         basic.pause(1000)
         res = serial.readString()
-        if (res.includes("HTTP / 1.1 200"))
+        if (res.includes("200"))
         {
             basic.showString("Good")
         }else{
