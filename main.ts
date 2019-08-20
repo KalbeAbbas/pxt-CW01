@@ -36,7 +36,6 @@ namespace CW01_HTTP {
             serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"" + NEWLINE)
             basic.pause(200)
             serial.readString()
-            basic.pause(10000)
             while (1) {
                 res += serial.readBuffer(1)
                 if (res.includes("OK")) {
