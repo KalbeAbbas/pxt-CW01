@@ -8,7 +8,6 @@ namespace CW01_HTTP {
     let asset_name: string = ""
     let NEWLINE: string = "\u000D\u000A"
     let start: boolean = false
-    let buf = control.createBuffer(2)
 
     //% weight=91
     //% group="ATT"
@@ -38,14 +37,9 @@ namespace CW01_HTTP {
             basic.pause(200)
             serial.readString()
             basic.pause(10000)
-            while (true) {
-                buf = serial.readBuffer(2)
-                if (buf.toString() == "OK") {
-                    basic.showString(buf.toString())
-                    break
-                }
-            }
-            basic.showString("Out!")
+            res += serial.readString()
+
+            basic.showString(res)
         } else {
             basic.showString("Missed begin block!")
         }
