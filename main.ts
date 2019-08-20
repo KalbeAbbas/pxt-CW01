@@ -40,6 +40,8 @@ namespace CW01_HTTP {
 
             res = serial.readLine()
 
+            basic.showString(res)
+
             if (res == "WIFI CONNECTED") {
                 basic.showString("C")
             }
