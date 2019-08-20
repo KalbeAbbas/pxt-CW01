@@ -109,14 +109,15 @@ namespace CW01_HTTP {
         basic.pause(10)
         serial.readString()
         basic.pause(1000)
+
         res = serial.readString()
+
         if (res.includes("HTTP/1.1 200"))
         {
-            basic.showString("Good")
+            basic.showIcon(IconNames.Yes)
         }else{
-            basic.showString("Bad")
+            basic.showIcon(IconNames.No)
         }
-        basic.showString(res)
     }
 
     //% weight=91
