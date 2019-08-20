@@ -104,6 +104,8 @@ namespace CW01_HTTP {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(request + NEWLINE)
+        basic.pause(10)
+        serial.readString()
         basic.pause(1000)
         basic.showString(serial.readString())
     }
