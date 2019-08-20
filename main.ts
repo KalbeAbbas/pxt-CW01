@@ -37,14 +37,14 @@ namespace CW01_HTTP {
             basic.pause(200)
             serial.readString()
             basic.pause(10000)
-            while(1){
-                res+=serial.readBuffer(1)
-                basic.showString(res)
-                if (res.includes("OK")){
+            while (1) {
+                res += serial.readBuffer(1)
+                if (res.includes("OK")) {
                     break
                 }
-                basic.showString("Out!")
             }
+            res = ""
+            basic.showString("Out!")
 
 
             basic.showString(res)
