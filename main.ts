@@ -37,10 +37,12 @@ namespace CW01_HTTP {
             basic.pause(200)
             serial.readString()
             basic.pause(10000)
-
             res = serial.readLine()
 
-            basic.showString((res.compare("WIFI CONNECTED\r")).toString())
+            if (res.compare("WIFI CONNECTED\r") == 0) {
+                basic.showString("C")
+            }
+            
         } else {
             basic.showString("Missed begin block!")
         }
