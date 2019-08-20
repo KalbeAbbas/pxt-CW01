@@ -107,7 +107,10 @@ namespace CW01_HTTP {
         basic.pause(10)
         serial.readString()
         basic.pause(1000)
-        basic.showString(serial.readString())
+        serial.onDataReceived("\n", function () {
+            res += serial.readString()
+        })
+        basic.showString((res.includes("HTTP/1.1 200").toString()))
     }
 
     //% weight=91
