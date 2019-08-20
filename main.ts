@@ -38,12 +38,9 @@ namespace CW01_HTTP {
             serial.readString()
             basic.pause(10000)
 
-            res += serial.readLine()
+            res = serial.readLine()
 
-            basic.showString(res)
-
-            if (res == "WIFI CONNECTED")
-            {
+            if (res == "WIFI CONNECTED") {
                 basic.showString("C")
             }
         } else {
