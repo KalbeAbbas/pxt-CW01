@@ -82,7 +82,17 @@ namespace CW01_HTTP {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(request + NEWLINE)
+        basic.pause(10)
+        serial.readString()
         basic.pause(1000)
+
+        res = serial.readString()
+
+        if (res.includes("HTTP/1.1 200")) {
+            basic.showIcon(IconNames.Yes)
+        } else {
+            basic.showIcon(IconNames.No)
+        }
     }
 
     //% weight=91
@@ -141,7 +151,17 @@ namespace CW01_HTTP {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(request + NEWLINE)
+        basic.pause(10)
+        serial.readString()
         basic.pause(1000)
+
+        res = serial.readString()
+
+        if (res.includes("HTTP/1.1 200")) {
+            basic.showIcon(IconNames.Yes)
+        } else {
+            basic.showIcon(IconNames.No)
+        }
     }
 
 } 
