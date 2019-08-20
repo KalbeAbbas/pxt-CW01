@@ -109,9 +109,13 @@ namespace CW01_HTTP {
         basic.pause(10)
         serial.readString()
         basic.pause(1000)
-        serial.onDataReceived(serial.delimiters(Delimiters.NewLine), function () {
-            res += serial.readString()
-        })
+        res = serial.readString()
+        if (res.includes("HTTP / 1.1 200"))
+        {
+            basic.showString("Good")
+        }else{
+            basic.showString("Bad")
+        }
         basic.showString(res)
     }
 
