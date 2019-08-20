@@ -6,23 +6,33 @@ namespace CW01_HTTP {
     let DEVICE_ID: string = ""
     let asset_name: string = ""
     let NEWLINE: string = "\u000D\u000A"
+    let start:boolean = false
 
-    serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
-
-    basic.pause(100)
-    serial.writeString("AT+TEST=0" + NEWLINE)
-    basic.pause(100)
-    serial.writeString("AT+TEST" + NEWLINE)
-    basic.pause(100)
-    serial.writeString("AT+TEST=1" + NEWLINE)
+    //% weight=91
+    //% blockId="begin" block="Begin CW01"
+    export function begin():void {
+        start = true
+        serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
+        basic.pause(100)
+        serial.writeString("AT+TEST=0" + NEWLINE)
+        basic.pause(100)
+        serial.writeString("AT+TEST" + NEWLINE)
+        basic.pause(100)
+        serial.writeString("AT+TEST=1" + NEWLINE)
+    }
 
     //% weight=91
     //% blockId="connectToWifi" block="connect to WiFi SSID %SSID, Password %PSK"
     export function connectToWifi(SSID: string, PSK: string): void {
-        serial.writeString("AT+CWMODE=1" + NEWLINE)
-        basic.pause(100)
-        serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"" + NEWLINE)
-        basic.pause(10000)
+        if(start)
+        {
+            serial.writeString("AT+CWMODE=1" + NEWLINE)
+            basic.pause(100)
+            serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"" + NEWLINE)
+            basic.pause(10000)
+        }else{
+            basic.showString("Missed begin block!")
+        }
     }
     //% weight=91
     //% blockId="connectToATT" block="connect to ATT with TOKEN %TKN and DEVICE_ID %ID"
