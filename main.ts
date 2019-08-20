@@ -36,8 +36,9 @@ namespace CW01_HTTP {
             serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"" + NEWLINE)
             basic.pause(10000)
 
-            serial.onDataReceived("", function () {
-
+            serial.onDataReceived(NEWLINE, function () {
+                res+=serial.readString()
+                basic.showString(res)
             })
         } else {
             basic.showString("Missed begin block!")
