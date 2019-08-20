@@ -34,6 +34,8 @@ namespace CW01_HTTP {
             basic.pause(100)
             serial.readString()
             serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"" + NEWLINE)
+            basic.pause(200)
+            serial.readString()
             basic.pause(10000)
             basic.showString(serial.readString())
 
