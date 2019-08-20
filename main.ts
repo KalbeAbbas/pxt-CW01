@@ -1,5 +1,4 @@
-//% groups=['ATT', 'Ubidots', 'others']
-
+//% groups=["ATT", "Ubidots", "others"]
 //% weight=6 color=#2699BF icon="\uf110" block="CW01 HTTP"
 namespace CW01_HTTP {
 
@@ -73,7 +72,7 @@ namespace CW01_HTTP {
     }
 
     //% weight=91
-    //% group="ATT"
+    //% group="Ubidots"
     //% blockId="IoTSendValueToATT" block="Send Value %value to ATT Asset %asset_name"
     export function IoTSendValueToATT(value: number, asset: string): void {
         asset_name = asset
