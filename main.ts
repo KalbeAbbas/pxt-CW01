@@ -16,6 +16,8 @@ namespace CW01_HTTP {
         start = true
         serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
         basic.pause(100)
+        serial.writeString("AT+RST" + NEWLINE)
+        basic.pause(100)
         serial.writeString("AT+TEST=0" + NEWLINE)
         basic.pause(100)
         serial.writeString("AT+TEST" + NEWLINE)
@@ -30,8 +32,13 @@ namespace CW01_HTTP {
         if (start) {
             serial.writeString("AT+CWMODE=1" + NEWLINE)
             basic.pause(100)
+            serial.readString()
             serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"" + NEWLINE)
             basic.pause(10000)
+
+            serial.onDataReceived("", function () {
+
+            })
         } else {
             basic.showString("Missed begin block!")
         }
