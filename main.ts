@@ -39,9 +39,10 @@ namespace CW01_HTTP {
 
 
 
-            serial.onDataReceived(NEWLINE, function () {
+            serial.onDataReceived(serial.delimiters(Delimiters.NewLine), function () {
                 res += serial.readString()
             })
+
             basic.showString(res)
         } else {
             basic.showString("Missed begin block!")
