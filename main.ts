@@ -15,6 +15,7 @@ namespace CW01_HTTP {
     export function begin(): void {
         start = true
         serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
+        serial.setRxBufferSize(200)
         basic.pause(100)
         serial.writeString("AT+RST" + NEWLINE)
         basic.pause(100)
@@ -42,7 +43,7 @@ namespace CW01_HTTP {
             if (res.compare("WIFI CONNECTED\r") == 0) {
                 basic.showString("C")
             }
-            
+
         } else {
             basic.showString("Missed begin block!")
         }
@@ -104,6 +105,7 @@ namespace CW01_HTTP {
         basic.pause(100)
         serial.writeString(request + NEWLINE)
         basic.pause(1000)
+        basic.showString(serial.readString())
     }
 
     //% weight=91
