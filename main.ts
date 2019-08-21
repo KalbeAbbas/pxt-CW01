@@ -193,12 +193,12 @@ namespace CW01_HTTP {
 
 
         let client_id: string = "CW01/1.1"
-        let client_id_len: string = (pins.packBuffer("!H", [client_id.length])).toString()
+        let client_id_len: Buffer = pins.packBuffer("!H", [client_id.length])
         let username: string = "maker:4TBZDG1N8fWRW1VeVm2yIZG9wr7UYBVLpMR3OY6"
-        let username_len: string = (pins.packBuffer("!H", [username.length])).toString()
+        let username_len: Buffer = pins.packBuffer("!H", [username.length])
         let password: string = "c770b0220c"
-        let password_len: string = (pins.packBuffer("!H", [password.length])).toString()
-        let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
+        let password_len: Buffer = pins.packBuffer("!H", [password.length])
+        //let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
 
         serial.writeString("AT+CIPSEND=" + "81" + NEWLINE)
         basic.pause(1000)
@@ -206,13 +206,18 @@ namespace CW01_HTTP {
         serial.writeBuffer(pins.packBuffer("!B", [4]))*/
 
         serial.writeBuffer(pins.packBuffer("!B", [1 << 4]))
-        serial.writeBuffer(pins.packBuffer("!B", [msg_part_one.length + connect_flags.length + keep_alive.length + msg_part_two.length]))
+        serial.writeBuffer(pins.packBuffer("!B", [7 + connect_flags.length + keep_alive.length + 70]))
         serial.writeBuffer(pins.packBuffer("!H", [4]))
         serial.writeString("MQTT")
         serial.writeBuffer(pins.packBuffer("!B", [4]))
         serial.writeBuffer(connect_flags) // flags
         serial.writeBuffer(keep_alive) //keep alive
-        serial.writeString(msg_part_two) //string data
+        serial.writeBuffer(client_id_len)
+        serial.writeString(client_id)
+        serial.writeBuffer(username_len)
+        serial.writeString(username)
+        serial.writeBuffer(password_len)
+        serial.writeString(password)
 
         basic.pause(2000)
     }
