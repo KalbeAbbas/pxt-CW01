@@ -177,9 +177,9 @@ namespace CW01_HTTP {
     //% group="ATT"
     //% blockId="IoTSubscribeToATTMQTT" block="Subscribe to ATT MQTT Asset %asset"
     export function IoTSubscribeToATTMQTT(asset: string): void {
-        serial.writeString("AT+CIPMODE=1" + NEWLINE)
-        basic.pause(1000)
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
+        basic.pause(1000)
+        serial.writeString("AT+CIPMODE=1" + NEWLINE)
         basic.pause(1000)
         serial.writeString("AT+CIPSEND" + NEWLINE)
         basic.pause(1000)
