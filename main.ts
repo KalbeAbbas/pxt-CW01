@@ -181,10 +181,6 @@ namespace CW01_HTTP {
         basic.pause(1000)
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
         basic.pause(1000)
-        serial.writeString("AT+CIPMODE=1" + NEWLINE)
-        basic.pause(1000)
-        serial.writeString("AT+CIPSEND" + NEWLINE)
-        basic.pause(1000)
 
         let protocol_name: string = pins.packBuffer("!H", [4]).toString() + "MQTT"
         let protocol_lvl: string = (pins.packBuffer("!B", [4])).toString()
@@ -204,15 +200,16 @@ namespace CW01_HTTP {
         let password_len: string = (pins.packBuffer("!H", [password.length])).toString()
         let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
 
+        serial.writeString("AT+CIPSEND=" + (1+1+msg_part_one.length+1+2+msg_part_two.length).toString() + NEWLINE)
+        basic.pause(1000)
+
         serial.writeBuffer(pins.packBuffer("!B", [1 << 4]))
         serial.writeBuffer(pins.packBuffer("!B", [msg_part_one.length + connect_flags.length + keep_alive.length + msg_part_two.length]))
         serial.writeString(msg_part_one) //protocol name
         serial.writeBuffer(connect_flags) // flags
         serial.writeBuffer(keep_alive) //keep alive
         serial.writeString(msg_part_two) //string data
-
-        basic.pause(2000)
-        serial.writeString("+++")
+        
         basic.pause(2000)
     }
 
