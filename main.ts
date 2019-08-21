@@ -43,7 +43,7 @@ namespace CW01_HTTP {
             if (res.compare("WIFI CONNECTED\r") == 0) {
                 basic.showString("C")
                 res = ""
-            }else{
+            } else {
                 basic.showString("D")
             }
 
@@ -88,13 +88,8 @@ namespace CW01_HTTP {
         serial.readString()
         basic.pause(1000)
 
-        res = serial.readString()
+        get_status()
 
-        if (res.includes("HTTP/1.1 200")) {
-            basic.showIcon(IconNames.Yes)
-        } else {
-            basic.showIcon(IconNames.No)
-        }
     }
 
     //% weight=91
@@ -122,14 +117,7 @@ namespace CW01_HTTP {
         serial.readString()
         basic.pause(1000)
 
-        res = serial.readString()
-
-        if (res.includes("HTTP/1.1 200"))
-        {
-            basic.showIcon(IconNames.Yes)
-        }else{
-            basic.showIcon(IconNames.No)
-        }
+        get_status()
     }
 
     //% weight=91
@@ -157,6 +145,10 @@ namespace CW01_HTTP {
         serial.readString()
         basic.pause(1000)
 
+        get_status()
+    }
+
+    function get_status(): void {
         res = serial.readString()
 
         if (res.includes("HTTP/1.1 200")) {
