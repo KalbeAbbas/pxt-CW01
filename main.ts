@@ -191,6 +191,12 @@ namespace CW01_HTTP {
         let password_len: string = (pins.packBuffer("!H", [password.length])).toString()
         let msg_part_two:string = protocol_name + protocol_lvl + connect_flags + keep_alive + client_id_len + client_id + username_len + username + password_len + password
         let msg_part_one:string = (pins.packBuffer("!B", [1 << 4])).toString() + (pins.packBuffer("!B", [msg_part_two.length])).toString()
+        let msg: string = msg_part_one + msg_part_two
+
+        serial.writeString("AT+CIPSEND=" + (msg.length + 2).toString() + NEWLINE)
+        basic.pause(100)
+        serial.writeString(msg + NEWLINE)
+        basic.pause(1000)
 
 
         asset_name = asset
