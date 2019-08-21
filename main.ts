@@ -206,7 +206,7 @@ namespace CW01_HTTP {
         serial.writeBuffer(pins.packBuffer("!B", [4]))*/
 
         serial.writeBuffer(pins.packBuffer("!B", [1 << 4]))
-        serial.writeBuffer(pins.packBuffer("!B", [7 + connect_flags.length + keep_alive.length + 70]))
+        serial.writeBuffer(pins.packBuffer("!B", [7 + connect_flags.length + keep_alive.length + 2 + client_id.length + 2 + username.length + 2 + password.length]))
         serial.writeBuffer(pins.packBuffer("!H", [4]))
         serial.writeString("MQTT")
         serial.writeBuffer(pins.packBuffer("!B", [4]))
