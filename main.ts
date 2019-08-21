@@ -193,6 +193,8 @@ namespace CW01_HTTP {
         let msg_part_one:string = (pins.packBuffer("!B", [1 << 4])).toString() + (pins.packBuffer("!B", [msg_part_two.length])).toString()
         let msg: string = msg_part_one + msg_part_two
 
+        serial.writeString(msg)
+        basic.pause(1000)
         serial.writeString("AT+CIPSEND=" + (msg.length).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(msg + NEWLINE)
