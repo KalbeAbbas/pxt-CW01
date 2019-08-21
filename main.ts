@@ -194,7 +194,7 @@ namespace CW01_HTTP {
 
         let client_id: string = "CW01/1.1"
         let client_id_len: Buffer = pins.packBuffer("!H", [client_id.length])
-        let username: string = "maker:4TBZDG1N8fWRW1VeVm2yIZG9wr7UYBVLpMR3OY6"
+        let username: string = "makeTBZDG1N8fWRW1VeVm2yIZG9wr7UYBVLpMR3OY6"
         let username_len: Buffer = pins.packBuffer("!H", [username.length])
         let password: string = "c770b0220c"
         let password_len: Buffer = pins.packBuffer("!H", [password.length])
