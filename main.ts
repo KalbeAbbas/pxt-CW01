@@ -173,6 +173,46 @@ namespace CW01_HTTP {
         }
     }
 
+    //% weight=91
+    //% group="ATT"
+    //% blockId="IoTSubscribeToATTMQTT" block="Subscribe to ATT Asset %asset"
+    export function IoTSubscribeToATTMQTT(asset: string): void {
+        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
+        basic.pause(100)
+        let protocol_name: string = ((pins.packBuffer("!H", [4])).toString()) + "MQTT"
+        let protocol_lvl: string = (pins.packBuffer("!H", [4])).toString()
+        let connect_flags: string = (pins.packBuffer("!B", [(1 << 7) | (1 << 6) | (1 << 1)])).toString()
+        let keep_alive: string = (pins.packBuffer("!H", [200])).toString()
+        let client_id: string = "CW01/1.1"
+        let client_id_len: string = (pins.packBuffer("!H", [client_id.length])).toString()
+        let username: string = "maker:4TBZDG1N8fWRW1VeVm2yIZG9wr7UYBVLpMR3OY6"
+        let username_len: string = (pins.packBuffer("!H", [username.length])).toString()
+        let password: string = "c770b0220c"
+        let password_len: string = (pins.packBuffer("!H", [password.length])).toString()
+        let msg_part_two:string = protocol_name + protocol_lvl + connect_flags + keep_alive + client_id_len + client_id + username_len + username + password_len + password
+        let msg_part_one:string = (pins.packBuffer("!B", [1 << 4])).toString() + (pins.packBuffer("!B", [msg_part_two.length])).toString()
+
+
+        asset_name = asset
+        basic.pause(100)
+        let request: string = "GET /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
+            "Host: api.allthingstalk.io" + NEWLINE +
+            "User-Agent: CW01/1.0" + NEWLINE +
+            "Accept: */*" + NEWLINE +
+            "Authorization: Bearer " + TOKEN + NEWLINE + NEWLINE
+
+        serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
+        basic.pause(100)
+        serial.writeString(request + NEWLINE)
+        basic.pause(10)
+        serial.readString()
+        basic.pause(1000)
+        for (let i = 0; i < 3; i++) {
+            buf = serial.readBuffer(100);
+            serial.writeBuffer(buf)
+        }
+    }
+
     function get_status(): void {
         res = serial.readString()
 
