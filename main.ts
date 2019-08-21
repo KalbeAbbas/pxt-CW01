@@ -8,6 +8,7 @@ namespace CW01_HTTP {
     let asset_name: string = ""
     let NEWLINE: string = "\u000D\u000A"
     let start: boolean = false
+    let buf: Buffer = null
 
     //% weight=91
     //% group="ATT"
@@ -15,7 +16,7 @@ namespace CW01_HTTP {
     export function begin(): void {
         start = true
         serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
-        serial.setRxBufferSize(280)
+        serial.setRxBufferSize(200)
         basic.pause(100)
         serial.writeString("AT+RST" + NEWLINE)
         basic.pause(100)
@@ -167,8 +168,10 @@ namespace CW01_HTTP {
         serial.readString()
         basic.pause(1000)
 
-        res = serial.readString()
-        serial.writeString(res)
+        for (let i = 0; i < 2; i++) {
+            buf = serial.readBuffer(100);
+            serial.writeBuffer(buf)
+        }
     }
 
     function get_status(): void {
