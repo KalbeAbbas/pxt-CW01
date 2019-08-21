@@ -209,8 +209,9 @@ namespace CW01_HTTP {
         serial.writeBuffer(keep_alive) //keep alive
         serial.writeString(msg_part_two) //string data
 
-        serial.writeString("+++"+NEWLINE)
-        basic.pause(1000)
+        basic.pause(2000)
+        serial.writeString("+++")
+        basic.pause(2000)
     }
 
     function get_status(): void {
