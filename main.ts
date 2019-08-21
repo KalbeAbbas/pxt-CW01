@@ -15,7 +15,7 @@ namespace CW01_HTTP {
     export function begin(): void {
         start = true
         serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
-        serial.setRxBufferSize(200)
+        serial.setRxBufferSize(300)
         basic.pause(100)
         serial.writeString("AT+RST" + NEWLINE)
         basic.pause(100)
@@ -148,6 +148,29 @@ namespace CW01_HTTP {
         get_status()
     }
 
+    //% weight=91
+    //% group="ATT"
+    //% blockId="IoTSubscribeToATTAsset" block="Subscribe to ATT Asset %asset"
+    export function IoTSubscribeToATTAsset(asset: string): void {
+        asset_name = asset
+        basic.pause(100)
+        let request: string = "GET /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
+            "Host: api.allthingstalk.io" + NEWLINE +
+            "User-Agent: CW01/1.0" + NEWLINE +
+            "Accept: */*" + NEWLINE +
+            "Authorization: Bearer " + TOKEN + NEWLINE + NEWLINE
+
+        serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
+        basic.pause(100)
+        serial.writeString(request + NEWLINE)
+        basic.pause(10)
+        serial.readString()
+        basic.pause(1000)
+
+        get_status()
+        get_value()
+    }
+
     function get_status(): void {
         res = serial.readString()
 
@@ -156,6 +179,10 @@ namespace CW01_HTTP {
         } else {
             basic.showIcon(IconNames.No)
         }
+    }
+
+    function get_value(): void {
+        serial.writeString(res)
     }
 
 } 
