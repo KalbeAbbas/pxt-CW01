@@ -15,7 +15,7 @@ namespace CW01_HTTP {
     export function begin(): void {
         start = true
         serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
-        serial.setRxBufferSize(250)
+        serial.setRxBufferSize(280)
         basic.pause(100)
         serial.writeString("AT+RST" + NEWLINE)
         basic.pause(100)
