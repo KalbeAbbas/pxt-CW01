@@ -168,7 +168,7 @@ namespace CW01_HTTP {
         basic.pause(1000)
 
         res = serial.readString()
-        basic.showString(res)
+        serial.writeString(res)
     }
 
     function get_status(): void {
