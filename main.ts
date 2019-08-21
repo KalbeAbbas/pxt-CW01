@@ -166,6 +166,7 @@ namespace CW01_HTTP {
         basic.pause(10)
         serial.readString()
         basic.pause(1000)
+        basic.pause(10)
 
         get_status()
         get_value()
@@ -182,7 +183,7 @@ namespace CW01_HTTP {
     }
 
     function get_value(): void {
-        basic.showString(res)
+        serial.writeString(res)
     }
 
 } 
