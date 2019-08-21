@@ -178,7 +178,7 @@ namespace CW01_HTTP {
     //% blockId="IoTSubscribeToATTMQTT" block="Subscribe to ATT MQTT Asset %asset"
     export function IoTSubscribeToATTMQTT(asset: string): void {
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
-        basic.pause(100)
+        basic.pause(1000)
         let protocol_name: string = ((pins.packBuffer("!H", [4])).toString()) + "MQTT"
         let protocol_lvl: string = (pins.packBuffer("!B", [4])).toString()
         let connect_flags: string = (pins.packBuffer("!B", [(1 << 7) | (1 << 6) | (1 << 1)])).toString()
