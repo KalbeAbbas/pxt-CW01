@@ -167,11 +167,9 @@ namespace CW01_HTTP {
         serial.readString()
         basic.pause(1000)
 
-        while(true)
-        {
+        while (true) {
             res = serial.readString()
-            if(res.includes("id"))
-            {
+            if (res.includes("state")) {
                 basic.showString(res)
                 break
             }
