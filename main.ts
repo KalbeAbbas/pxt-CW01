@@ -204,10 +204,10 @@ namespace CW01_HTTP {
 
         serial.writeBuffer(pins.packBuffer("!B", [1 << 4]))
         serial.writeBuffer(pins.packBuffer("!B", [msg_part_one.length + connect_flags.length + keep_alive.length + msg_part_two.length]))
-        serial.writeString(msg_part_one)
-        serial.writeBuffer(connect_flags)
-        serial.writeBuffer(keep_alive)
-        serial.writeString(msg_part_two)
+        serial.writeString(msg_part_one) //protocol name
+        serial.writeBuffer(connect_flags) // flags
+        serial.writeBuffer(keep_alive) //keep alive
+        serial.writeString(msg_part_two) //string data
 
         serial.writeString("+++")
         basic.pause(1000)
