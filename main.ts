@@ -209,7 +209,7 @@ namespace CW01_HTTP {
         serial.writeBuffer(keep_alive) //keep alive
         serial.writeString(msg_part_two) //string data
 
-        serial.writeString("+++")
+        serial.writeString("+++"+NEWLINE)
         basic.pause(1000)
     }
 
