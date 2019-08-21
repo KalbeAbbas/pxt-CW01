@@ -177,27 +177,39 @@ namespace CW01_HTTP {
     //% group="ATT"
     //% blockId="IoTSubscribeToATTMQTT" block="Subscribe to ATT MQTT Asset %asset"
     export function IoTSubscribeToATTMQTT(asset: string): void {
+        serial.writeString("AT+CIPMODE=1" + NEWLINE)
+        basic.pause(1000)
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
         basic.pause(1000)
-        let protocol_name: string = ((pins.packBuffer("!H", [4])).toString()) + "MQTT"
+        serial.writeString("AT+CIPSEND" + NEWLINE)
+        basic.pause(1000)
+
+        let protocol_name: string = pins.packBuffer("!H", [4]).toString() + "MQTT"
         let protocol_lvl: string = (pins.packBuffer("!B", [4])).toString()
-        let connect_flags: string = (pins.packBuffer("!B", [(1 << 7) | (1 << 6) | (1 << 1)])).toString()
-        let keep_alive: string = (pins.packBuffer("!H", [200])).toString()
+        let msg_part_one: string = protocol_name + protocol_lvl
+
+
+        let connect_flags: Buffer = (pins.packBuffer("!B", [(1 << 7) | (1 << 6) | (1 << 1)]))
+
+        let keep_alive: Buffer = pins.packBuffer("!H", [200])
+
+
         let client_id: string = "CW01/1.1"
         let client_id_len: string = (pins.packBuffer("!H", [client_id.length])).toString()
         let username: string = "maker:4TBZDG1N8fWRW1VeVm2yIZG9wr7UYBVLpMR3OY6"
         let username_len: string = (pins.packBuffer("!H", [username.length])).toString()
         let password: string = "c770b0220c"
         let password_len: string = (pins.packBuffer("!H", [password.length])).toString()
-        let msg_part_two:string = protocol_name + protocol_lvl + connect_flags + keep_alive + client_id_len + client_id + username_len + username + password_len + password
-        let msg_part_one:string = (pins.packBuffer("!B", [1 << 4])).toString() + (pins.packBuffer("!B", [msg_part_two.length])).toString()
-        let msg: string = msg_part_one + msg_part_two
+        let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
 
-        basic.showString(msg)
-        basic.pause(1000)
-        serial.writeString("AT+CIPSEND=" + (msg.length-1).toString() + NEWLINE)
-        basic.pause(100)
-        serial.writeString(msg + NEWLINE)
+        serial.writeBuffer(pins.packBuffer("!B", [1 << 4]))
+        serial.writeBuffer(pins.packBuffer("!B", [msg_part_one.length + connect_flags.length + keep_alive.length + msg_part_two.length]))
+        serial.writeString(msg_part_one)
+        serial.writeBuffer(connect_flags)
+        serial.writeBuffer(keep_alive)
+        serial.writeString(msg_part_two)
+
+        serial.writeString("+++")
         basic.pause(1000)
     }
 
