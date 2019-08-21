@@ -167,7 +167,6 @@ namespace CW01_HTTP {
         basic.pause(10)
         serial.readString()
         basic.pause(1000)
-
         for (let i = 0; i < 3; i++) {
             buf = serial.readBuffer(100);
             serial.writeBuffer(buf)
