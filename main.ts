@@ -202,7 +202,7 @@ namespace CW01_HTTP {
 
         serial.writeString("AT+CIPSEND=" + "1" + NEWLINE)
         basic.pause(1000)
-        serial.writeString(pins.packBuffer("!B", [4]).toString())
+        serial.writeBuffer(pins.packBuffer("!B", [4]))
 
         /*serial.writeBuffer(pins.packBuffer("!B", [1 << 4]))
         serial.writeBuffer(pins.packBuffer("!B", [msg_part_one.length + connect_flags.length + keep_alive.length + msg_part_two.length]))
