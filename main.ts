@@ -163,12 +163,19 @@ namespace CW01_HTTP {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(request + NEWLINE)
-        basic.pause(100)
+        basic.pause(10)
         serial.readString()
         basic.pause(1000)
 
-        get_status()
-        get_value()
+        while(true)
+        {
+            res = serial.readString()
+            if(res.includes("id"))
+            {
+                basic.showString(res)
+                break
+            }
+        }
     }
 
     function get_status(): void {
