@@ -200,9 +200,9 @@ namespace CW01_HTTP {
         let password_len: string = (pins.packBuffer("!H", [password.length])).toString()
         let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
 
-        serial.writeString("AT+CIPSEND="+"1"+NEWLINE)
+        serial.writeString("AT+CIPSEND=" + "1" + NEWLINE)
         basic.pause(1000)
-        serial.writeString(pins.packBuffer("!B",[4]).toString() + NEWLINE)
+        serial.writeString(pins.packBuffer("!B", [4]).toString())
 
         /*serial.writeBuffer(pins.packBuffer("!B", [1 << 4]))
         serial.writeBuffer(pins.packBuffer("!B", [msg_part_one.length + connect_flags.length + keep_alive.length + msg_part_two.length]))
