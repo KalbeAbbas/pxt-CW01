@@ -9,10 +9,6 @@ namespace CW01_HTTP {
     let NEWLINE: string = "\u000D\u000A"
     let start: boolean = false
     let buf: Buffer = null
-    let resBuf: Buffer = null
-    let newBuf: Buffer = null
-    let num: Number[] = null
-    let newRes: string = null
 
     //% weight=91
     //% group="ATT"
@@ -24,12 +20,7 @@ namespace CW01_HTTP {
 
 
         serial.onDataReceived("{", function () {
-            newBuf = serial.readBuffer(3)
-            newRes = serial.readString()
-            basic.showString("Hello")
-            basic.showString(newBuf.toString())
-            serial.readBuffer(197)
-
+            basic.showString("microbit pinged")
         })
 
         basic.pause(100)
