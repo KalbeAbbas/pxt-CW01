@@ -23,7 +23,7 @@ namespace CW01_HTTP {
         serial.onDataReceived("{", function () {
             resBuf = serial.readBuffer(100)
             basic.showString("Hello")
-            basic.showString(resBuf.toString())
+            basic.showNumber(resBuf[50])
 
         })
 
