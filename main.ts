@@ -177,33 +177,28 @@ namespace CW01_HTTP {
     //% group="ATT"
     //% blockId="IoTSubscribeToATTMQTT" block="Subscribe to ATT MQTT Asset %asset"
     export function IoTSubscribeToATTMQTT(asset: string): void {
-        serial.writeString("AT+CIPMODE=0" + NEWLINE)
-        basic.pause(1000)
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
         basic.pause(1000)
 
-        let protocol_name: string = pins.packBuffer("!H", [4]).toString() + "MQTT"
-        let protocol_lvl: string = (pins.packBuffer("!B", [4])).toString()
-        let msg_part_one: string = protocol_name + protocol_lvl
-
-
         let connect_flags: Buffer = (pins.packBuffer("!B", [(1 << 7) | (1 << 6) | (1 << 1)]))
-
         let keep_alive: Buffer = pins.packBuffer("!H", [200])
-
-
         let client_id: string = "CW01/1.1"
         let client_id_len: Buffer = pins.packBuffer("!H", [client_id.length])
-        let username: string = "maker:4TBZDG1N8fWRW1VeVm2yIZG9wr7UYBVLpMR3OY6"
+        let username: string = TOKEN
         let username_len: Buffer = pins.packBuffer("!H", [username.length])
         let password: string = "c770b0220c"
         let password_len: Buffer = pins.packBuffer("!H", [password.length])
         //let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
 
+        let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
+        let topic: string = "device/" + DEVICE_ID + "/asset/" + asset_name + "/command"
+        let topic_len:  Buffer =  pins.packBuffer("!H", [topic.length])
+        let qos: Buffer =  pins.packBuffer("!B", [0x00])
+        let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
+        let remain_len: Buffer = pins.packBuffer("!B", [pid.length+(topic_len.length+topic.length+qos.length)])
+
         serial.writeString("AT+CIPSEND=" + (9 + connect_flags.length + keep_alive.length + 2 + client_id.length + 2 + username.length + 2 + password.length).toString() + NEWLINE)
         basic.pause(1000)
-        /*serial.writeBuffer(pins.packBuffer("!B", [4]))
-        serial.writeBuffer(pins.packBuffer("!B", [4]))*/
 
         serial.writeBuffer(pins.packBuffer("!B", [1 << 4]))
         serial.writeBuffer(pins.packBuffer("!B", [7 + connect_flags.length + keep_alive.length + 2 + client_id.length + 2 + username.length + 2 + password.length]))
