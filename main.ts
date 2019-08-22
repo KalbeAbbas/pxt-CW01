@@ -20,7 +20,7 @@ namespace CW01_HTTP {
         serial.setRxBufferSize(200)
 
 
-        serial.onDataReceived("", function () {
+        serial.onDataReceived("\\", function () {
             resBuf = serial.readBuffer(100)
             basic.showString("Hello")
             basic.showString(resBuf.toString())
