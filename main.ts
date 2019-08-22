@@ -248,11 +248,10 @@ namespace CW01_HTTP {
         let index2: number = null
         let value: string = null
 
-        while(true)
-        {
-            if(serial.readBuffer(1) == pins.packBuffer("!B",[0x30])){
+        while (true) {
+            serial.onDataReceived("{", function () {
                 basic.showString("Hello!")
-            }
+            })
         }
 
         /*serial.onDataReceived("{", function () {
