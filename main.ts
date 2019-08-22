@@ -252,12 +252,17 @@ namespace CW01_HTTP {
         /*res = serial.readString()
         basic.showString(res)*/
 
-
-        res = serial.readString()
-        if (res.includes("{"))
-        {
+        serial.onDataReceived("true", function () {
+            res = serial.readString()
+            basic.showString("Hello!")
             basic.showString(res)
-        }
+        })
+
+        serial.onDataReceived("false", function () {
+            res = serial.readString()
+            basic.showString("Bad")
+            basic.showString(res)
+        })
 
         /*serial.onDataReceived("true", function () {
             res = serial.readString()
