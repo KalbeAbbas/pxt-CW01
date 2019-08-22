@@ -19,11 +19,11 @@ namespace CW01_HTTP {
         serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
         serial.setRxBufferSize(200)
 
-        serial.onDataReceived("0", function () {
+
+        serial.onDataReceived("", function () {
             resBuf = serial.readBuffer(100)
             basic.showString("Hello")
             basic.showString(resBuf.toString())
-
         })
 
         basic.pause(100)
