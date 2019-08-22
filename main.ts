@@ -68,8 +68,21 @@ namespace CW01_HTTP {
     export function connectToATT(TKN: string, ID: string): void {
         DEVICE_ID = ID
         TOKEN = TKN
-        //serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + NEWLINE)
+    }
 
+    //% weight=91
+    //% group="ATT"
+    //% blockId="beginATTHTTP" block="Begin AllThingsTalk HTTP
+    export function beginATTHTTP(): void {
+        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + NEWLINE)
+        basic.pause(500)
+    }
+
+    //% weight=91
+    //% group="ATT"
+    //% blockId="beginATTMQTT" block="Begin AllThingsTalk MQTT
+    export function beginATTMQTT(): void {
+        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
         basic.pause(500)
     }
 
@@ -188,9 +201,6 @@ namespace CW01_HTTP {
     export function IoTSubscribeToATTMQTT(asset: string): void {
 
         asset_name = asset
-
-        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
-        basic.pause(1000)
 
         //Packet for connecting with MQTT broker
         let connect_flags: Buffer = (pins.packBuffer("!B", [(1 << 7) | (1 << 6) | (1 << 1)]))
