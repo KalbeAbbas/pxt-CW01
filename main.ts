@@ -253,6 +253,8 @@ namespace CW01_HTTP {
                 endIndex = res.indexOf("\"", startIndex + "\"value\":".length+1)
                 value = res.slice(startIndex,endIndex)
             }
+
+            res= ""
         }
 
         basic.showString(value)
