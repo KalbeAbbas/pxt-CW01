@@ -9,6 +9,7 @@ namespace CW01_HTTP {
     let NEWLINE: string = "\u000D\u000A"
     let start: boolean = false
     let buf: Buffer = null
+    let resBuf: Buffer = null
 
     //% weight=91
     //% group="ATT"
@@ -19,10 +20,10 @@ namespace CW01_HTTP {
         serial.setRxBufferSize(200)
 
         serial.onDataReceived("{", function () {
-            res=serial.readString()
+            resBuf = serial.readBuffer(100)
             basic.showString("Hello")
-            basic.showString(res)
-            
+            basic.showString(resBuf.toString())
+
         })
 
         basic.pause(100)
