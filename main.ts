@@ -248,14 +248,12 @@ namespace CW01_HTTP {
         let value: string = null
 
         if (res) {
-            if (res.includes("/device/"+DEVICE_ID+"/asset/" + asset_name + "/command")) {
+            serial.writeString(res)
+           /* if (res.includes("/device/" + DEVICE_ID + "/asset/" + asset_name + "/command")) {
                 startIndex = res.indexOf("\"value\":")
-                endIndex = res.indexOf("\"", startIndex + "\"value\":".length+1)
-                value = res.slice(startIndex,endIndex)
-                basic.showString(value)
-            }
-
-            res= ""
+                endIndex = res.indexOf("\"", startIndex + "\"value\":".length + 1)
+                value = res.slice(startIndex, endIndex)
+                basic.showString(value)*/
         }
 
 
