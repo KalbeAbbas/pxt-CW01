@@ -248,16 +248,16 @@ namespace CW01_HTTP {
         let index2: number = null
         let value: string = null
 
-        basic.pause(10000)
+        /*res = serial.readString()
+        basic.showString(res)*/
 
-        res = serial.readString()
-        basic.showString(res)        
-
-        /*serial.onDataReceived("{", function () {
+        serial.onDataReceived("{", function () {
             res = serial.readString()
             basic.showString("Hello!")
             basic.showString(res)
-        })*/
+        })
+
+        basic.pause(100)
 
         /* if (res.includes("/device/" + DEVICE_ID + "/asset/" + asset_name + "/command")) {
              startIndex = res.indexOf("\"value\":")
