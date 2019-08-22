@@ -251,9 +251,7 @@ namespace CW01_HTTP {
     export function isMicrobitPinged(asset: string): void {
         if (ping) {
             basic.showString("Microbit pinged")
-            function doSomething() {
-
-            }
+            ping = false
         }
     }
 
