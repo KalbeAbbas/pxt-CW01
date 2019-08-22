@@ -239,6 +239,8 @@ namespace CW01_HTTP {
     //% blockId="GetValueFromAsset" block="Get Value from Asset %asset"
     export function GetVAlueFromAsset(asset: string): void {
 
+        serial.readString()
+
         asset_name = asset
 
         res = serial.readString()
@@ -249,11 +251,12 @@ namespace CW01_HTTP {
 
         if (res) {
             serial.writeString(res)
-           /* if (res.includes("/device/" + DEVICE_ID + "/asset/" + asset_name + "/command")) {
-                startIndex = res.indexOf("\"value\":")
-                endIndex = res.indexOf("\"", startIndex + "\"value\":".length + 1)
-                value = res.slice(startIndex, endIndex)
-                basic.showString(value)*/
+            basic.pause(1000)
+            /* if (res.includes("/device/" + DEVICE_ID + "/asset/" + asset_name + "/command")) {
+                 startIndex = res.indexOf("\"value\":")
+                 endIndex = res.indexOf("\"", startIndex + "\"value\":".length + 1)
+                 value = res.slice(startIndex, endIndex)
+                 basic.showString(value)*/
         }
 
 
