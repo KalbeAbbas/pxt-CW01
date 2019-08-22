@@ -232,14 +232,14 @@ namespace CW01_HTTP {
         serial.writeBuffer(qos)
         basic.pause(2000)
 
+        serial.readString()
+
     }
 
     //% weight=91
     //% group="ATT"
     //% blockId="GetValueFromAsset" block="Get Value from Asset %asset"
     export function GetVAlueFromAsset(asset: string): void {
-
-        serial.readString()
 
         asset_name = asset
 
