@@ -9,6 +9,7 @@ namespace CW01_HTTP {
     let NEWLINE: string = "\u000D\u000A"
     let start: boolean = false
     let buf: Buffer = null
+    let ping: Boolean = true
 
     //% weight=91
     //% group="ATT"
@@ -20,7 +21,7 @@ namespace CW01_HTTP {
 
 
         serial.onDataReceived("{", function () {
-            basic.showString("microbit pinged")
+            ping = true
         })
 
         basic.pause(100)
@@ -246,33 +247,14 @@ namespace CW01_HTTP {
 
     //% weight=91
     //% group="ATT"
-    //% blockId="GetValueFromAsset" block="Get Value from Asset %asset"
-    export function GetVAlueFromAsset(asset: string): void {
+    //% blockId="isMicrobitPinged" block="Check if microbit is pinged from Asset %asset"
+    export function isMicrobitPinged(asset: string): void {
+        if (ping) {
+            basic.showString("Microbit pinged")
+            function doSomething() {
 
-        asset_name = asset
-
-        let startIndex: number = null
-        let endIndex: number = null
-        let index2: number = null
-        let value: string = null
-
-        /*res = serial.readString()
-        basic.showString(res)*/
-        /*serial.onDataReceived("true", function () {
-            res = serial.readString()
-            basic.showString("Hello!")
-            basic.showString(res)
-        })*/
-
-        basic.pause(100)
-
-        /* if (res.includes("/device/" + DEVICE_ID + "/asset/" + asset_name + "/command")) {
-             startIndex = res.indexOf("\"value\":")
-             endIndex = res.indexOf("\"", startIndex + "\"value\":".length + 1)
-             value = res.slice(startIndex, endIndex)
-             basic.showString(value)*/
-
-
+            }
+        }
     }
 
     function get_status(): void {
