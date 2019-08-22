@@ -72,7 +72,7 @@ namespace CW01_HTTP {
 
     //% weight=91
     //% group="ATT"
-    //% blockId="beginATTHTTP" block="Begin AllThingsTalk HTTP
+    //% blockId="beginATTHTTP" block="Begin AllThingsTalk HTTP"
     export function beginATTHTTP(): void {
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + NEWLINE)
         basic.pause(500)
@@ -80,7 +80,7 @@ namespace CW01_HTTP {
 
     //% weight=91
     //% group="ATT"
-    //% blockId="beginATTMQTT" block="Begin AllThingsTalk MQTT
+    //% blockId="beginATTMQTT" block="Begin AllThingsTalk MQTT"
     export function beginATTMQTT(): void {
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
         basic.pause(500)
