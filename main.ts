@@ -24,7 +24,7 @@ namespace CW01_HTTP {
 
 
         serial.onDataReceived("{", function () {
-            serial.readBuffer(80)
+            serial.readBuffer(100)
             newRes = serial.readString()
             basic.showString("Hello")
             basic.showString(newRes)
