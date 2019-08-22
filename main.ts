@@ -232,6 +232,31 @@ namespace CW01_HTTP {
         serial.writeBuffer(qos)
         basic.pause(2000)
 
+    }
+
+    //% weight=91
+    //% group="ATT"
+    //% blockId="GetValueFromAsset" block="Get Value from Asset %asset"
+    export function GetVAlueFromAsset(asset: string): void {
+
+        asset_name = asset
+
+        res = serial.readString()
+        let startIndex: number = null
+        let endIndex: number = null
+        let index2: number = null
+        let value: string = null
+
+        if (res) {
+            if (res.includes("/device/"+DEVICE_ID+"/asset/" + asset_name + "/command")) {
+                startIndex = res.indexOf("\"value\":")
+                endIndex = res.indexOf("\"", startIndex + "\"value\":".length+1)
+                value = res.slice(startIndex,endIndex)
+            }
+        }
+
+        basic.showString(value)
+
 
     }
 
