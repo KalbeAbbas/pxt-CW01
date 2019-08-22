@@ -23,8 +23,9 @@ namespace CW01_HTTP {
         serial.onDataReceived("{", function () {
             resBuf = serial.readBuffer(100)
             basic.showString("Hello")
-            serial.writeBuffer(resBuf)
         })
+
+        serial.writeBuffer(resBuf)
 
         basic.pause(100)
         serial.writeString("AT+RST" + NEWLINE)
