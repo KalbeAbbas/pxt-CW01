@@ -171,9 +171,6 @@ namespace CW01_HTTP {
         get_status()
     }
 
-    //% weight=91
-    //% group="ATT"
-    //% blockId="IoTSubscribeToATTAsset" block="Subscribe to ATT Asset %asset"
     export function IoTSubscribeToATTAsset(asset: string): void {
         asset_name = asset
         basic.pause(100)
@@ -257,8 +254,8 @@ namespace CW01_HTTP {
 
     //% weight=91
     //% group="ATT"
-    //% blockId="isMicrobitPinged" block="Check if microbit is pinged from Asset %asset"
-    export function isMicrobitPinged(asset: string): void {
+    //% blockId="isMicrobitPinged" block="Check if microbit is pinged"
+    export function isMicrobitPinged(): void {
         if (ping) {
             basic.showString("Microbit pinged")
             ping = false
