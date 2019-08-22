@@ -252,12 +252,11 @@ namespace CW01_HTTP {
                 startIndex = res.indexOf("\"value\":")
                 endIndex = res.indexOf("\"", startIndex + "\"value\":".length+1)
                 value = res.slice(startIndex,endIndex)
+                basic.showString(value)
             }
 
             res= ""
         }
-
-        basic.showString(value)
 
 
     }
