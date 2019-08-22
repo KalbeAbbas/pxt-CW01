@@ -177,9 +177,11 @@ namespace CW01_HTTP {
     //% group="ATT"
     //% blockId="IoTSubscribeToATTMQTT" block="Subscribe to ATT MQTT Asset %asset"
     export function IoTSubscribeToATTMQTT(asset: string): void {
+        
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
         basic.pause(1000)
 
+        //Packet for connecting with MQTT broker
         let connect_flags: Buffer = (pins.packBuffer("!B", [(1 << 7) | (1 << 6) | (1 << 1)]))
         let keep_alive: Buffer = pins.packBuffer("!H", [200])
         let client_id: string = "CW01/1.1"
@@ -188,8 +190,8 @@ namespace CW01_HTTP {
         let username_len: Buffer = pins.packBuffer("!H", [username.length])
         let password: string = "c770b0220c"
         let password_len: Buffer = pins.packBuffer("!H", [password.length])
-        //let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
 
+        //Packet for subscribing to MQTT broker
         let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
         let topic: string = "device/" + DEVICE_ID + "/asset/" + asset_name + "/command"
         let topic_len:  Buffer =  pins.packBuffer("!H", [topic.length])
@@ -197,6 +199,7 @@ namespace CW01_HTTP {
         let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
         let remain_len: Buffer = pins.packBuffer("!B", [pid.length+(topic_len.length+topic.length+qos.length)])
 
+        //Serial Transmission to connect with MQTT broker
         serial.writeString("AT+CIPSEND=" + (9 + connect_flags.length + keep_alive.length + 2 + client_id.length + 2 + username.length + 2 + password.length).toString() + NEWLINE)
         basic.pause(1000)
 
@@ -213,8 +216,21 @@ namespace CW01_HTTP {
         serial.writeString(username)
         serial.writeBuffer(password_len)
         serial.writeString(password)
-
         basic.pause(2000)
+
+        //Serial Transmission to subscribe with MQTT broker
+        serial.writeString("AT+CIPSEND=" + (ctrl_pkt.length+remain_len.length+pid.length+topic_len.length+topic.length+qos.length).toString() + NEWLINE)
+        basic.pause(1000)
+
+        serial.writeBuffer(ctrl_pkt)
+        serial.writeBuffer(remain_len)
+        serial.writeBuffer(pid)
+        serial.writeBuffer(topic_len)
+        serial.writeString(topic)
+        serial.writeBuffer(qos)
+        basic.pause(2000)
+
+
     }
 
     function get_status(): void {
