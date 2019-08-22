@@ -253,6 +253,7 @@ namespace CW01_HTTP {
             basic.showString("Hello!")
             basic.showString(res)
         }
+        basic.pause(100)
 
         /*serial.onDataReceived("{", function () {
             res = serial.readString()
