@@ -249,8 +249,9 @@ namespace CW01_HTTP {
         let index2: number = null
         let value: string = null
 
-        if (res) {
-            serial.writeString(res)
+        if (res.length>100) {
+            basic.showString("Hello!")
+            basic.showString(res)
             basic.pause(1000)
             /* if (res.includes("/device/" + DEVICE_ID + "/asset/" + asset_name + "/command")) {
                  startIndex = res.indexOf("\"value\":")
