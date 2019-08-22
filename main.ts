@@ -21,21 +21,17 @@ namespace CW01_HTTP {
 
 
         serial.onDataReceived("{", function () {
-            res = serial.readString()
+            resBuf = serial.readString()
             basic.showString("Hello")
-            if(res.includes("device"))
-            {
-                serial.writeString("Hello")
-                basic.showString("Good")
-            }
+            serial.writeString(resBuf)
 
         })
 
         basic.pause(100)
         serial.writeString("AT+RST" + NEWLINE)
         basic.pause(1000)
-        serial.writeString("ATE0" + NEWLINE)
-        basic.pause(100)
+        //serial.writeString("ATE0" + NEWLINE)
+        //basic.pause(100)
         serial.writeString("AT+TEST=0" + NEWLINE)
         basic.pause(100)
         serial.writeString("AT+TEST" + NEWLINE)
