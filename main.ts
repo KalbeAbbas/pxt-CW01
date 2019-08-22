@@ -248,11 +248,10 @@ namespace CW01_HTTP {
         let index2: number = null
         let value: string = null
 
-        while (true) {
-            serial.onDataReceived("{", function () {
-                basic.showString("Hello!")
-            })
-        }
+        basic.pause(10000)
+
+        res = serial.readString()
+        basic.showString(res)        
 
         /*serial.onDataReceived("{", function () {
             res = serial.readString()
