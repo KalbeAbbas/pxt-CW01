@@ -9,7 +9,7 @@ namespace CW01_HTTP {
     let NEWLINE: string = "\u000D\u000A"
     let start: boolean = false
     let buf: Buffer = null
-    let ping: Boolean = true
+    let ping: Boolean = false
 
     //% weight=91
     //% group="ATT"
