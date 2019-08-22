@@ -10,6 +10,8 @@ namespace CW01_HTTP {
     let start: boolean = false
     let buf: Buffer = null
     let resBuf: Buffer = null
+    let newBuf: Buffer =  null
+    let num: Number[] = null
 
     //% weight=91
     //% group="ATT"
@@ -23,7 +25,9 @@ namespace CW01_HTTP {
         serial.onDataReceived("{", function () {
             resBuf = serial.readBuffer(100)
             basic.showString("Hello")
-            basic.showNumber(resBuf[0])
+            newBuf = resBuf.slice(50,20)
+            serial.writeBuffer(newBuf)
+            basic.showString(newBuf.toString())
 
         })
 
