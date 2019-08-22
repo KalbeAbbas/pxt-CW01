@@ -18,12 +18,6 @@ namespace CW01_HTTP {
         serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
         serial.setRxBufferSize(200)
 
-        serial.onDataReceived("true", function () {
-            res = serial.readString()
-            basic.showString("Hello!")
-            basic.showString(res)
-        })
-
         basic.pause(100)
         serial.writeString("AT+RST" + NEWLINE)
         basic.pause(100)
@@ -257,6 +251,19 @@ namespace CW01_HTTP {
 
         /*res = serial.readString()
         basic.showString(res)*/
+
+
+        res = serial.readString()
+        if (res.includes("{"))
+        {
+            basic.showString(res)
+        }
+
+        /*serial.onDataReceived("true", function () {
+            res = serial.readString()
+            basic.showString("Hello!")
+            basic.showString(res)
+        })*/
 
         basic.pause(100)
 
