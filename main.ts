@@ -243,20 +243,22 @@ namespace CW01_HTTP {
 
         asset_name = asset
 
-        res = serial.readString()
         let startIndex: number = null
         let endIndex: number = null
         let index2: number = null
         let value: string = null
 
-//            basic.showString("Hello!")
+        serial.onDataReceived("{", function () {
+            res = serial.readString()
+            basic.showString("Hello!")
             basic.showString(res)
-            basic.pause(100)
-            /* if (res.includes("/device/" + DEVICE_ID + "/asset/" + asset_name + "/command")) {
-                 startIndex = res.indexOf("\"value\":")
-                 endIndex = res.indexOf("\"", startIndex + "\"value\":".length + 1)
-                 value = res.slice(startIndex, endIndex)
-                 basic.showString(value)*/
+        })
+
+        /* if (res.includes("/device/" + DEVICE_ID + "/asset/" + asset_name + "/command")) {
+             startIndex = res.indexOf("\"value\":")
+             endIndex = res.indexOf("\"", startIndex + "\"value\":".length + 1)
+             value = res.slice(startIndex, endIndex)
+             basic.showString(value)*/
 
 
     }
