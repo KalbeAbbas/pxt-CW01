@@ -249,11 +249,10 @@ namespace CW01_HTTP {
         let value: string = null
 
         res = serial.readString()
-        if(res.length>100){
-            basic.showString("Hello!")
+        if(res.includes("{"))
+        {
             basic.showString(res)
         }
-        basic.pause(100)
 
         /*serial.onDataReceived("{", function () {
             res = serial.readString()
