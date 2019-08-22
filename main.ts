@@ -10,7 +10,7 @@ namespace CW01_HTTP {
     let start: boolean = false
     let buf: Buffer = null
     let resBuf: Buffer = null
-    let newBuf: Buffer =  null
+    let newBuf: Buffer = null
     let num: Number[] = null
 
     //% weight=91
@@ -25,8 +25,9 @@ namespace CW01_HTTP {
         serial.onDataReceived("{", function () {
             resBuf = serial.readBuffer(110)
             basic.showString("Hello")
-            newBuf = resBuf.slice(50,50)
+            newBuf = resBuf.slice(50, 50)
             basic.showString(newBuf.toString())
+            serial.readLine()
 
         })
 
