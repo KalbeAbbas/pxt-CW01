@@ -59,7 +59,7 @@ namespace CW01_HTTP {
     export function connectToATT(TKN: string, ID: string): void {
         DEVICE_ID = ID
         TOKEN = TKN
-        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + NEWLINE)
+        //serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + NEWLINE)
 
         basic.pause(500)
     }
@@ -177,7 +177,7 @@ namespace CW01_HTTP {
     //% group="ATT"
     //% blockId="IoTSubscribeToATTMQTT" block="Subscribe to ATT MQTT Asset %asset"
     export function IoTSubscribeToATTMQTT(asset: string): void {
-        
+
         asset_name = asset
 
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
@@ -196,10 +196,10 @@ namespace CW01_HTTP {
         //Packet for subscribing to MQTT broker
         let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
         let topic: string = "device/" + DEVICE_ID + "/asset/" + asset_name + "/command"
-        let topic_len:  Buffer =  pins.packBuffer("!H", [topic.length])
-        let qos: Buffer =  pins.packBuffer("!B", [0x00])
+        let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
+        let qos: Buffer = pins.packBuffer("!B", [0x00])
         let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
-        let remain_len: Buffer = pins.packBuffer("!B", [pid.length+(topic_len.length+topic.length+qos.length)])
+        let remain_len: Buffer = pins.packBuffer("!B", [pid.length + (topic_len.length + topic.length + qos.length)])
 
         //Serial Transmission to connect with MQTT broker
         serial.writeString("AT+CIPSEND=" + (9 + connect_flags.length + keep_alive.length + 2 + client_id.length + 2 + username.length + 2 + password.length).toString() + NEWLINE)
@@ -221,7 +221,7 @@ namespace CW01_HTTP {
         basic.pause(2000)
 
         //Serial Transmission to subscribe with MQTT broker
-        serial.writeString("AT+CIPSEND=" + (ctrl_pkt.length+remain_len.length+pid.length+topic_len.length+topic.length+qos.length).toString() + NEWLINE)
+        serial.writeString("AT+CIPSEND=" + (ctrl_pkt.length + remain_len.length + pid.length + topic_len.length + topic.length + qos.length).toString() + NEWLINE)
         basic.pause(1000)
 
         serial.writeBuffer(ctrl_pkt)
