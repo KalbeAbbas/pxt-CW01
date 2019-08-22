@@ -251,7 +251,7 @@ namespace CW01_HTTP {
         /*res = serial.readString()
         basic.showString(res)*/
 
-        serial.onDataReceived("{", function () {
+        serial.onDataReceived("true", function () {
             res = serial.readString()
             basic.showString("Hello!")
             basic.showString(res)
