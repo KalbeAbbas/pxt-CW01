@@ -30,6 +30,8 @@ namespace CW01_HTTP {
         basic.pause(100)
         serial.writeString("AT+RST" + NEWLINE)
         basic.pause(100)
+        serial.writeString("ATE0" + NEWLINE)
+        basic.pause(100)
         serial.writeString("AT+TEST=0" + NEWLINE)
         basic.pause(100)
         serial.writeString("AT+TEST" + NEWLINE)
