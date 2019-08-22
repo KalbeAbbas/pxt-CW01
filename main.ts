@@ -20,11 +20,11 @@ namespace CW01_HTTP {
     export function begin(): void {
         start = true
         serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
-        serial.setRxBufferSize(200)
+        serial.setRxBufferSize(250)
 
 
         serial.onDataReceived("{", function () {
-            serial.readBuffer(64)
+            serial.readBuffer(120)
             newRes = serial.readString()
             basic.showString("Hello")
             basic.showString(newRes)
