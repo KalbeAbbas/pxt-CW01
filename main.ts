@@ -177,6 +177,9 @@ namespace CW01_HTTP {
     //% blockId="IoTSubscribeToATTAsset" block="Subscribe to ATT Asset %asset"
     export function IoTSubscribeToATTAsset(asset: string): void {
         res = ""
+        let index1:number
+        let index2:number
+        let value:string
         asset_name = asset
         basic.pause(100)
         let request: string = "GET /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
@@ -196,9 +199,11 @@ namespace CW01_HTTP {
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(400)
         res += serial.readString()
-        basic.pause(1000)
+        index1 = res.indexOf("\"value\":")
+        index2 = res.indexOf("}",index1)
+        value = res.substr(index1,index2-index1)
 
-        basic.showString(res)
+        basic.showString(value)
     }
 
     /* //% weight=91
