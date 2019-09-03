@@ -8,8 +8,6 @@ namespace CW01_HTTP {
     let asset_name: string = ""
     let NEWLINE: string = "\u000D\u000A"
     let start: boolean = false
-    let buf: Buffer = null
-    let ping: Boolean = false
 
     //% weight=91
     //% group="ATT"
@@ -18,11 +16,6 @@ namespace CW01_HTTP {
         start = true
         serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
         serial.setRxBufferSize(200)
-
-
-        serial.onDataReceived("{", function () {
-            ping = true
-        })
 
         basic.pause(100)
         //serial.writeString("ATE0" + NEWLINE)
@@ -67,23 +60,9 @@ namespace CW01_HTTP {
     export function connectToATT(TKN: string, ID: string): void {
         DEVICE_ID = ID
         TOKEN = TKN
-    }
-
-    //% weight=91
-    //% group="ATT"
-    //% blockId="beginATTHTTP" block="Begin AllThingsTalk HTTP"
-    export function beginATTHTTP(): void {
         serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
         basic.pause(100)
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + NEWLINE)
-        basic.pause(500)
-    }
-
-    //% weight=91
-    //% group="ATT"
-    //% blockId="beginATTMQTT" block="Begin AllThingsTalk MQTT"
-    export function beginATTMQTT(): void {
-        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
         basic.pause(500)
     }
 
@@ -281,8 +260,12 @@ namespace CW01_HTTP {
 
         if (res.includes("HTTP/1.1 200")) {
             basic.showIcon(IconNames.Yes)
+            basic.pause(100)
+            basic.showString("")
         } else {
             basic.showIcon(IconNames.No)
+            basic.pause(100)
+            basic.showString("")
         }
     }
 
