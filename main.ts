@@ -1,4 +1,4 @@
-//% groups=["ATT", "Ubidots", "others"]
+=//% groups=["ATT", "Ubidots", "others"]
 //% weight=6 color=#2699BF icon="\uf110" block="CW01 HTTP"
 namespace CW01_HTTP {
 
@@ -25,8 +25,6 @@ namespace CW01_HTTP {
         })
 
         basic.pause(100)
-        serial.writeString("AT+RST" + NEWLINE)
-        basic.pause(1000)
         //serial.writeString("ATE0" + NEWLINE)
         //basic.pause(100)
         serial.writeString("AT+TEST=0" + NEWLINE)
@@ -34,6 +32,7 @@ namespace CW01_HTTP {
         serial.writeString("AT+TEST" + NEWLINE)
         basic.pause(100)
         serial.writeString("AT+TEST=1" + NEWLINE)
+        basic.pause(100)
     }
 
     //% weight=91
@@ -74,6 +73,8 @@ namespace CW01_HTTP {
     //% group="ATT"
     //% blockId="beginATTHTTP" block="Begin AllThingsTalk HTTP"
     export function beginATTHTTP(): void {
+        serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
+        basic.pause(100)     
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + NEWLINE)
         basic.pause(500)
     }
@@ -192,7 +193,7 @@ namespace CW01_HTTP {
         }
     }
 
-    //% weight=91
+  /* //% weight=91
     //% group="ATT"
     //% blockId="IoTSubscribeToATTMQTT" block="Subscribe to ATT MQTT Asset %asset"
     export function IoTSubscribeToATTMQTT(asset: string): void {
@@ -260,7 +261,7 @@ namespace CW01_HTTP {
             basic.showString("Microbit pinged")
             ping = false
         }
-    }
+    }*/
 
     function get_status(): void {
         res = serial.readString()
