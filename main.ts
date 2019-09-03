@@ -269,8 +269,4 @@ namespace CW01_HTTP {
         }
     }
 
-    function get_value(): void {
-        serial.writeString(res)
-    }
-
 } 
