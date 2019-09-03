@@ -200,8 +200,8 @@ namespace CW01_HTTP {
         basic.pause(400)
         res += serial.readString()
         index1 = res.indexOf("\"value\":")
-        index2 = res.indexOf("}", index1 + "\"value\":".length)
-        value = res.substr(index1 + "\"value\":".length, index2 - index1)
+        index2 = res.indexOf("}", index1 + "\"value\":".length-1)
+        value = res.substr(index1 + "\"value\":".length-1, index2 - index1)
 
         return value
     }
