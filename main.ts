@@ -175,7 +175,7 @@ namespace CW01_HTTP {
     //% weight=91
     //% group="ATT"
     //% blockId="getATTAssetValue" block="Get ATT Asset %asset value"
-    export function getATTAssetValue(asset: string): void {
+    export function getATTAssetValue(asset: string): string {
         res = ""
         let index1: number
         let index2: number
@@ -203,7 +203,7 @@ namespace CW01_HTTP {
         index2 = res.indexOf("}", index1 + "\"value\":".length)
         value = res.substr(index1, index2 - index1)
 
-        basic.showString(value)
+        return value
     }
 
     /* //% weight=91
