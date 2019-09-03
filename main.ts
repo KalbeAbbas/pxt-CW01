@@ -174,8 +174,8 @@ namespace CW01_HTTP {
 
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSubscribeToATTAsset" block="Subscribe to ATT Asset %asset"
-    export function IoTSubscribeToATTAsset(asset: string): void {
+    //% blockId="getATTAssetValue" block="Get ATT Asset %asset value"
+    export function getATTAssetValue(asset: string): void {
         res = ""
         let index1: number
         let index2: number
