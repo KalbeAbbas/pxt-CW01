@@ -199,9 +199,9 @@ namespace CW01_HTTP {
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(400)
         res += serial.readString()
-        index1 = res.indexOf("\"value\":")
-        index2 = res.indexOf("}", index1 + "\"value\":".length-1)
-        value = res.substr(index1 + "\"value\":".length-1, index2 - index1)
+        index1 = res.indexOf("\"value\":") + "\"value\":".length
+        index2 = res.indexOf("}", index1)
+        value = res.substr(index1 + "\"value\":".length, index2 - index1)
 
         return value
     }
