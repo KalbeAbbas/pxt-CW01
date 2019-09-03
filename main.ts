@@ -1,3 +1,6 @@
+
+
+
 //% groups=["ATT", "Ubidots", "others"]
 //% weight=6 color=#2699BF icon="\uf110" block="CW01 HTTP"
 namespace CW01_HTTP {
@@ -66,9 +69,10 @@ namespace CW01_HTTP {
         basic.pause(500)
     }
 
+
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendStringToATT" block="Send String %value to ATT Asset %asset_name"
+    //% blockId="IoTSendStringToATT" block="Send String %value to ATT Asset %asset"
     export function IoTSendStringToATT(value: string, asset: string): void {
         asset_name = asset
         serial.writeString("AT+CIPMODE=0" + NEWLINE)
@@ -97,7 +101,7 @@ namespace CW01_HTTP {
 
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendValueToATT" block="Send Value %value to ATT Asset %asset_name"
+    //% blockId="IoTSendValueToATT" block="Send Value %value to ATT Asset %asset"
     export function IoTSendValueToATT(value: number, asset: string): void {
         asset_name = asset
         serial.writeString("AT+CIPMODE=0" + NEWLINE)
@@ -153,8 +157,8 @@ namespace CW01_HTTP {
 
     //% weight=91
     //% group="ATT"
-    //% blockId="getATTAssetValue" block="Get ATT Asset %asset value"
-    export function getATTAssetValue(asset: string): string {
+    //% blockId="IoTgetATTAssetValue" block="Get ATT Asset %asset value"
+    export function IoTgetATTAssetValue(asset: string): string {
         res = ""
         let index1: number
         let index2: number
@@ -184,76 +188,6 @@ namespace CW01_HTTP {
 
         return value
     }
-
-    /* //% weight=91
-      //% group="ATT"
-      //% blockId="IoTSubscribeToATTMQTT" block="Subscribe to ATT MQTT Asset %asset"
-      export function IoTSubscribeToATTMQTT(asset: string): void {
-  
-          asset_name = asset
-  
-          //Packet for connecting with MQTT broker
-          let connect_flags: Buffer = (pins.packBuffer("!B", [(1 << 7) | (1 << 6) | (1 << 1)]))
-          let keep_alive: Buffer = pins.packBuffer("!H", [200])
-          let client_id: string = "CW01/1.1"
-          let client_id_len: Buffer = pins.packBuffer("!H", [client_id.length])
-          let username: string = TOKEN
-          let username_len: Buffer = pins.packBuffer("!H", [username.length])
-          let password: string = "c770b0220c"
-          let password_len: Buffer = pins.packBuffer("!H", [password.length])
-  
-          //Packet for subscribing to MQTT broker
-          let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
-          let topic: string = "device/" + DEVICE_ID + "/asset/" + asset_name + "/command"
-          let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
-          let qos: Buffer = pins.packBuffer("!B", [0x00])
-          let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
-          let remain_len: Buffer = pins.packBuffer("!B", [pid.length + (topic_len.length + topic.length + qos.length)])
-  
-          //Serial Transmission to connect with MQTT broker
-          serial.writeString("AT+CIPSEND=" + (9 + connect_flags.length + keep_alive.length + 2 + client_id.length + 2 + username.length + 2 + password.length).toString() + NEWLINE)
-          basic.pause(1000)
-  
-          serial.writeBuffer(pins.packBuffer("!B", [1 << 4]))
-          serial.writeBuffer(pins.packBuffer("!B", [7 + connect_flags.length + keep_alive.length + 2 + client_id.length + 2 + username.length + 2 + password.length]))
-          serial.writeBuffer(pins.packBuffer("!H", [4]))
-          serial.writeString("MQTT")
-          serial.writeBuffer(pins.packBuffer("!B", [4]))
-          serial.writeBuffer(connect_flags) // flags
-          serial.writeBuffer(keep_alive) //keep alive
-          serial.writeBuffer(client_id_len)
-          serial.writeString(client_id)
-          serial.writeBuffer(username_len)
-          serial.writeString(username)
-          serial.writeBuffer(password_len)
-          serial.writeString(password)
-          basic.pause(2000)
-  
-          //Serial Transmission to subscribe with MQTT broker
-          serial.writeString("AT+CIPSEND=" + (ctrl_pkt.length + remain_len.length + pid.length + topic_len.length + topic.length + qos.length).toString() + NEWLINE)
-          basic.pause(1000)
-  
-          serial.writeBuffer(ctrl_pkt)
-          serial.writeBuffer(remain_len)
-          serial.writeBuffer(pid)
-          serial.writeBuffer(topic_len)
-          serial.writeString(topic)
-          serial.writeBuffer(qos)
-          basic.pause(2000)
-  
-          serial.readString()
-  
-      }
-  
-      //% weight=91
-      //% group="ATT"
-      //% blockId="isMicrobitPinged" block="Check if microbit is pinged"
-      export function isMicrobitPinged(): void {
-          if (ping) {
-              basic.showString("Microbit pinged")
-              ping = false
-          }
-      }*/
 
     function get_status(): void {
 
