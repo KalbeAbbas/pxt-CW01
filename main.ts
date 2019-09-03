@@ -256,6 +256,9 @@ namespace CW01_HTTP {
       }*/
 
     function get_status(): void {
+
+        serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
+        basic.pause(100)
         res = serial.readString()
 
         if (res.includes("HTTP/1.1 200")) {
