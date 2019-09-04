@@ -200,12 +200,12 @@ namespace CW01_HTTP {
     //% blockId="IoTSendValueToUbidots" block="Send Value %value to Ubidots Device %device Variable %variable , include location %loc"
     export function IoTSendValueToUbidots(value: number, device: string, variable: string, loc: boolean): void {
         let payload: string = "{\"value\":" + value.toString() + "}"
-        let request: string = "POST /api/v1.6/devices/" + device + "/" + variable + " / values HTTP/ 1.1" + NEWLINE +
+        let request: string = "POST /api/v1.6/devices/" + device + "/" + variable + "/values HTTP/ 1.1" + NEWLINE +
             "Host: things.ubidots.com" + NEWLINE +
             "User-Agent: CW01/1.0" + NEWLINE +
             "X-Auth-Token: " + TOKEN + NEWLINE +
             "Content-Type: application/json" + NEWLINE
-            "Accept: */*" + NEWLINE +
+        "Accept: */*" + NEWLINE +
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
 
