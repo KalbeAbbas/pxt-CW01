@@ -9,7 +9,7 @@ namespace CW01_HTTP {
     let NEWLINE: string = "\u000D\u000A"
     let start: boolean = false
 
-    //% weight=91
+    //% weight=91 color=#ad0303
     //% group="Common"
     //% blockId="begin" block="Begin CW01"
     export function begin(): void {
@@ -28,7 +28,7 @@ namespace CW01_HTTP {
         basic.pause(100)
     }
 
-    //% weight=91
+    //% weight=91 color=#ad0303
     //% group="Common"
     //% blockId="connectToWifi" block="connect to WiFi SSID %SSID, Password %PSK"
     export function connectToWifi(SSID: string, PSK: string): void {
