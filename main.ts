@@ -8,6 +8,8 @@ namespace CW01_HTTP {
     let asset_name: string = ""
     let NEWLINE: string = "\u000D\u000A"
     let start: boolean = false
+    let latitude: number
+    let longitude: number
 
     //% weight=91 color=#ad0303
     //% group="Common"
@@ -259,6 +261,14 @@ namespace CW01_HTTP {
         basic.pause(10)
         serial.readString()
         basic.pause(1000)
+    }
+
+    //% weight=91 color=#f2ca00
+    //% group="Ubidots"
+    //% blockId="IoTaddLocation" block="Latitude is %lat and Longitude in %lng"
+    export function IoTaddLocation(lat: number, lng: number): void {
+        latitude = lat
+        longitude = lng
     }
 
     function get_status(): void {
