@@ -296,7 +296,7 @@ namespace CW01_HTTP {
 
     //% weight=91 color=#f2ca00
     //% group="Ubidots"
-    //% blockId="IoTaddLocation" block="Latitude is %lat and Longitude in %lng"
+    //% blockId="IoTaddLocation" block="Latitude is %lat and Longitude is %lng"
     export function IoTaddLocation(lat: number, lng: number): void {
         latitude = lat
         longitude = lng
