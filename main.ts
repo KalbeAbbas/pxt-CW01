@@ -210,9 +210,9 @@ namespace CW01_HTTP {
 
 
 
-        serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
+        serial.writeString("AT+CIPSEND=" + (request.length).toString() + NEWLINE)
         basic.pause(100)
-        serial.writeString(request + NEWLINE)
+        serial.writeString(request)
         basic.pause(10)
         serial.readString()
         basic.pause(1000)
