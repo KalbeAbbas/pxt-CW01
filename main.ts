@@ -214,7 +214,7 @@ namespace CW01_HTTP {
 
 
         serial.writeString("AT+CIPSEND=" + (request.length).toString() + NEWLINE)
-        basic.pause(100)
+        basic.pause(400)
         serial.writeString(request)
         basic.pause(10)
         serial.readString()
@@ -223,6 +223,7 @@ namespace CW01_HTTP {
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(400)
         serial.readString()
+        basic.pause(10)
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(400)
 
