@@ -201,7 +201,7 @@ namespace CW01_HTTP {
     export function IoTgetValuefromUbidots(device: string, variable: string): string {
         res = ""
         let value: string
-        let request: string = "GET /api/v1.6/devices/" + device + "/" + variable + "/values HTTP/1.1" + NEWLINE +
+        let request: string = "GET /api/v1.6/devices/" + device + "/" + variable + "/lv HTTP/1.1" + NEWLINE +
             "Host: things.ubidots.com" + NEWLINE +
             "User-Agent: CW01/1.0" + NEWLINE +
             "Accept: */*" + NEWLINE +
