@@ -204,8 +204,8 @@ namespace CW01_HTTP {
             "Host: things.ubidots.com" + NEWLINE +
             "User-Agent: CW01/1.0" + NEWLINE +
             "X-Auth-Token: " + TOKEN + NEWLINE +
-            "Content-Type: application/json" + NEWLINE
-            "Accept: */*" + NEWLINE
+            "Content-Type: application/json" + NEWLINE +
+            "Accept: */*" + NEWLINE +
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
 
