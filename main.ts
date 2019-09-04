@@ -221,20 +221,20 @@ namespace CW01_HTTP {
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(400)
         serial.readString()
+        serial.writeString("AT+CIPRECVDATA=100" + NEWLINE)
+        basic.pause(400)
+        serial.readString()
         basic.pause(100)
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(400)
         res += serial.readString()
         basic.pause(100)
-        serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
-        basic.pause(400)
-        serial.readString()
 
         index1 = res.indexOf("\"value\": ") + "\"value\": ".length
-        index2 = res.indexOf("}", index1)
+        index2 = res.indexOf("]", index1)
         value = res.substr(index1, index2 - index1)
 
-        return ((index2-index1).toString())
+        return value
 
     }
 
