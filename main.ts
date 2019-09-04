@@ -1,7 +1,4 @@
-
-
-
-//% groups=["ATT", "Ubidots", "others"]
+//% groups=["Common",ATT", "Ubidots", "others"]
 //% weight=6 color=#2699BF icon="\uf110" block="CW01 HTTP"
 namespace CW01_HTTP {
 
@@ -13,7 +10,7 @@ namespace CW01_HTTP {
     let start: boolean = false
 
     //% weight=91
-    //% group="ATT"
+    //% group="Common"
     //% blockId="begin" block="Begin CW01"
     export function begin(): void {
         start = true
@@ -32,7 +29,7 @@ namespace CW01_HTTP {
     }
 
     //% weight=91
-    //% group="ATT"
+    //% group="Common"
     //% blockId="connectToWifi" block="connect to WiFi SSID %SSID, Password %PSK"
     export function connectToWifi(SSID: string, PSK: string): void {
         if (start) {
@@ -187,6 +184,18 @@ namespace CW01_HTTP {
         value = res.substr(index1, index2 - index1)
 
         return value
+    }
+
+    //% weight=91 color=#f2ca00
+    //% group="Ubidots"
+    //% blockId="connectToUbidots" block="connect to Ubidots with TOKEN %TKN"
+    export function connectToUbidots(TKN: string, ID: string): void {
+        DEVICE_ID = ID
+        TOKEN = TKN
+        serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
+        basic.pause(100)
+        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + NEWLINE)
+        basic.pause(500)
     }
 
     function get_status(): void {
