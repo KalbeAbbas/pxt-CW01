@@ -1,3 +1,11 @@
+enum user{
+    //% block="Industrial"
+    industrial = 1,
+    //% block="Educational"
+    educational = 2
+    
+}
+
 //% groups=["Common",ATT", "Ubidots", "others"]
 //% weight=6 color=#2699BF icon="\uf110" block="CW01 HTTP"
 namespace CW01_HTTP {
@@ -10,6 +18,7 @@ namespace CW01_HTTP {
     let start: boolean = false
     let latitude: number
     let longitude: number
+    let select: boolean
 
     //% weight=91 color=#ad0303
     //% group="Common"
@@ -190,8 +199,13 @@ namespace CW01_HTTP {
 
     //% weight=91 color=#f2ca00
     //% group="Ubidots"
-    //% blockId="connectToUbidots" block="connect to Ubidots with TOKEN %TKN"
-    export function connectToUbidots(TKN: string): void {
+    //% blockId="connectToUbidots" block="connect to Ubidots %user with TOKEN %TKN"
+    export function connectToUbidots(TKN: string,User: user): void {
+        switch(User)
+        {
+            case user.industrial: select = true;
+            case user.educational: select = false;
+        }
         TOKEN = TKN
         serial.writeString("AT+CIPSTART=\"TCP\",\"things.ubidots.com\",80" + NEWLINE)
         basic.pause(500)
@@ -205,8 +219,17 @@ namespace CW01_HTTP {
         let value: string
         let index1: number
         let index2: number
+        let industrial: string = "industrial.api.ubidots.com"
+        let educational: string = "things.ubidots.com"
+        let server: string
+        if(select)
+        {
+            server = industrial
+        }else{
+            server = educational
+        }
         let request: string = "GET /api/v1.6/devices/" + device + "/" + variable + "/values/?page_size=1 HTTP/1.1" + NEWLINE +
-            "Host: things.ubidots.com" + NEWLINE +
+            "Host: " + server + NEWLINE +
             "User-Agent: CW01/1.0" + NEWLINE +
             "Accept: */*" + NEWLINE +
             "X-Auth-Token: " + TOKEN + NEWLINE +
@@ -234,7 +257,7 @@ namespace CW01_HTTP {
 
         index1 = res.indexOf("\"value\": ") + "\"value\": ".length
         index2 = res.indexOf("]", index1)
-        value = res.substr(index1, index2 - index1-1)
+        value = res.substr(index1, index2 - index1 - 1)
 
         return value
 
@@ -245,8 +268,16 @@ namespace CW01_HTTP {
     //% blockId="IoTSendValueToUbidots" block="Send Value %value to Ubidots Device %device Variable %variable , include location %loc"
     export function IoTSendValueToUbidots(value: number, device: string, variable: string, loc: boolean): void {
         let payload: string = "{\"value\": " + value.toString() + "}"
+        let industrial: string = "industrial.api.ubidots.com"
+        let educational: string = "things.ubidots.com"
+        let server: string
+        if (select) {
+            server = industrial
+        } else {
+            server = educational
+        }
         let request: string = "POST /api/v1.6/devices/" + device + "/" + variable + "/values HTTP/1.1" + NEWLINE +
-            "Host: things.ubidots.com" + NEWLINE +
+            "Host: "+ server + NEWLINE +
             "User-Agent: CW01/1.0" + NEWLINE +
             "X-Auth-Token: " + TOKEN + NEWLINE +
             "Content-Type: application/json" + NEWLINE +
