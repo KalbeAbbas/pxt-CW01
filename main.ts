@@ -229,10 +229,10 @@ namespace CW01_HTTP {
         serial.readString()
 
         index1 = res.indexOf("\"value\": ") + "\"value\": ".length
-        index2 = res.indexOf("}", index1)
+        index2 = res.indexOf("7", index1)
         value = res.substr(index1, index2 - index1)
 
-        return ((index2-index1).toString())
+        return ((index2 - index1).toString())
 
     }
 
