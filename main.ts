@@ -26,6 +26,8 @@ namespace CW01_HTTP {
         basic.pause(100)
         serial.writeString("AT+TEST=1" + NEWLINE)
         basic.pause(100)
+        serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
+        basic.pause(100)
     }
 
     //% weight=91 color=#ad0303
@@ -60,8 +62,6 @@ namespace CW01_HTTP {
     export function connectToATT(TKN: string, ID: string): void {
         DEVICE_ID = ID
         TOKEN = TKN
-        serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
-        basic.pause(100)
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + NEWLINE)
         basic.pause(500)
     }
@@ -216,12 +216,10 @@ namespace CW01_HTTP {
         serial.writeString("AT+CIPSEND=" + (request.length).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(request)
+        basic.pause(10)
         serial.readString()
-        basic.pause(100)
-
-        serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(400)
-        serial.readString()
+
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(400)
         serial.readString()
