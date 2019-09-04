@@ -200,14 +200,14 @@ namespace CW01_HTTP {
     //% blockId="IoTgetValuefromUbidots" block="Get Value from Ubidots Device %device Variable %variable"
     export function IoTgetValuefromUbidots(device: string, variable: string): string {
         res = ""
-        let value:string
+        let value: string
         let request: string = "GET /api/v1.6/devices/" + device + "/" + variable + "/values HTTP/1.1" + NEWLINE +
             "Host: things.ubidots.com" + NEWLINE +
             "User-Agent: CW01/1.0" + NEWLINE +
-            "Accept: " + NEWLINE +
+            "Accept: */*" + NEWLINE +
             "X-Auth-Token: " + TOKEN + NEWLINE +
             "Content-Type: application/json" + NEWLINE + NEWLINE
-            //"Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
+        //"Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
 
 
