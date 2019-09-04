@@ -18,8 +18,8 @@ namespace CW01_HTTP {
         serial.setRxBufferSize(200)
 
         basic.pause(100)
-        //serial.writeString("ATE0" + NEWLINE)
-        //basic.pause(100)
+        serial.writeString("ATE0" + NEWLINE)
+        basic.pause(100)
         serial.writeString("AT+TEST=0" + NEWLINE)
         basic.pause(100)
         serial.writeString("AT+TEST" + NEWLINE)
@@ -232,7 +232,7 @@ namespace CW01_HTTP {
         index2 = res.indexOf("}", index1)
         value = res.substr(index1, index2 - index1)
 
-        return res
+        return (res.includes("\"value\": ").toString())
 
     }
 
