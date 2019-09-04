@@ -216,8 +216,6 @@ namespace CW01_HTTP {
         basic.pause(10)
         serial.readString()
         basic.pause(1000)
-    
-        basic.showNumber(payload.length)
 
         get_status()
     }
@@ -228,7 +226,7 @@ namespace CW01_HTTP {
         basic.pause(100)
         res = serial.readString()
 
-        if (res.includes("HTTP/1.1 200")) {
+        if (res.includes("HTTP/1.1 200") || res.includes("HTTP/1.1 201") ) {
             basic.showIcon(IconNames.Yes)
             basic.pause(100)
             basic.showString("")
