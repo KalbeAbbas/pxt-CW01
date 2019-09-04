@@ -189,13 +189,35 @@ namespace CW01_HTTP {
     //% weight=91 color=#f2ca00
     //% group="Ubidots"
     //% blockId="connectToUbidots" block="connect to Ubidots with TOKEN %TKN"
-    export function connectToUbidots(TKN: string, ID: string): void {
-        DEVICE_ID = ID
+    export function connectToUbidots(TKN: string): void {
         TOKEN = TKN
-        serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
-        basic.pause(100)
-        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + NEWLINE)
+        serial.writeString("AT+CIPSTART=\"TCP\",\"things.ubidots.com\",80" + NEWLINE)
         basic.pause(500)
+    }
+
+    //% weight=91 color=#f2ca00
+    //% group="Ubidots"
+    //% blockId="IoTSendValueToUbidots" block="Send Value %value to Ubidots Device %device Variable %variable , include location %loc"
+    export function IoTSendValueToUbidots(value: number, device: string, variable: string, loc: boolean): void {
+        let payload: string = "{\"value\":" + value.toString() + "}"
+        let request: string = "POST /api/v1.6/devices/" + device + "/" + variable + " / values HTTP/ 1.1" + NEWLINE +
+            "Host: things.ubidots.com" + NEWLINE +
+            "User-Agent: CW01/1.0" + NEWLINE +
+            "X-Auth-Token: " + TOKEN + NEWLINE +
+            "Content-Type: application/json" + NEWLINE
+            "Accept: */*" + NEWLINE +
+            "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
+
+
+
+        serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
+        basic.pause(100)
+        serial.writeString(request + NEWLINE)
+        basic.pause(10)
+        serial.readString()
+        basic.pause(1000)
+
+        get_status()
     }
 
     function get_status(): void {
