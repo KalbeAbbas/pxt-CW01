@@ -205,6 +205,7 @@ namespace CW01_HTTP {
             "User-Agent: CW01/1.0" + NEWLINE +
             "X-Auth-Token: " + TOKEN + NEWLINE +
             "Content-Type: application/json" + NEWLINE
+            "Accept: */*" + NEWLINE
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
 
@@ -215,6 +216,8 @@ namespace CW01_HTTP {
         basic.pause(10)
         serial.readString()
         basic.pause(1000)
+    
+        basic.showNumber(payload.length)
 
         get_status()
     }
