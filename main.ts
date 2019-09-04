@@ -232,7 +232,7 @@ namespace CW01_HTTP {
         index2 = res.indexOf("7", index1)
         value = res.substr(index1, index2 - index1)
 
-        return ((index2 - index1).toString())
+        return (res)
 
     }
 
