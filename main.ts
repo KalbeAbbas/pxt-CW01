@@ -219,15 +219,15 @@ namespace CW01_HTTP {
         basic.pause(1000)
 
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
-        basic.pause(500)
+        basic.pause(1000)
         serial.readString()
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
-        basic.pause(500)
+        basic.pause(1000)
 
         res += serial.readString()
 
         value = res
-        index1 = res.indexOf("\"value\":") + "\"value\":".length
+        index1 = res.indexOf("\"value\": ") + "\"value\": ".length
         index2 = res.indexOf("}", index1)
         value = res.substr(index1, index2 - index1)
 
