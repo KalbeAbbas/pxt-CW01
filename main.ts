@@ -199,7 +199,7 @@ namespace CW01_HTTP {
 
     //% weight=91 color=#f2ca00
     //% group="Ubidots"
-    //% blockId="connectToUbidots" block="connect to Ubidots %user| with TOKEN %TKN|"
+    //% blockId="connectToUbidots" block="connect to Ubidots %user| with TOKEN %TKN"
     export function connectToUbidots(User: user, TKN: string): void {
         switch(User)
         {
