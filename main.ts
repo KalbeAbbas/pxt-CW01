@@ -201,7 +201,9 @@ namespace CW01_HTTP {
     export function IoTgetValuefromUbidots(device: string, variable: string): string {
         res = ""
         let value: string
-        let request: string = "GET /api/v1.6/devices/" + device + "/" + variable + "/lv HTTP/1.1" + NEWLINE +
+        let index1: number
+        let index2: number
+        let request: string = "GET /api/v1.6/devices/" + device + "/" + variable + "/values/?page_size=1 HTTP/1.1" + NEWLINE +
             "Host: things.ubidots.com" + NEWLINE +
             "User-Agent: CW01/1.0" + NEWLINE +
             "Accept: */*" + NEWLINE +
@@ -214,13 +216,22 @@ namespace CW01_HTTP {
         serial.writeString("AT+CIPSEND=" + (request.length).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(request)
-        basic.pause(10)
         serial.readString()
+        basic.pause(100)
+
+        serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(400)
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
-        basic.pause(100)
+        basic.pause(400)
+        serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
+        basic.pause(400)
+
         res += serial.readString()
+        
         value = res
+        index1 = res.indexOf("\"value\":") + "\"value\":".length
+        index2 = res.indexOf("}", index1)
+        value = res.substr(index1, index2 - index1)
 
         return value
 
