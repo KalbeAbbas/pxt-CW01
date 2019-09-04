@@ -197,6 +197,30 @@ namespace CW01_HTTP {
 
     //% weight=91 color=#f2ca00
     //% group="Ubidots"
+    //% blockId="IoTgetValuefromUbidots" block="Get Value from Ubidots Device %device Variable %variable"
+    /*export function IoTgetValuefromUbidots(device: string, variable: string): void {
+        let request: string = "GET /api/v1.6/devices/" + device + "/" + variable + "/values HTTP/1.1" + NEWLINE +
+            "Host: things.ubidots.com" + NEWLINE +
+            "User-Agent: CW01/1.0" + NEWLINE +
+            "X-Auth-Token: " + TOKEN + NEWLINE +
+            "Content-Type: application/json" + NEWLINE +
+            //"Accept: " + NEWLINE +
+            "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
+
+
+
+        serial.writeString("AT+CIPSEND=" + (request.length).toString() + NEWLINE)
+        basic.pause(100)
+        serial.writeString(request)
+        basic.pause(10)
+        serial.readString()
+        basic.pause(1000)
+
+        get_status()
+}*/
+
+    //% weight=91 color=#f2ca00
+    //% group="Ubidots"
     //% blockId="IoTSendValueToUbidots" block="Send Value %value to Ubidots Device %device Variable %variable , include location %loc"
     export function IoTSendValueToUbidots(value: number, device: string, variable: string, loc: boolean): void {
         let payload: string = "{\"value\": " + value.toString() + "}"
@@ -216,8 +240,6 @@ namespace CW01_HTTP {
         basic.pause(10)
         serial.readString()
         basic.pause(1000)
-
-        get_status()
     }
 
     function get_status(): void {
@@ -226,7 +248,7 @@ namespace CW01_HTTP {
         basic.pause(100)
         res = serial.readString()
 
-        if (res.includes("HTTP/1.1 200") || res.includes("HTTP/1.1 201") ) {
+        if (res.includes("HTTP/1.1 200") || res.includes("HTTP/1.1 201")) {
             basic.showIcon(IconNames.Yes)
             basic.pause(100)
             basic.showString("")
