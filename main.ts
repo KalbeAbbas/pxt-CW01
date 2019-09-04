@@ -232,7 +232,7 @@ namespace CW01_HTTP {
 
         value = res
         index1 = res.indexOf("\"value\":") + "\"value\":".length
-        index2 = res.indexOf(",", index1)
+        index2 = res.indexOf("}", index1)
         value = res.substr(index1, index2 - index1)
 
         return value
