@@ -230,9 +230,9 @@ namespace CW01_HTTP {
 
         index1 = res.indexOf("\"value\": ") + "\"value\": ".length
         index2 = res.indexOf("}", index1)
-        value = res.substr(index1, index2 - index1)
+        value = res.substr(index1,3)
 
-        return (res.includes("\"value\": ").toString())
+        return (value)
 
     }
 
