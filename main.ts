@@ -8,7 +8,7 @@ enum user {
 
 //% groups=["Common",ATT", "Ubidots", "Azure", "others"]
 //% weight=6 color=#2699BF icon="\uf110" block="CW01 HTTP"
-namespace CW01_HTTP {
+namespace cw01HTTP {
 
     let res: string = ""
     let TOKEN: string = ""
@@ -290,6 +290,12 @@ namespace CW01_HTTP {
         basic.pause(10)
         serial.readString()
         basic.pause(1000)
+    }
+
+    //% weight=91 color=#4B0082
+    //% group="Azure"
+    //% blockId="connectToAzure" block="connect to Azure %user| with TOKEN %TKN"
+    export function connectToAzure(User: user, TKN: string): void {
     }
 
     //% weight=91 color=#f2ca00
