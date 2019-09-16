@@ -294,7 +294,7 @@ namespace cw01HTTP {
 
     //% weight=91 color=#4B0082
     //% group="Azure"
-    //% blockId="connectToAzure" block="connect to Azure with access enpoint #access"
+    //% blockId="connectToAzure" block="connect to Azure with access enpoint %access"
     export function connectToAzure(access: string): void {
     }
 
