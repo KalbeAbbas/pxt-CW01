@@ -299,7 +299,6 @@ namespace cw01HTTP {
     export function connectToAzure(access: string): void {
         serial.writeString("AT+CIPSTART=\"TCP\",\"proxy.xinabox.cc\",80" + NEWLINE)
         basic.pause(500)
-        azureAccess = access
     }
 
     //% weight=91 color=#4B0082
@@ -313,7 +312,23 @@ namespace cw01HTTP {
     //% group="Azure"
     //% blockId="IoTSendValueToAzure" block="Update Azure variable %asset with Value %value"
     export function IoTSendValueToAzure(value: number, asset: string): void {
+        let payload: string = "{\"" + asset + "\": " + value.toString() + "}"
 
+        let request: string = "POST /135/" + azureAccess + " HTTP/1.1" + NEWLINE +
+            "Host: proxy.xinabox.cc" + NEWLINE +
+            "User-Agent: CW01/1.0" + NEWLINE +
+            "Content-Type: application/json" + NEWLINE +
+            "Accept: */*" + NEWLINE +
+            "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
+
+
+
+        serial.writeString("AT+CIPSEND=" + (request.length).toString() + NEWLINE)
+        basic.pause(100)
+        serial.writeString(request)
+        basic.pause(10)
+        serial.readString()
+        basic.pause(1000)
     }
 
     //% weight=91 color=#4B0082
