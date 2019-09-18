@@ -330,6 +330,11 @@ namespace cw01HTTP {
         basic.pause(10)
         serial.readString()
         basic.pause(1000)
+
+        if(!get_status)
+        {
+            connectToAzure(azureAccess)
+        }
     }
 
     //% weight=91 color=#4B0082
@@ -346,20 +351,22 @@ namespace cw01HTTP {
         longitude = lng
     }
 
-    function get_status(): void {
+    function get_status(): boolean {
 
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(100)
         res = serial.readString()
 
-        if (res.includes("HTTP/1.1 200") || res.includes("HTTP/1.1 201")) {
+        if (res.includes("HTTP/1.1 200") || res.includes("HTTP/1.1 201") || res.includes("HTTP/1.0 202")) {
             basic.showIcon(IconNames.Yes)
             basic.pause(100)
             basic.showString("")
+            return true
         } else {
             basic.showIcon(IconNames.No)
             basic.pause(100)
             basic.showString("")
+            return false
         }
     }
 
