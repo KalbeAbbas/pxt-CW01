@@ -19,6 +19,7 @@ namespace cw01HTTP {
     let latitude: number
     let longitude: number
     let select: boolean
+    let azureAccess: string
 
     //% weight=91 color=#ad0303
     //% group="Common"
@@ -296,6 +297,11 @@ namespace cw01HTTP {
     //% group="Azure"
     //% blockId="connectToAzure" block="connect to Azure with access enpoint %access"
     export function connectToAzure(access: string): void {
+        serial.writeString("AT+CIPSTART=\"TCP\",\"proxy.xinabox.cc\",80" + NEWLINE)
+        basic.pause(500)
+        azureAccess = access
+        basic.showString(azureAccess)
+
     }
 
     //% weight=91 color=#4B0082
