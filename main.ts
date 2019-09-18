@@ -331,7 +331,7 @@ namespace cw01HTTP {
         serial.readString()
         basic.pause(1000)
 
-        if(!get_status)
+        if(!get_status())
         {
             connectToAzure(azureAccess)
         }
