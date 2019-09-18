@@ -299,12 +299,13 @@ namespace cw01HTTP {
     export function connectToAzure(access: string): void {
         serial.writeString("AT+CIPSTART=\"TCP\",\"proxy.xinabox.cc\",80" + NEWLINE)
         basic.pause(500)
+        azureAccess = access
     }
 
     //% weight=91 color=#4B0082
     //% group="Azure"
     //% blockId="IoTSendStringToAzure" block="Update Azure variable %asset with String %value"
-    export function IoTSendStringToAzure(asset: string, value: number): void {
+    export function IoTSendStringToAzure(asset: string, value: string): void {
 
     }
 
