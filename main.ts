@@ -300,8 +300,6 @@ namespace cw01HTTP {
         serial.writeString("AT+CIPSTART=\"TCP\",\"proxy.xinabox.cc\",80" + NEWLINE)
         basic.pause(500)
         azureAccess = access
-        basic.showString(azureAccess)
-
     }
 
     //% weight=91 color=#4B0082
