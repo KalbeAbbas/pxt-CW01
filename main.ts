@@ -304,14 +304,14 @@ namespace cw01HTTP {
     //% weight=91 color=#4B0082
     //% group="Azure"
     //% blockId="IoTSendStringToAzure" block="Update Azure variable %asset with String %value"
-    export function IoTSendStringToAzure(value: string, asset: string): void {
+    export function IoTSendStringToAzure(asset: string, value: number): void {
 
     }
 
     //% weight=91 color=#4B0082
     //% group="Azure"
     //% blockId="IoTSendValueToAzure" block="Update Azure variable %asset with Value %value"
-    export function IoTSendValueToAzure(value: number, asset: string): void {
+    export function IoTSendValueToAzure(asset: string, value: number): void {
         let payload: string = "{\"" + asset + "\": " + value.toString() + "}"
 
         let request: string = "POST /135/" + azureAccess + " HTTP/1.1" + NEWLINE +
@@ -334,7 +334,7 @@ namespace cw01HTTP {
     //% weight=91 color=#4B0082
     //% group="Azure"
     //% blockId="IoTSendStateToAzure" block="Update Azure variable %asset with Boolean state %state"
-    export function IoTSendStateToAzure(state: boolean, asset: string): void {
+    export function IoTSendStateToAzure(asset: string, value: number): void {
     }
 
     //% weight=91 color=#f2ca00
