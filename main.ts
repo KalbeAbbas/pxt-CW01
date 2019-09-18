@@ -363,7 +363,7 @@ namespace cw01HTTP {
     //% blockId="IoTSendStateToAzure" block="Update Azure variable %asset with Boolean state %value"
     export function IoTSendStateToAzure(asset: string, value: boolean): void {
 
-        let payload: string = "{\"" + asset + "\": " + value.toString() + "}"
+        let payload: string = "{\"" + asset + "\": " + value + "}"
 
         let request: string = "POST /135/" + azureAccess + " HTTP/1.1" + NEWLINE +
             "Host: proxy.xinabox.cc" + NEWLINE +
