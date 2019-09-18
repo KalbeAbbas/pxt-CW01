@@ -360,8 +360,30 @@ namespace cw01HTTP {
 
     //% weight=91 color=#4B0082
     //% group="Azure"
-    //% blockId="IoTSendStateToAzure" block="Update Azure variable %asset with Boolean state %state"
-    export function IoTSendStateToAzure(asset: string, value: number): void {
+    //% blockId="IoTSendStateToAzure" block="Update Azure variable %asset with Boolean state %value"
+    export function IoTSendStateToAzure(asset: string, value: boolean): void {
+
+        let payload: string = "{\"" + asset + "\": " + value.toString() + "}"
+
+        let request: string = "POST /135/" + azureAccess + " HTTP/1.1" + NEWLINE +
+            "Host: proxy.xinabox.cc" + NEWLINE +
+            "User-Agent: CW01/1.0" + NEWLINE +
+            "Content-Type: application/json" + NEWLINE +
+            "Accept: */*" + NEWLINE +
+            "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
+
+
+
+        serial.writeString("AT+CIPSEND=" + (request.length).toString() + NEWLINE)
+        basic.pause(100)
+        serial.writeString(request)
+        basic.pause(10)
+        serial.readString()
+        basic.pause(1000)
+
+        if (!get_status()) {
+            connectToAzure(azureAccess)
+        }
     }
 
     //% weight=91 color=#f2ca00
