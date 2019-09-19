@@ -29,13 +29,13 @@ namespace cw01HTTP {
         serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
         serial.setRxBufferSize(200)
 
-       // basic.pause(100)
+        // basic.pause(100)
         //erial.writeString("ATE0" + NEWLINE)
         //basic.pause(100)
         serial.writeString("AT+TEST=0" + NEWLINE)
         basic.pause(100)
         serial.writeString("AT+TEST" + NEWLINE)
-        basic.pause(100)
+        basic.pause(1000)
         serial.writeString("AT+TEST=1" + NEWLINE)
         basic.pause(100)
         serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
@@ -352,8 +352,7 @@ namespace cw01HTTP {
         serial.readString()
         basic.pause(1000)
 
-        if(!get_status())
-        {
+        if (!get_status()) {
             connectToAzure(azureAccess)
         }
     }
