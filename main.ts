@@ -21,10 +21,10 @@ namespace cw01HTTP {
     let select: boolean
     let azureAccess: string
 
-    //% weight=91 color=#ad0303
+   /* //% weight=91 color=#ad0303
     //% group="Common"
-    //% blockId="begin" block="Begin CW01"
-    export function begin(): void {
+    //% blockId="begin" block="Begin CW01"*/
+    //export function begin(): void {
         start = true
         serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
         serial.setRxBufferSize(200)
@@ -35,14 +35,13 @@ namespace cw01HTTP {
         basic.pause(100)
         serial.writeString("ATE0" + NEWLINE)
         basic.pause(100)
-        basic.pause(100)
         serial.writeString("AT+TEST" + NEWLINE)
         basic.pause(100)
         serial.writeString("AT+TEST=1" + NEWLINE)
         basic.pause(100)
         serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
         basic.pause(100)
-    }
+    //}
 
     //% weight=91 color=#ad0303
     //% group="Common"

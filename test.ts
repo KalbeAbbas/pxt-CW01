@@ -1,6 +1,5 @@
 // tests go here; this will not be compiled when this package is used as a library
 
-cw01HTTP.begin()
 cw01HTTP.connectToWifi("SSID", "PSK")
 cw01HTTP.connectToATT("DEVICE_TOKEN", "DEVICE_ID")
 basic.forever(function () {
