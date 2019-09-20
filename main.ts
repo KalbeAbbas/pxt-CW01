@@ -289,9 +289,9 @@ namespace cw01HTTP {
         serial.writeString("AT+CIPSEND=" + (request.length).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(request)
-        basic.pause(10)
-        serial.readString()
         basic.pause(1000)
+
+        get_status()
     }
 
     //% weight=91 color=#4B0082
