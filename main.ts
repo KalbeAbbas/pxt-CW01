@@ -21,26 +21,26 @@ namespace cw01HTTP {
     let select: boolean
     let azureAccess: string
 
-   /* //% weight=91 color=#ad0303
-    //% group="Common"
-    //% blockId="begin" block="Begin CW01"*/
+    /* //% weight=91 color=#ad0303
+     //% group="Common"
+     //% blockId="begin" block="Begin CW01"*/
     //export function begin(): void {
-        start = true
-        serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
-        serial.setRxBufferSize(200)
+    start = true
+    serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
+    serial.setRxBufferSize(200)
 
-        serial.writeString("AT+RST" + NEWLINE)
-        basic.pause(2000)
-        serial.writeString("AT+TEST=0" + NEWLINE)
-        basic.pause(100)
-        serial.writeString("ATE0" + NEWLINE)
-        basic.pause(100)
-        serial.writeString("AT+TEST" + NEWLINE)
-        basic.pause(100)
-        serial.writeString("AT+TEST=1" + NEWLINE)
-        basic.pause(100)
-        serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
-        basic.pause(100)
+    serial.writeString("AT+RST" + NEWLINE)
+    basic.pause(2000)
+    serial.writeString("AT+TEST=0" + NEWLINE)
+    basic.pause(100)
+    serial.writeString("ATE0" + NEWLINE)
+    basic.pause(100)
+    serial.writeString("AT+TEST" + NEWLINE)
+    basic.pause(100)
+    serial.writeString("AT+TEST=1" + NEWLINE)
+    basic.pause(100)
+    serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
+    basic.pause(100)
     //}
 
     //% weight=91 color=#ad0303
@@ -290,8 +290,12 @@ namespace cw01HTTP {
         basic.pause(100)
         serial.writeString(request)
         basic.pause(1000)
-
         get_status()
+
+
+        serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
+        basic.pause(100)
+        serial.readString()
     }
 
     //% weight=91 color=#4B0082
