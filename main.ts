@@ -290,9 +290,10 @@ namespace cw01HTTP {
         basic.pause(100)
         serial.writeString(request)
         basic.pause(1000)
+
         get_status()
-
-
+        
+        basic.pause(100)
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(100)
         serial.readString()
