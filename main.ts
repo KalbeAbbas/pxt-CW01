@@ -296,6 +296,8 @@ namespace cw01HTTP {
         basic.pause(100)
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(100)
+        serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
+        basic.pause(100)
         serial.readString()
     }
 
