@@ -414,9 +414,8 @@ namespace cw01HTTP {
         serial.readString()
         basic.pause(1000)
 
-        if (!get_status()) {
-            connectToAzure(azureAccess)
-        }
+        serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
+        basic.pause(1000)
     }
 
     //% weight=91 color=#f2ca00
