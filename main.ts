@@ -292,7 +292,7 @@ namespace cw01HTTP {
         basic.pause(1000)
 
         get_status()
-        
+
         basic.pause(100)
         serial.writeString("AT+CIPRECVDATA=400" + NEWLINE)
         basic.pause(100)
@@ -369,6 +369,34 @@ namespace cw01HTTP {
     export function IoTSendStateToAzure(asset: string, value: boolean): void {
 
         let payload: string = "{\"" + asset + "\": " + value + "}"
+
+        let request: string = "POST /135/" + azureAccess + " HTTP/1.1" + NEWLINE +
+            "Host: proxy.xinabox.cc" + NEWLINE +
+            "User-Agent: CW01/1.0" + NEWLINE +
+            "Content-Type: application/json" + NEWLINE +
+            "Accept: */*" + NEWLINE +
+            "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
+
+
+
+        serial.writeString("AT+CIPSEND=" + (request.length).toString() + NEWLINE)
+        basic.pause(100)
+        serial.writeString(request)
+        basic.pause(10)
+        serial.readString()
+        basic.pause(1000)
+
+        if (!get_status()) {
+            connectToAzure(azureAccess)
+        }
+    }
+
+    //% weight=91 color=#4B0082
+    //% group="Azure"
+    //% blockId="IoTGetValueFromAzure" block="Get latest value of Azure variable %asset"
+    export function IoTGetValueFromAzure(asset: string): void {
+
+        let payload: string = "{}"
 
         let request: string = "POST /135/" + azureAccess + " HTTP/1.1" + NEWLINE +
             "Host: proxy.xinabox.cc" + NEWLINE +
