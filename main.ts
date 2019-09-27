@@ -424,9 +424,9 @@ namespace cw01HTTP {
         serial.readString()
         serial.writeString("AT+CIPRECVDATA=100" + NEWLINE)
         basic.pause(200)
-        res =  serial.readString()
+        res = serial.readString()
 
-        if(res.includes(asset)){
+        if (res.includes(asset)) {
             index1 = res.indexOf(searchString) + searchString.length
             index2 = res.indexOf("}", index1)
             value = res.substr(index1, index2 - index1 - 1)
