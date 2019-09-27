@@ -417,7 +417,8 @@ namespace cw01HTTP {
         serial.writeString(request)
         basic.pause(10)
         serial.readString()
-        basic.pause(3000)
+
+        while(getDataLen() < 1000);
 
         serial.writeString("AT+CIPRECVDATA=1100" + NEWLINE)
         basic.pause(200)
@@ -446,6 +447,25 @@ namespace cw01HTTP {
     export function IoTaddLocation(lat: number, lng: number): void {
         latitude = lat
         longitude = lng
+    }
+
+    function getDataLen(): number
+    {
+
+        let index1: number
+        let index2: number
+        let searchString: string = ":"
+        let value: string
+
+        serial.writeString("AT+CIPRECVLEN?" + NEWLINE)
+        basic.pause(100)
+        res =  serial.readString()
+        index1 = res.indexOf(searchString) + searchString.length
+        index2 = res.indexOf(",", index1)
+        value = res.substr(index1, index2 - index1)
+
+        return parseInt(value)
+
     }
 
     function get_status(): boolean {
