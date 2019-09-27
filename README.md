@@ -1,6 +1,6 @@
-# XinaBox SW01 MakeCode extension
+# XinaBox CW01 MakeCode extension
 
-This library provides functions to access environmental data from the [XinaBox SW01](https://xinabox.cc/products/cw01?_pos=1&_sid=130924612&_ss=r).
+This library provides functions to access environmental data from the [XinaBox CW01](https://xinabox.cc/products/cw01?_pos=1&_sid=130924612&_ss=r).
 
 ![](sw01.jpg)
 
