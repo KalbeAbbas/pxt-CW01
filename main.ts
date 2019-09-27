@@ -268,6 +268,12 @@ namespace cw01HTTP {
     //% blockId="IoTSendValueToUbidots" block="Send Value %value to Ubidots Device %device Variable %variable , include location %loc"
     export function IoTSendValueToUbidots(value: number, device: string, variable: string, loc: boolean): void {
         let payload: string = "{\"value\": " + value.toString() + "}"
+
+        if(loc)
+        {
+            payload = "{\"value\": " + value.toString() + ", \"context\": {\"lat\": "+latitude.toString()+", \"lng\": "+longitude.toString()+"}}"
+        }
+
         let industrial: string = "industrial.api.ubidots.com"
         let educational: string = "things.ubidots.com"
         let server: string
