@@ -430,6 +430,10 @@ namespace cw01HTTP {
             index1 = res.indexOf(searchString) + searchString.length
             index2 = res.indexOf("}", index1)
             value = res.substr(index1, index2 - index1)
+        }else{
+            connectToAzure(azureAccess)
+            value = ""
+
         }
 
         return value
