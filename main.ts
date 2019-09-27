@@ -472,7 +472,7 @@ namespace cw01HTTP {
         let value: string
 
         serial.writeString("AT+CIPRECVLEN?" + NEWLINE)
-        basic.pause(200)
+        basic.pause(300)
         res =  serial.readString()
         index1 = res.indexOf(searchString) + searchString.length
         index2 = res.indexOf(",", index1)
