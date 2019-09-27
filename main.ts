@@ -38,7 +38,7 @@ namespace cw01HTTP {
     serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
     basic.pause(100)
 
-    /*
+    /**
     * Connect to W-Fi 
     */
     //% weight=91 color=#ad0303
@@ -67,7 +67,7 @@ namespace cw01HTTP {
             basic.showString("Missed begin block!")
         }
     }
-    /*
+    /**
     * Connect to AllThingsTalk IoT platform
     */
     //% weight=91
@@ -81,7 +81,7 @@ namespace cw01HTTP {
     }
 
 
-    /*
+    /**
     * Send string data to AllThingsTalk IoT platform
     */
     //% weight=91
@@ -113,7 +113,7 @@ namespace cw01HTTP {
 
     }
 
-    /*
+    /**
     * Send numerical data to AllThingsTalk IoT platform
     */
     //% weight=91
@@ -144,7 +144,7 @@ namespace cw01HTTP {
         get_status()
     }
 
-    /*
+    /**
     * Send boolean data to AllThingsTalk IoT platform
     */
     //% weight=91
@@ -175,7 +175,7 @@ namespace cw01HTTP {
         get_status()
     }
 
-    /*
+    /**
     * Get latest value of asset from AllThingsTalk IoT platform. Asset can be string, numerical and boolean
     */
     //% weight=91
@@ -212,7 +212,7 @@ namespace cw01HTTP {
         return value
     }
 
-    /*
+    /**
     * Connect to Ubidots IoT platform
     */
     //% weight=91 color=#f2ca00
@@ -228,7 +228,7 @@ namespace cw01HTTP {
         basic.pause(500)
     }
 
-    /*
+    /**
     * Get latest value of variable from Ubidots IoT platform
     */
     //% weight=91 color=#f2ca00
@@ -282,7 +282,7 @@ namespace cw01HTTP {
 
     }
 
-    /*
+    /**
     * Send numerical value to Ubidots IoT platform. Select loc to true if you want to send GPS
     * location entered with IoTaddLocation block
     */
@@ -328,7 +328,7 @@ namespace cw01HTTP {
         serial.readString()
     }
 
-    /*
+    /**
     * Connect to Microsoft Azure cloud computing platform
     */
     //% weight=91 color=#4B0082
@@ -340,7 +340,7 @@ namespace cw01HTTP {
         azureAccess = access
     }
 
-    /*
+    /**
     * Send string data to Microsoft Azure cloud computing platform
     */
     //% weight=91 color=#4B0082
@@ -371,9 +371,9 @@ namespace cw01HTTP {
         }
     }
 
-    /*
+    /**
     * Send numerical value to Microsoft Azure cloud computing platform
-    */ 
+    */
     //% weight=91 color=#4B0082
     //% group="Azure"
     //% blockId="IoTSendValueToAzure" block="Update Azure variable %asset with Value %value"
@@ -401,7 +401,7 @@ namespace cw01HTTP {
         }
     }
 
-    /*
+    /**
     * Send boolean state to Microsoft Azure cloud computing platform
     */
     //% weight=91 color=#4B0082
@@ -432,7 +432,7 @@ namespace cw01HTTP {
         }
     }
 
-    /*
+    /**
     * Get value from Microsoft Azure cloud computing platform. Value can be string, numerical and boolean.
     */
     //% weight=91 color=#4B0082
@@ -497,7 +497,7 @@ namespace cw01HTTP {
 
     }
 
-    /*
+    /**
     * Add your GPS location
     */
     //% weight=91 color=#f2ca00
