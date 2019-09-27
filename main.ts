@@ -21,10 +21,6 @@ namespace cw01HTTP {
     let select: boolean
     let azureAccess: string
 
-    /* //% weight=91 color=#ad0303
-     //% group="Common"
-     //% blockId="begin" block="Begin CW01"*/
-    //export function begin(): void {
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
     serial.setRxBufferSize(200)
@@ -41,8 +37,10 @@ namespace cw01HTTP {
     basic.pause(100)
     serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
     basic.pause(100)
-    //}
 
+    /*
+    * Connect to W-Fi 
+    */
     //% weight=91 color=#ad0303
     //% group="Common"
     //% blockId="connectToWifi" block="connect to WiFi SSID %SSID, Password %PSK"
@@ -69,6 +67,9 @@ namespace cw01HTTP {
             basic.showString("Missed begin block!")
         }
     }
+    /*
+    * Connect to AllThingsTalk IoT platform
+    */
     //% weight=91
     //% group="ATT"
     //% blockId="connectToATT" block="connect to ATT with TOKEN %TKN and DEVICE_ID %ID"
@@ -80,6 +81,9 @@ namespace cw01HTTP {
     }
 
 
+    /*
+    * Send string data to AllThingsTalk IoT platform
+    */
     //% weight=91
     //% group="ATT"
     //% blockId="IoTSendStringToATT" block="Send String %value to ATT Asset %asset"
@@ -109,6 +113,9 @@ namespace cw01HTTP {
 
     }
 
+    /*
+    * Send numerical data to AllThingsTalk IoT platform
+    */
     //% weight=91
     //% group="ATT"
     //% blockId="IoTSendValueToATT" block="Send Value %value to ATT Asset %asset"
@@ -137,6 +144,9 @@ namespace cw01HTTP {
         get_status()
     }
 
+    /*
+    * Send boolean data to AllThingsTalk IoT platform
+    */
     //% weight=91
     //% group="ATT"
     //% blockId="IoTSendStateToATT" block="Send State %state to ATT Asset %asset_name"
@@ -165,6 +175,9 @@ namespace cw01HTTP {
         get_status()
     }
 
+    /*
+    * Get latest value of asset from AllThingsTalk IoT platform. Asset can be string, numerical and boolean
+    */
     //% weight=91
     //% group="ATT"
     //% blockId="IoTgetATTAssetValue" block="Get ATT Asset %asset value"
@@ -199,6 +212,9 @@ namespace cw01HTTP {
         return value
     }
 
+    /*
+    * Connect to Ubidots IoT platform
+    */
     //% weight=91 color=#f2ca00
     //% group="Ubidots"
     //% blockId="connectToUbidots" block="connect to Ubidots %user| with TOKEN %TKN"
@@ -212,6 +228,9 @@ namespace cw01HTTP {
         basic.pause(500)
     }
 
+    /*
+    * Get latest value of variable from Ubidots IoT platform
+    */
     //% weight=91 color=#f2ca00
     //% group="Ubidots"
     //% blockId="IoTgetValuefromUbidots" block="Get Value from Ubidots Device %device Variable %variable"
@@ -263,16 +282,19 @@ namespace cw01HTTP {
 
     }
 
+    /*
+    * Send numerical value to Ubidots IoT platform. Select loc to true if you want to send GPS
+    * location entered with IoTaddLocation block
+    */
     //% weight=91 color=#f2ca00
     //% group="Ubidots"
     //% blockId="IoTSendValueToUbidots" block="Send Value %value to Ubidots Device %device Variable %variable , include location %loc"
     export function IoTSendValueToUbidots(value: number, device: string, variable: string, loc: boolean): void {
-        
+
         let payload: string = "{\"value\": " + value.toString() + "}"
 
-        if(loc)
-        {
-            payload = "{\"value\": " + value.toString() + ", \"context\": {\"lat\": "+latitude.toString()+", \"lng\": "+longitude.toString()+"}}"
+        if (loc) {
+            payload = "{\"value\": " + value.toString() + ", \"context\": {\"lat\": " + latitude.toString() + ", \"lng\": " + longitude.toString() + "}}"
         }
 
         let industrial: string = "industrial.api.ubidots.com"
@@ -306,6 +328,9 @@ namespace cw01HTTP {
         serial.readString()
     }
 
+    /*
+    * Connect to Microsoft Azure cloud computing platform
+    */
     //% weight=91 color=#4B0082
     //% group="Azure"
     //% blockId="connectToAzure" block="connect to Azure with access enpoint %access"
@@ -315,6 +340,9 @@ namespace cw01HTTP {
         azureAccess = access
     }
 
+    /*
+    * Send string data to Microsoft Azure cloud computing platform
+    */
     //% weight=91 color=#4B0082
     //% group="Azure"
     //% blockId="IoTSendStringToAzure" block="Update Azure variable %asset with String %value"
@@ -343,6 +371,9 @@ namespace cw01HTTP {
         }
     }
 
+    /*
+    * Send numerical value to Microsoft Azure cloud computing platform
+    */ 
     //% weight=91 color=#4B0082
     //% group="Azure"
     //% blockId="IoTSendValueToAzure" block="Update Azure variable %asset with Value %value"
@@ -370,6 +401,9 @@ namespace cw01HTTP {
         }
     }
 
+    /*
+    * Send boolean state to Microsoft Azure cloud computing platform
+    */
     //% weight=91 color=#4B0082
     //% group="Azure"
     //% blockId="IoTSendStateToAzure" block="Update Azure variable %asset with Boolean state %value"
@@ -398,6 +432,9 @@ namespace cw01HTTP {
         }
     }
 
+    /*
+    * Get value from Microsoft Azure cloud computing platform. Value can be string, numerical and boolean.
+    */
     //% weight=91 color=#4B0082
     //% group="Azure"
     //% blockId="IoTGetValueFromAzure" block="Get latest value of Azure variable %asset"
@@ -426,20 +463,18 @@ namespace cw01HTTP {
         basic.pause(10)
         serial.readString()
 
-        for(; i<10; i++)
-        {
-            if(getDataLen() < 1000){
+        for (; i < 10; i++) {
+            if (getDataLen() < 1000) {
                 continue
-            }else{
+            } else {
                 break
             }
         }
 
-        if(i == 10)
-        {
+        if (i == 10) {
             connectToAzure(azureAccess)
         }
-         
+
 
         serial.writeString("AT+CIPRECVDATA=1100" + NEWLINE)
         basic.pause(200)
@@ -452,7 +487,7 @@ namespace cw01HTTP {
             index1 = res.indexOf(searchString) + searchString.length
             index2 = res.indexOf("}", index1)
             value = res.substr(index1, index2 - index1)
-        }else{
+        } else {
 
             value = ""
 
@@ -462,6 +497,9 @@ namespace cw01HTTP {
 
     }
 
+    /*
+    * Add your GPS location
+    */
     //% weight=91 color=#f2ca00
     //% group="Ubidots"
     //% blockId="IoTaddLocation" block="Latitude is %lat and Longitude is %lng"
@@ -470,8 +508,7 @@ namespace cw01HTTP {
         longitude = lng
     }
 
-    function getDataLen(): number
-    {
+    function getDataLen(): number {
 
         let index1: number
         let index2: number
@@ -480,7 +517,7 @@ namespace cw01HTTP {
 
         serial.writeString("AT+CIPRECVLEN?" + NEWLINE)
         basic.pause(300)
-        res =  serial.readString()
+        res = serial.readString()
         index1 = res.indexOf(searchString) + searchString.length
         index2 = res.indexOf(",", index1)
         value = res.substr(index1, index2 - index1)
