@@ -394,7 +394,12 @@ namespace cw01HTTP {
     //% weight=91 color=#4B0082
     //% group="Azure"
     //% blockId="IoTGetValueFromAzure" block="Get latest value of Azure variable %asset"
-    export function IoTGetValueFromAzure(asset: string): void {
+    export function IoTGetValueFromAzure(asset: string): string {
+
+        let value: string
+        let index1: number
+        let index2: number
+        let searchString: string = "\"" + asset + "\":"
 
         let payload: string = "{}"
 
@@ -414,8 +419,21 @@ namespace cw01HTTP {
         serial.readString()
         basic.pause(1000)
 
-        serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
-        basic.pause(1000)
+        serial.writeString("AT+CIPRECVDATA=100" + NEWLINE)
+        basic.pause(200)
+        serial.readString()
+        serial.writeString("AT+CIPRECVDATA=100" + NEWLINE)
+        basic.pause(200)
+        res =  serial.readString()
+
+        if(res.includes(asset)){
+            index1 = res.indexOf(searchString) + searchString.length
+            index2 = res.indexOf("}", index1)
+            value = res.substr(index1, index2 - index1 - 1)
+        }
+
+        return value
+
     }
 
     //% weight=91 color=#f2ca00
