@@ -400,6 +400,7 @@ namespace cw01HTTP {
         let index1: number
         let index2: number
         let searchString: string = "\"" + asset + "\":"
+        let i: number = 0
 
         let payload: string = "{}"
 
@@ -418,7 +419,20 @@ namespace cw01HTTP {
         basic.pause(10)
         serial.readString()
 
-        while(getDataLen() < 1000);
+        for(; i<10; i++)
+        {
+            if(getDataLen() < 1000){
+                continue
+            }else{
+                break
+            }
+        }
+
+        if(i == 10)
+        {
+            connectToAzure(azureAccess)
+        }
+         
 
         serial.writeString("AT+CIPRECVDATA=1100" + NEWLINE)
         basic.pause(200)
@@ -432,7 +446,7 @@ namespace cw01HTTP {
             index2 = res.indexOf("}", index1)
             value = res.substr(index1, index2 - index1)
         }else{
-            connectToAzure(azureAccess)
+
             value = ""
 
         }
