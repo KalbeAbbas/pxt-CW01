@@ -7,8 +7,8 @@ enum USER{
 }
 
 //% groups=["Common",ATT", "Ubidots", "Azure", "others"]
-//% weight=6 color=#2699BF icon="\uf110" block="CW01 HTTP"
-namespace cw01HTTP {
+//% weight=6 color=#2699BF icon="\uf110" block="CW01"
+namespace cw01 {
 
     let res: string = ""
     let TOKEN: string = ""
@@ -43,7 +43,7 @@ namespace cw01HTTP {
     */
     //% weight=91 color=#ad0303
     //% group="Common"
-    //% blockId="connectToWifi" block="connect to WiFi SSID %SSID, Password %PSK"
+    //% blockId="connectToWifi" block="CW01 connect to WiFi SSID %SSID, password %PSK"
     export function connectToWifi(SSID: string, PSK: string): void {
         if (start) {
             serial.writeString("AT+CWMODE=1" + NEWLINE)
@@ -72,7 +72,7 @@ namespace cw01HTTP {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="connectToATT" block="connect to ATT with TOKEN %TKN and DEVICE_ID %ID"
+    //% blockId="connectToATT" block="CW01 connect to ATT with token %TKN and device-id %ID"
     export function connectToATT(TKN: string, ID: string): void {
         DEVICE_ID = ID
         TOKEN = TKN
@@ -86,7 +86,7 @@ namespace cw01HTTP {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendStringToATT" block="Send String %value to ATT Asset %asset"
+    //% blockId="IoTSendStringToATT" block="CW01 send string %value to ATT asset %asset"
     export function IoTSendStringToATT(value: string, asset: string): void {
         asset_name = asset
         serial.writeString("AT+CIPMODE=0" + NEWLINE)
@@ -118,7 +118,7 @@ namespace cw01HTTP {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendValueToATT" block="Send Value %value to ATT Asset %asset"
+    //% blockId="IoTSendValueToATT" block="CW01 send value %value to ATT asset %asset"
     export function IoTSendValueToATT(value: number, asset: string): void {
         asset_name = asset
         serial.writeString("AT+CIPMODE=0" + NEWLINE)
@@ -149,7 +149,7 @@ namespace cw01HTTP {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendStateToATT" block="Send State %state to ATT Asset %asset_name"
+    //% blockId="IoTSendStateToATT" block="CW01 send state %state to ATT asset %asset_name"
     export function IoTSendStateToATT(state: boolean, asset: string): void {
         asset_name = asset
         serial.writeString("AT+CIPMODE=0" + NEWLINE)
@@ -180,7 +180,7 @@ namespace cw01HTTP {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTgetATTAssetValue" block="Get ATT Asset %asset value"
+    //% blockId="IoTgetATTAssetValue" block="CW01 get ATT asset %asset value"
     export function IoTgetATTAssetValue(asset: string): string {
         res = ""
         let index1: number
@@ -217,7 +217,7 @@ namespace cw01HTTP {
     */
     //% weight=91 color=#f2ca00
     //% group="Ubidots"
-    //% blockId="connectToUbidots" block="connect to Ubidots %user| with TOKEN %TKN"
+    //% blockId="connectToUbidots" block="CW01 connect to Ubidots %user| with token %TKN"
     export function connectToUbidots(User: USER, TKN: string): void {
         switch (User) {
             case USER.INDUSTRIAL: select = true;
@@ -233,7 +233,7 @@ namespace cw01HTTP {
     */
     //% weight=91 color=#f2ca00
     //% group="Ubidots"
-    //% blockId="IoTgetValuefromUbidots" block="Get Value from Ubidots Device %device Variable %variable"
+    //% blockId="IoTgetValuefromUbidots" block="CW01 get value from Ubidots device %device variable %variable"
     export function IoTgetValuefromUbidots(device: string, variable: string): string {
         res = ""
         let value: string
@@ -288,7 +288,7 @@ namespace cw01HTTP {
     */
     //% weight=91 color=#f2ca00
     //% group="Ubidots"
-    //% blockId="IoTSendValueToUbidots" block="Send Value %value to Ubidots Device %device Variable %variable , include location %loc"
+    //% blockId="IoTSendValueToUbidots" block="CW01 send value %value to Ubidots device %device variable %variable , include location %loc"
     export function IoTSendValueToUbidots(value: number, device: string, variable: string, loc: boolean): void {
 
         let payload: string = "{\"value\": " + value.toString() + "}"
@@ -333,7 +333,7 @@ namespace cw01HTTP {
     */
     //% weight=91 color=#4B0082
     //% group="Azure"
-    //% blockId="connectToAzure" block="connect to Azure with access enpoint %access"
+    //% blockId="connectToAzure" block="CW01 connect to Azure with access enpoint %access"
     export function connectToAzure(access: string): void {
         serial.writeString("AT+CIPSTART=\"TCP\",\"proxy.xinabox.cc\",80" + NEWLINE)
         basic.pause(500)
@@ -345,7 +345,7 @@ namespace cw01HTTP {
     */
     //% weight=91 color=#4B0082
     //% group="Azure"
-    //% blockId="IoTSendStringToAzure" block="Update Azure variable %asset with String %value"
+    //% blockId="IoTSendStringToAzure" block="CW01 update Azure variable %asset with string %value"
     export function IoTSendStringToAzure(asset: string, value: string): void {
 
         let payload: string = "{\"" + asset + "\": " + value + "}"
@@ -376,7 +376,7 @@ namespace cw01HTTP {
     */
     //% weight=91 color=#4B0082
     //% group="Azure"
-    //% blockId="IoTSendValueToAzure" block="Update Azure variable %asset with Value %value"
+    //% blockId="IoTSendValueToAzure" block="CW01 update Azure variable %asset with value %value"
     export function IoTSendValueToAzure(asset: string, value: number): void {
         let payload: string = "{\"" + asset + "\": " + value.toString() + "}"
 
@@ -406,7 +406,7 @@ namespace cw01HTTP {
     */
     //% weight=91 color=#4B0082
     //% group="Azure"
-    //% blockId="IoTSendStateToAzure" block="Update Azure variable %asset with Boolean state %value"
+    //% blockId="IoTSendStateToAzure" block="CW01 update Azure variable %asset with boolean state %value"
     export function IoTSendStateToAzure(asset: string, value: boolean): void {
 
         let payload: string = "{\"" + asset + "\": " + value + "}"
@@ -437,7 +437,7 @@ namespace cw01HTTP {
     */
     //% weight=91 color=#4B0082
     //% group="Azure"
-    //% blockId="IoTGetValueFromAzure" block="Get latest value of Azure variable %asset"
+    //% blockId="IoTGetValueFromAzure" block="CW01 get latest value of Azure variable %asset"
     export function IoTGetValueFromAzure(asset: string): string {
 
         let value: string
@@ -502,7 +502,7 @@ namespace cw01HTTP {
     */
     //% weight=91 color=#f2ca00
     //% group="Ubidots"
-    //% blockId="IoTaddLocation" block="Latitude is %lat and Longitude is %lng"
+    //% blockId="IoTaddLocation" block="CW01 latitude is %lat and longitude is %lng"
     export function IoTaddLocation(lat: number, lng: number): void {
         latitude = lat
         longitude = lng
