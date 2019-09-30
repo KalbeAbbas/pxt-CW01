@@ -27,7 +27,7 @@ A comprehensive set of How-to guides that show you how to use the blocks is avai
 
 ```blocks
 // Connect to WiFi
-cw01HTTP.connectToWifi("SSID", "PSK")
+cw01.connectToWifi("SSID", "PSK")
 
 ```
 
@@ -36,19 +36,19 @@ cw01HTTP.connectToWifi("SSID", "PSK")
 
 ```blocks
 // Connect
-cw01HTTP.connectToATT("TOKEN", "ID")
+cw01.connectToATT("TOKEN", "ID")
 
 //Send string data
-cw01HTTP.IoTSendStringToATT("string", "asset_name")
+cw01.IoTSendStringToATT("string", "asset_name")
 
 //Send numerical data
-cw01HTTP.IoTSendValueToATT(0, "asset_name")
+cw01P.IoTSendValueToATT(0, "asset_name")
 
 //Send boolean data
-cw01HTTP.IoTSendStateToATT(false, "asset_name")
+cw01.IoTSendStateToATT(false, "asset_name")
 
 //Get data
-cw01HTTP.IoTgetATTAssetValue("asset_name")
+cw01.IoTgetATTAssetValue("asset_name")
 
 ```
 
@@ -56,19 +56,19 @@ cw01HTTP.IoTgetATTAssetValue("asset_name")
 
 ```blocks
 // Connect
-cw01HTTP.connectToAzure("access_endpoint")
+cw01.connectToAzure("access_endpoint")
 
 //Send string data
-cw01HTTP.IoTSendStringToAzure("variable_name", "string")
+cw01.IoTSendStringToAzure("variable_name", "string")
 
 //Send numerical data
-cw01HTTP.IoTSendValueToAzure("variable_name", 0)
+cw01.IoTSendValueToAzure("variable_name", 0)
 
 //Send boolean data
-cw01HTTP.IoTSendStateToAzure("variable_name", false)
+cw01.IoTSendStateToAzure("variable_name", false)
 
 //Get data
-cw01HTTP.IoTGetValueFromAzure("variable_name")
+cw01.IoTGetValueFromAzure("variable_name")
 
 ```
 
@@ -76,16 +76,16 @@ cw01HTTP.IoTGetValueFromAzure("variable_name")
 
 ```blocks
 // Connect to Industrial or Education account type
-cw01HTTP.connectToUbidots(user.industrial, "TOKEN")
+cw01.connectToUbidots(USER.INDUSTRIAL, "TOKEN")
 
 //Send numerical data to variable in device. Select true to enter GPS location
-cw01HTTP.IoTSendValueToUbidots(0, "device_api", "variable_api", false)
+cw01.IoTSendValueToUbidots(0, "device_api", "variable_api", false)
 
 //Get data
-cw01HTTP.IoTgetValuefromUbidots("device_api", "variable_api")
+cw01.IoTgetValuefromUbidots("device_api", "variable_api")
 
 //Add GPS location, latitude and longitude
-cw01HTTP.IoTaddLocation(0, 0)
+cw01.IoTaddLocation(0, 0)
 
 ```
   
