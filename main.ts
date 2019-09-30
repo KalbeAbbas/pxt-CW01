@@ -1,8 +1,8 @@
-enum user {
-    //% block="Industrial"
-    industrial = 1,
-    //% block="Educational"
-    educational = 2
+enum USER{
+    //% block="INDUSTRIAL"
+    INDUSTRIAL = 1,
+    //% block="EDUCATIONAL"
+    EDUCATIONAL = 2
 
 }
 
@@ -218,10 +218,10 @@ namespace cw01HTTP {
     //% weight=91 color=#f2ca00
     //% group="Ubidots"
     //% blockId="connectToUbidots" block="connect to Ubidots %user| with TOKEN %TKN"
-    export function connectToUbidots(User: user, TKN: string): void {
+    export function connectToUbidots(User: USER, TKN: string): void {
         switch (User) {
-            case user.industrial: select = true;
-            case user.educational: select = false;
+            case USER.INDUSTRIAL: select = true;
+            case USER.EDUCATIONAL: select = false;
         }
         TOKEN = TKN
         serial.writeString("AT+CIPSTART=\"TCP\",\"things.ubidots.com\",80" + NEWLINE)
