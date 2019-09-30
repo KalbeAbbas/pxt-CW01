@@ -9,8 +9,8 @@ This library provides functions to access environmental data from the [XinaBox C
 The CW01 uses ESP8266 core to transimit and receive data.
 This libray enables you connect to IoT clouds specifically with:
 * AllThingsTalk
-* Ubidots
 * Microsoft Azure
+* Ubidots
 
 There are functions to:
 * Connect to Wi-Fi
