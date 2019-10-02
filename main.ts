@@ -1,4 +1,4 @@
-enum USER{
+enum USER {
     //% block="INDUSTRIAL"
     INDUSTRIAL = 1,
     //% block="EDUCATIONAL"
