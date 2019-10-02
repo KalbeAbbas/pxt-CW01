@@ -22,7 +22,7 @@ namespace cw01 {
     let azureAccess: string
 
     start = true
-    serial.redirect(SerialPin.P0, SerialPin.P1, 115200)
+    serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
     serial.setRxBufferSize(200)
 
     serial.writeString("AT+RST" + NEWLINE)
