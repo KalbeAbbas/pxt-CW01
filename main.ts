@@ -27,14 +27,8 @@ namespace cw01 {
 
     serial.writeString("AT+RST" + NEWLINE)
     basic.pause(2000)
-    serial.writeString("AT+TEST=0" + NEWLINE)
-    basic.pause(100)
     /*serial.writeString("ATE0" + NEWLINE)
     basic.pause(100)*/
-    serial.writeString("AT+TEST" + NEWLINE)
-    basic.pause(100)
-    serial.writeString("AT+TEST=1" + NEWLINE)
-    basic.pause(100)
     serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
     basic.pause(100)
 
@@ -61,6 +55,13 @@ namespace cw01 {
             } else {
                 basic.showString("D")
             }
+
+            serial.writeString("AT+TEST=0" + NEWLINE)
+            basic.pause(300)
+            serial.writeString("AT+TEST" + NEWLINE)
+            basic.pause(300)
+            serial.writeString("AT+TEST=1" + NEWLINE)
+            basic.pause(300)
 
 
         } else {
