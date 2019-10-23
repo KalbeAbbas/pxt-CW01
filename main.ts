@@ -404,9 +404,10 @@ namespace cw01 {
 
     //% weight=91
     //% group="MQTT"
-    //% blockId="IoTSendValueToMQTT" block="Send value to MQTT Asset %asset"
-    export function IoTSendValueToMQTT(asset: string): void {
-        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
+    //% blockId="IoTMQTTConnect" block="CW01 connect to MQTT broker URL %broker with Username %Username and Password %Password"
+    export function IoTMQTTConnect(broker: string, Username: string, Password: string): void {
+
+        serial.writeString("AT+CIPSTART=\"TCP\",\""+ broker + "\",1883" + NEWLINE)
         basic.pause(2000)
 
         let protocol_name_prior: Buffer = pins.packBuffer("!H", [4])
@@ -417,9 +418,9 @@ namespace cw01 {
         let keep_alive: Buffer = pins.packBuffer("!H", [200])
         let client_id: string = "CW01/1.1"
         let client_id_len: Buffer = pins.packBuffer("!H", [client_id.length])
-        let username: string = "maker:4OFo7FMIqoIOW1VeVsn87ckz2OyDoR1rXKd23sT"
+        let username: string = Username
         let username_len: Buffer = pins.packBuffer("!H", [username.length])
-        let password: string = "c770b0220c"
+        let password: string = Password
         let password_len: Buffer = pins.packBuffer("!H", [password.length])
         //let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
 
@@ -446,16 +447,20 @@ namespace cw01 {
         serial.writeString(password)
 
         basic.pause(1000)
-        serial.writeString("AT+CIPRECVDATA=4" + NEWLINE);
+    }
 
-        basic.pause(2000)
+
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTMQTTSendValue" block="CW01 send JSON %Json to topic %Topic"
+   export function IoTMQTTSendValue(Json: string, Topic: string): void {
 
         //Publish data
 
         //Msg part two
-        let topic: string = "device/" + "E3pee2icRLE1wDXArfJsdmtA" + "/asset/" + asset + "/state"
+        let topic: string = Topic
         let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
-        let value: string = "{ \"value\":" + (Math.randomRange(0, 10)).toString() +  "}" 
+        let value: string = Json
 
         //Msg part one
         let start_byte: Buffer = pins.packBuffer("!B", [0x30])
@@ -471,6 +476,76 @@ namespace cw01 {
         serial.writeString(topic)
         serial.writeString(value)
     }
+
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTSendValueToMQTT" block="Send value to MQTT Asset %asset"
+    /*export function IoTSendValueToMQTT(asset: string): void {
+        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
+        basic.pause(2000)
+
+        let protocol_name_prior: Buffer = pins.packBuffer("!H", [4])
+        let protocol_name: string = "MQTT"
+        let protocol_lvl: Buffer = pins.packBuffer("!B", [4])*/
+        //let msg_part_one: string = protocol_name + protocol_lvl
+        /*let connect_flags: Buffer = (pins.packBuffer("!B", [(1 << 7) | (1 << 6) | (1 << 1)]))
+        let keep_alive: Buffer = pins.packBuffer("!H", [200])
+        let client_id: string = "CW01/1.1"
+        let client_id_len: Buffer = pins.packBuffer("!H", [client_id.length])
+        let username: string = "maker:4OFo7FMIqoIOW1VeVsn87ckz2OyDoR1rXKd23sT"
+        let username_len: Buffer = pins.packBuffer("!H", [username.length])
+        let password: string = "c770b0220c"
+        let password_len: Buffer = pins.packBuffer("!H", [password.length])*/
+        //let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
+
+       /* serial.writeString("AT+CIPSEND=" + (1 + 1 + protocol_name_prior.length + protocol_name.length + protocol_lvl.length + connect_flags.length + keep_alive.length + client_id_len.length + client_id.length + username_len.length + username.length + password_len.length + password.length) + NEWLINE)
+        basic.pause(1000)*/
+        /*serial.writeBuffer(pins.packBuffer("!B", [4]))
+        serial.writeBuffer(pins.packBuffer("!B", [4]))*/
+
+        //Msg part one
+        /*serial.writeBuffer(pins.packBuffer("!B", [1 << 4]))
+        serial.writeBuffer(pins.packBuffer("!B", [protocol_name_prior.length + protocol_name.length + protocol_lvl.length + connect_flags.length + keep_alive.length + client_id_len.length + client_id.length + username_len.length + username.length + password_len.length + password.length]))*/
+
+        //Msg part two
+        /*serial.writeBuffer(protocol_name_prior)
+        serial.writeString(protocol_name)
+        serial.writeBuffer(protocol_lvl)
+        serial.writeBuffer(connect_flags)
+        serial.writeBuffer(keep_alive)
+        serial.writeBuffer(client_id_len)
+        serial.writeString(client_id)
+        serial.writeBuffer(username_len)
+        serial.writeString(username)
+        serial.writeBuffer(password_len)
+        serial.writeString(password)
+
+        basic.pause(1000)
+        serial.writeString("AT+CIPRECVDATA=4" + NEWLINE);
+
+        basic.pause(2000)*/
+
+        //Publish data
+
+        //Msg part two
+        /*let topic: string = "device/" + "E3pee2icRLE1wDXArfJsdmtA" + "/asset/" + asset + "/state"
+        let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
+        let value: string = "{ \"value\":" + (Math.randomRange(0, 10)).toString() +  "}" */
+
+        //Msg part one
+        /*let start_byte: Buffer = pins.packBuffer("!B", [0x30])
+        let msg_part_two_len: Buffer = pins.packBuffer("!B", [topic_len.length + topic.length + value.length])
+
+        serial.writeString("AT+CIPSEND=" + (start_byte.length + msg_part_two_len.length + topic_len.length + topic.length + value.length) + NEWLINE)
+        basic.pause(1000)
+
+        serial.writeBuffer(start_byte)
+        serial.writeBuffer(msg_part_two_len)
+
+        serial.writeBuffer(topic_len)
+        serial.writeString(topic)
+        serial.writeString(value)
+    }*/
 
     /**
     * Send boolean state to Microsoft Azure cloud computing platform
