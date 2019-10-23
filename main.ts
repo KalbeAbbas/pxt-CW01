@@ -417,7 +417,7 @@ namespace cw01 {
         let keep_alive: Buffer = pins.packBuffer("!H", [200])
         let client_id: string = "CW01/1.1"
         let client_id_len: Buffer = pins.packBuffer("!H", [client_id.length])
-        let username: string = "maker:4TBZDG1N8fWRW1VeVm2yIZG9wr7UYBVLpMR3OY6"
+        let username: string = "maker:4OFo7FMIqoIOW1VeVsn87ckz2OyDoR1rXKd23sT"
         let username_len: Buffer = pins.packBuffer("!H", [username.length])
         let password: string = "c770b0220c"
         let password_len: Buffer = pins.packBuffer("!H", [password.length])
