@@ -409,7 +409,7 @@ namespace cw01 {
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
         basic.pause(2000)
 
-        let protocol_name_prior:Buffer = pins.packBuffer("!H", [4])
+        let protocol_name_prior: Buffer = pins.packBuffer("!H", [4])
         let protocol_name: string = "MQTT"
         let protocol_lvl: Buffer = pins.packBuffer("!B", [4])
         //let msg_part_one: string = protocol_name + protocol_lvl
@@ -431,7 +431,7 @@ namespace cw01 {
         //Msg part one
         serial.writeBuffer(pins.packBuffer("!B", [1 << 4]))
         serial.writeBuffer(pins.packBuffer("!B", [protocol_name_prior.length + protocol_name.length + protocol_lvl.length + connect_flags.length + keep_alive.length + client_id_len.length + client_id.length + username_len.length + username.length + password_len.length + password.length]))
-        
+
         //Msg part two
         serial.writeBuffer(protocol_name_prior)
         serial.writeString(protocol_name)
@@ -449,6 +449,27 @@ namespace cw01 {
         serial.writeString("AT+CIPRECVDATA=4" + NEWLINE);
 
         basic.pause(2000)
+
+        //Publish data
+
+        //Msg part two
+        let topic: string = "device/" + DEVICE_ID + "/asset/" + asset + "/state"
+        let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
+        let value: string = (Math.randomRange(0,10)).toString()
+
+        //Msg part one
+        let start_byte: Buffer = pins.packBuffer("!B", [30])
+        let msg_part_two_len: Buffer = pins.packBuffer("!B", [topic_len.length + topic.length + value.length])
+        
+        serial.writeString("AT+CIPSEND=" + (start_byte.length + msg_part_two_len.length + topic_len.length + topic.length + value.length) )
+        basic.pause(1000)
+
+        serial.writeBuffer(start_byte)
+        serial.writeBuffer(msg_part_two_len)
+        
+        serial.writeBuffer(topic_len)
+        serial.writeString(topic)
+        serial.writeString(value)
     }
 
     /**
