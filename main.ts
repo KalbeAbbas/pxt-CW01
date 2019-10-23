@@ -24,6 +24,7 @@ namespace cw01 {
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
     serial.setRxBufferSize(200)
 
+    basic.pause(2000)
     serial.writeString("AT+RST" + NEWLINE)
     basic.pause(2000)
     /*serial.writeString("ATE0" + NEWLINE)
