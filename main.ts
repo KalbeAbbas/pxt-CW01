@@ -1,9 +1,9 @@
-enum user{
+enum user {
     //% block="Industrial"
     industrial = 1,
     //% block="Educational"
     educational = 2
-    
+
 }
 
 //% groups=["Common",ATT", "Ubidots", "others"]
@@ -201,8 +201,7 @@ namespace CW01_HTTP {
     //% group="Ubidots"
     //% blockId="connectToUbidots" block="connect to Ubidots %user| with TOKEN %TKN"
     export function connectToUbidots(User: user, TKN: string): void {
-        switch(User)
-        {
+        switch (User) {
             case user.industrial: select = true;
             case user.educational: select = false;
         }
@@ -222,10 +221,9 @@ namespace CW01_HTTP {
         let industrial: string = "industrial.api.ubidots.com"
         let educational: string = "things.ubidots.com"
         let server: string
-        if(select)
-        {
+        if (select) {
             server = industrial
-        }else{
+        } else {
             server = educational
         }
         let request: string = "GET /api/v1.6/devices/" + device + "/" + variable + "/values/?page_size=1 HTTP/1.1" + NEWLINE +
@@ -277,7 +275,7 @@ namespace CW01_HTTP {
             server = educational
         }
         let request: string = "POST /api/v1.6/devices/" + device + "/" + variable + "/values HTTP/1.1" + NEWLINE +
-            "Host: "+ server + NEWLINE +
+            "Host: " + server + NEWLINE +
             "User-Agent: CW01/1.0" + NEWLINE +
             "X-Auth-Token: " + TOKEN + NEWLINE +
             "Content-Type: application/json" + NEWLINE +
@@ -292,6 +290,46 @@ namespace CW01_HTTP {
         basic.pause(10)
         serial.readString()
         basic.pause(1000)
+    }
+
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTSendValueToMQTT" block="Send value to MQTT Asset %asset"
+    export function IoTSendValueToMQTT(asset: string): void {
+        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
+        basic.pause(1000)
+
+        let protocol_name: string = pins.packBuffer("!H", [4]).toString() + "MQTT"
+        let protocol_lvl: string = (pins.packBuffer("!B", [4])).toString()
+        let msg_part_one: string = protocol_name + protocol_lvl
+
+
+        let connect_flags: Buffer = (pins.packBuffer("!B", [(1 << 7) | (1 << 6) | (1 << 1)]))
+
+        let keep_alive: Buffer = pins.packBuffer("!H", [200])
+
+
+        let client_id: string = "CW01/1.1"
+        let client_id_len: string = (pins.packBuffer("!H", [client_id.length])).toString()
+        let username: string = "maker:4TBZDG1N8fWRW1VeVm2yIZG9wr7UYBVLpMR3OY6"
+        let username_len: string = (pins.packBuffer("!H", [username.length])).toString()
+        let password: string = "c770b0220c"
+        let password_len: string = (pins.packBuffer("!H", [password.length])).toString()
+        let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
+
+        serial.writeString("AT+CIPSEND=" + (1 + 1 + msg_part_one.length + connect_flags.length + keep_alive.length + msg_part_two.length) + NEWLINE)
+        basic.pause(1000)
+        /*serial.writeBuffer(pins.packBuffer("!B", [4]))
+        serial.writeBuffer(pins.packBuffer("!B", [4]))*/
+
+        serial.writeBuffer(pins.packBuffer("!B", [1 << 4]))
+        serial.writeBuffer(pins.packBuffer("!B", [msg_part_one.length + connect_flags.length + keep_alive.length + msg_part_two.length]))
+        serial.writeString(msg_part_one) //protocol name
+        serial.writeBuffer(connect_flags) // flags
+        serial.writeBuffer(keep_alive) //keep alive
+        serial.writeString(msg_part_two) //string data
+
+        basic.pause(2000)
     }
 
     //% weight=91 color=#f2ca00
