@@ -406,7 +406,7 @@ namespace cw01 {
     //% blockId="IoTSendValueToMQTT" block="Send value to MQTT Asset %asset"
     export function IoTSendValueToMQTT(asset: string): void {
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
-        basic.pause(1000)
+        basic.pause(2000)
 
         let protocol_name: string = pins.packBuffer("!H", [4]).toString() + "MQTT"
         let protocol_lvl: string = (pins.packBuffer("!B", [4])).toString()
