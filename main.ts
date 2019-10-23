@@ -444,6 +444,8 @@ namespace cw01 {
         serial.writeBuffer(password_len)
         serial.writeString(password)
 
+        serial.writeString("AT+CIPRECVDATA=4" + NEWLINE);
+
         basic.pause(2000)
     }
 
