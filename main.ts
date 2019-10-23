@@ -455,8 +455,6 @@ namespace cw01 {
     //% blockId="IoTMQTTSendValue" block="CW01 send JSON %Json to topic %Topic"
    export function IoTMQTTSendValue(Json: string, Topic: string): void {
 
-        //Publish data
-
         //Msg part two
         let topic: string = Topic
         let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
