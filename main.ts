@@ -3,7 +3,6 @@ enum USER {
     INDUSTRIAL = 1,
     //% block="EDUCATIONAL"
     EDUCATIONAL = 2
-
 }
 
 //% groups=["Common",ATT", "Ubidots", "Azure", "MQTT", "others"]
@@ -400,6 +399,46 @@ namespace cw01 {
         if (!get_status()) {
             connectToAzure(azureAccess)
         }
+    }
+
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTSendValueToMQTT" block="Send value to MQTT Asset %asset"
+    export function IoTSendValueToMQTT(asset: string): void {
+        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
+        basic.pause(1000)
+
+        let protocol_name: string = pins.packBuffer("!H", [4]).toString() + "MQTT"
+        let protocol_lvl: string = (pins.packBuffer("!B", [4])).toString()
+        let msg_part_one: string = protocol_name + protocol_lvl
+
+
+        let connect_flags: Buffer = (pins.packBuffer("!B", [(1 << 7) | (1 << 6) | (1 << 1)]))
+
+        let keep_alive: Buffer = pins.packBuffer("!H", [200])
+
+
+        let client_id: string = "CW01/1.1"
+        let client_id_len: string = (pins.packBuffer("!H", [client_id.length])).toString()
+        let username: string = "maker:4TBZDG1N8fWRW1VeVm2yIZG9wr7UYBVLpMR3OY6"
+        let username_len: string = (pins.packBuffer("!H", [username.length])).toString()
+        let password: string = "c770b0220c"
+        let password_len: string = (pins.packBuffer("!H", [password.length])).toString()
+        let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
+
+        serial.writeString("AT+CIPSEND=" + (1 + 1 + msg_part_one.length + connect_flags.length + keep_alive.length + msg_part_two.length) + NEWLINE)
+        basic.pause(1000)
+        /*serial.writeBuffer(pins.packBuffer("!B", [4]))
+        serial.writeBuffer(pins.packBuffer("!B", [4]))*/
+
+        serial.writeBuffer(pins.packBuffer("!B", [1 << 4]))
+        serial.writeBuffer(pins.packBuffer("!B", [msg_part_one.length + connect_flags.length + keep_alive.length + msg_part_two.length]))
+        serial.writeString(msg_part_one) //protocol name
+        serial.writeBuffer(connect_flags) // flags
+        serial.writeBuffer(keep_alive) //keep alive
+        serial.writeString(msg_part_two) //string data
+
+        basic.pause(2000)
     }
 
     /**
