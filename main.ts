@@ -412,13 +412,8 @@ namespace cw01 {
         let protocol_name: string = "MQTT"
         let protocol_lvl: Buffer = pins.packBuffer("!B", [4])
         //let msg_part_one: string = protocol_name + protocol_lvl
-
-
         let connect_flags: Buffer = (pins.packBuffer("!B", [(1 << 7) | (1 << 6) | (1 << 1)]))
-
         let keep_alive: Buffer = pins.packBuffer("!H", [200])
-
-
         let client_id: string = "CW01/1.1"
         let client_id_len: Buffer = pins.packBuffer("!H", [client_id.length])
         let username: string = "maker:4TBZDG1N8fWRW1VeVm2yIZG9wr7UYBVLpMR3OY6"
@@ -441,6 +436,7 @@ namespace cw01 {
         serial.writeString(protocol_name)
         serial.writeBuffer(protocol_lvl)
         serial.writeBuffer(connect_flags)
+        serial.writeBuffer(keep_alive)
         serial.writeBuffer(client_id_len)
         serial.writeString(client_id)
         serial.writeBuffer(username_len)
