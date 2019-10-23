@@ -453,20 +453,20 @@ namespace cw01 {
         //Publish data
 
         //Msg part two
-        let topic: string = "device/" + DEVICE_ID + "/asset/" + asset + "/state"
+        let topic: string = "device/" + "E3pee2icRLE1wDXArfJsdmtA" + "/asset/" + asset + "/state"
         let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
-        let value: string = (Math.randomRange(0,10)).toString()
+        let value: string = (Math.randomRange(0, 10)).toString()
 
         //Msg part one
         let start_byte: Buffer = pins.packBuffer("!B", [0x30])
         let msg_part_two_len: Buffer = pins.packBuffer("!B", [topic_len.length + topic.length + value.length])
-        
-        serial.writeString("AT+CIPSEND=" + (start_byte.length + msg_part_two_len.length + topic_len.length + topic.length + value.length) + NEWLINE )
+
+        serial.writeString("AT+CIPSEND=" + (start_byte.length + msg_part_two_len.length + topic_len.length + topic.length + value.length) + NEWLINE)
         basic.pause(1000)
 
         serial.writeBuffer(start_byte)
         serial.writeBuffer(msg_part_two_len)
-        
+
         serial.writeBuffer(topic_len)
         serial.writeString(topic)
         serial.writeString(value)
