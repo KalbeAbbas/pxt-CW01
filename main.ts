@@ -461,7 +461,7 @@ namespace cw01 {
         let start_byte: Buffer = pins.packBuffer("!B", [30])
         let msg_part_two_len: Buffer = pins.packBuffer("!B", [topic_len.length + topic.length + value.length])
         
-        serial.writeString("AT+CIPSEND=" + (start_byte.length + msg_part_two_len.length + topic_len.length + topic.length + value.length) )
+        serial.writeString("AT+CIPSEND=" + (start_byte.length + msg_part_two_len.length + topic_len.length + topic.length + value.length) + NEWLINE )
         basic.pause(1000)
 
         serial.writeBuffer(start_byte)
