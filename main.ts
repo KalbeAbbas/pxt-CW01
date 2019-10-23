@@ -6,7 +6,7 @@ enum USER {
 
 }
 
-//% groups=["Common",ATT", "Ubidots", "Azure", "others"]
+//% groups=["Common",ATT", "Ubidots", "Azure", "MQTT", "others"]
 //% weight=6 color=#2699BF icon="\uf110" block="CW01"
 namespace cw01 {
 
