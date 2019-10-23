@@ -455,7 +455,7 @@ namespace cw01 {
         //Msg part two
         let topic: string = "device/" + "E3pee2icRLE1wDXArfJsdmtA" + "/asset/" + asset + "/state"
         let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
-        let value: string = (Math.randomRange(0, 10)).toString()
+        let value: string = "{ \"value\":" + (Math.randomRange(0, 10)).toString() +  "}" 
 
         //Msg part one
         let start_byte: Buffer = pins.packBuffer("!B", [0x30])
