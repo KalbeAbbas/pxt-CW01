@@ -473,6 +473,8 @@ namespace cw01 {
         serial.writeBuffer(topic_len)
         serial.writeString(topic)
         serial.writeString(value)
+
+        basic.pause(1000)
     }
 
 
