@@ -408,9 +408,10 @@ namespace cw01 {
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",1883" + NEWLINE)
         basic.pause(2000)
 
-        let protocol_name: string = pins.packBuffer("!H", [4]).toString() + "MQTT"
-        let protocol_lvl: string = (pins.packBuffer("!B", [4])).toString()
-        let msg_part_one: string = protocol_name + protocol_lvl
+        let protocol_name_prior:Buffer = pins.packBuffer("!H", [4])
+        let protocol_name: string = "MQTT"
+        let protocol_lvl: Buffer = pins.packBuffer("!B", [4])
+        //let msg_part_one: string = protocol_name + protocol_lvl
 
 
         let connect_flags: Buffer = (pins.packBuffer("!B", [(1 << 7) | (1 << 6) | (1 << 1)]))
@@ -419,24 +420,33 @@ namespace cw01 {
 
 
         let client_id: string = "CW01/1.1"
-        let client_id_len: string = (pins.packBuffer("!H", [client_id.length])).toString()
+        let client_id_len: Buffer = pins.packBuffer("!H", [client_id.length])
         let username: string = "maker:4TBZDG1N8fWRW1VeVm2yIZG9wr7UYBVLpMR3OY6"
-        let username_len: string = (pins.packBuffer("!H", [username.length])).toString()
+        let username_len: Buffer = pins.packBuffer("!H", [username.length])
         let password: string = "c770b0220c"
-        let password_len: string = (pins.packBuffer("!H", [password.length])).toString()
-        let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
+        let password_len: Buffer = pins.packBuffer("!H", [password.length])
+        //let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
 
-        serial.writeString("AT+CIPSEND=" + (1 + 1 + msg_part_one.length + connect_flags.length + keep_alive.length + msg_part_two.length) + NEWLINE)
+        serial.writeString("AT+CIPSEND=" + (1 + 1 + protocol_name_prior.length + protocol_name.length + protocol_lvl.length + connect_flags.length + keep_alive.length + client_id_len.length + client_id.length + username_len.length + username.length + password_len.length + password.length) + NEWLINE)
         basic.pause(1000)
         /*serial.writeBuffer(pins.packBuffer("!B", [4]))
         serial.writeBuffer(pins.packBuffer("!B", [4]))*/
 
+        //Msg part one
         serial.writeBuffer(pins.packBuffer("!B", [1 << 4]))
-        serial.writeBuffer(pins.packBuffer("!B", [msg_part_one.length + connect_flags.length + keep_alive.length + msg_part_two.length]))
-        serial.writeString(msg_part_one) //protocol name
-        serial.writeBuffer(connect_flags) // flags
-        serial.writeBuffer(keep_alive) //keep alive
-        serial.writeString(msg_part_two) //string data
+        serial.writeBuffer(pins.packBuffer("!B", [protocol_name_prior.length + protocol_name.length + protocol_lvl.length + connect_flags.length + keep_alive.length + client_id_len.length + client_id.length + username_len.length + username.length + password_len.length + password.length]))
+        
+        //Msg part two
+        serial.writeBuffer(protocol_name_prior)
+        serial.writeString(protocol_name)
+        serial.writeBuffer(protocol_lvl)
+        serial.writeBuffer(connect_flags)
+        serial.writeBuffer(client_id_len)
+        serial.writeString(client_id)
+        serial.writeBuffer(username_len)
+        serial.writeString(username)
+        serial.writeBuffer(password_len)
+        serial.writeString(password)
 
         basic.pause(2000)
     }
