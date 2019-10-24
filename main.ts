@@ -518,9 +518,16 @@ namespace cw01 {
 
     //% weight=91
     //% group="MQTT"
-    //% blockId="IoTMQTTGetLatestData" block="CW01 Get latest data"
-    function IoTMQTTGetLatestData(): string {
-        return payload
+    //% blockId="IoTMQTTGetLatestData" block="CW01 get latest data"
+    export function IoTMQTTGetLatestData(): string {
+        let prev_payload: string = ""
+
+        if(prev_payload.compare(payload) != 0)
+        {
+            return payload
+        }else{
+            return null
+        }
     }
 
     function IoTMQTTGetData(): void {
