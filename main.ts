@@ -506,7 +506,10 @@ namespace cw01 {
 
         basic.pause(1000)
 
+        serial.readString()
+        basic.pause(100)
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
+        serial.readBuffer(9)
 
         serial.onDataReceived("\n", function () {
             if ((serial.readString()).includes("IPD")) {
@@ -527,6 +530,7 @@ namespace cw01 {
         basic.pause(300)
         serial.writeString("AT+CIPRECVDATA=4" + NEWLINE)
         basic.pause(300)
+        serial.readBuffer(4)
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(300)
 
