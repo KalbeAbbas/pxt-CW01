@@ -19,7 +19,7 @@ namespace cw01 {
     let longitude: number
     let select: boolean
     let azureAccess: string
-    let payload: string
+    let payload: string = null
 
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
