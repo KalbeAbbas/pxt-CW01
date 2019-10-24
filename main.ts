@@ -533,12 +533,8 @@ namespace cw01 {
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(300)
 
-        let local_payload: string
-        local_payload = serial.readString()
-        let colon_index: number = local_payload.indexOf(":")
-        let lf_index: number = local_payload.indexOf("\n", colon_index)
-        payload = local_payload.substr(colon_index, lf_index - colon_index )
-        basic.showString("Hello")
+        payload = serial.readString()
+        basic.showString("Message received", 100)
         basic.showString(payload)
         basic.pause(100)
     }
