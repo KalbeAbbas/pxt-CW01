@@ -508,7 +508,7 @@ namespace cw01 {
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(300)
 
-        serial.onDataReceived(",", function () {
+        serial.onDataReceived("+", function () {
             if((serial.readString()).includes("IPD"))
             {
                 cw01.IoTMQTTGetData()
