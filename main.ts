@@ -534,8 +534,7 @@ namespace cw01 {
         basic.pause(300)
 
         payload = serial.readString()
-        basic.showString("Message received", 100)
-        basic.showString(payload)
+        basic.showString("Message received", 80)
         basic.pause(100)
     }
 
