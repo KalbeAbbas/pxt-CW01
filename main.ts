@@ -407,7 +407,7 @@ namespace cw01 {
     //% blockId="IoTMQTTConnect" block="CW01 connect to MQTT broker URL %broker with Username %Username and Password %Password"
     export function IoTMQTTConnect(broker: string, Username: string, Password: string): void {
 
-        serial.writeString("AT+CIPSTART=\"TCP\",\""+ broker + "\",1883" + NEWLINE)
+        serial.writeString("AT+CIPSTART=\"TCP\",\"" + broker + "\",1883" + NEWLINE)
         basic.pause(2000)
 
         let protocol_name_prior: Buffer = pins.packBuffer("!H", [4])
@@ -453,7 +453,7 @@ namespace cw01 {
     //% weight=91
     //% group="MQTT"
     //% blockId="IoTMQTTSendValue" block="CW01 send JSON %Json to topic %Topic"
-   export function IoTMQTTSendValue(Json: string, Topic: string): void {
+    export function IoTMQTTSendValue(Json: string, Topic: string): void {
 
         //Msg part two
         let topic: string = Topic
@@ -473,6 +473,35 @@ namespace cw01 {
         serial.writeBuffer(topic_len)
         serial.writeString(topic)
         serial.writeString(value)
+
+        basic.pause(1000)
+    }
+
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTMQTTSubscribe" block="CW01 subscribe to topic %Topic"
+    export function IoTMQTTSubscribe(Topic: string): void {
+
+        //Msg part two
+        let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
+        let qos: Buffer = pins.packBuffer("!B", [0x00])
+        let topic: string = Topic
+        let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
+
+        //Msg part one
+        let ctrl_pkt:Buffer = pins.packBuffer("!B", [0x82])
+        let remain_len: Buffer = pins.packBuffer("!B", [pid.length + topic_len.length + topic.length + qos.length])
+
+        serial.writeString("AT+CIPSEND=" + (ctrl_pkt.length + remain_len.length + pid.length + topic_len.length + topic.length + qos.length) + NEWLINE)
+
+        basic.pause(1000)
+
+        serial.writeBuffer(ctrl_pkt)
+        serial.writeBuffer(remain_len)
+        serial.writeBuffer(pid)
+        serial.writeBuffer(topic_len)
+        serial.writeString(topic)
+        serial.writeBuffer(qos)
 
         basic.pause(1000)
     }
