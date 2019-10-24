@@ -19,6 +19,7 @@ namespace cw01 {
     let longitude: number
     let select: boolean
     let azureAccess: string
+    let payload: string
 
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -509,26 +510,20 @@ namespace cw01 {
 
         serial.onDataReceived("\n", function () {
             if ((serial.readString()).includes("IPD")) {
-                cw01.IoTMQTTGetData()
+                IoTMQTTGetData()
             }
         })
     }
 
-    //% weight=91
-    //% group="MQTT"
-    //% blockId="IoTMQTTGetData" block="CW01 get data"
-    export function IoTMQTTGetData(): string {
-        let payload:string
+    function IoTMQTTGetData(): void {
         basic.pause(300)
         serial.writeString("AT+CIPRECVDATA=4" + NEWLINE)
         basic.pause(300)
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(300)
 
-        payload =  serial.readString()
+        payload = serial.readString()
         basic.pause(100)
-
-        return payload
     }
 
 
