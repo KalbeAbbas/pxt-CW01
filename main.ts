@@ -19,7 +19,7 @@ namespace cw01 {
     let longitude: number
     let select: boolean
     let azureAccess: string
-    let payload: string = null
+    let mqtt_payload: string = ""
 
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -524,12 +524,12 @@ namespace cw01 {
     export function IoTMQTTGetLatestData(): string {
         let prev_payload: string
 
-        if(prev_payload.compare(payload) !=0 )
+        if(prev_payload.compare(mqtt_payload) !=0 )
         {
-            prev_payload = payload
-            return payload
+            prev_payload = mqtt_payload
+            return mqtt_payload
         }else{
-            return null
+            return ""
         }
     }
 
@@ -541,7 +541,7 @@ namespace cw01 {
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(300)
 
-        payload = serial.readString()
+        mqtt_payload = serial.readString()
         basic.showString("Message received", 80)
         basic.pause(100)
     }
