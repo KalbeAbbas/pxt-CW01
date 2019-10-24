@@ -28,8 +28,8 @@ namespace cw01 {
     basic.pause(2000)
     serial.writeString("AT+RST" + NEWLINE)
     basic.pause(2000)
-    /*serial.writeString("ATE0" + NEWLINE)
-    basic.pause(100)*/
+    serial.writeString("ATE0" + NEWLINE)
+    basic.pause(100)
     serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
     basic.pause(100)
 
