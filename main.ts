@@ -526,6 +526,13 @@ namespace cw01 {
         basic.pause(100)
     }
 
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTMQTTGetLatestData" block="CW01 get latest data"
+    function IoTMQTTGetLatestData(): string{
+        return payload
+    }
+
 
     /**
     * Send boolean state to Microsoft Azure cloud computing platform
