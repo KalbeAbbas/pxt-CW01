@@ -20,6 +20,7 @@ namespace cw01 {
     let select: boolean
     let azureAccess: string
     let mqtt_payload: string = ""
+    let prev_mqtt_payload: string = ""
 
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -522,11 +523,10 @@ namespace cw01 {
     //% group="MQTT"
     //% blockId="IoTMQTTGetLatestData" block="CW01 get latest data"
     export function IoTMQTTGetLatestData(): string {
-        let prev_payload: string
 
-        if(prev_payload.compare(mqtt_payload) !=0 )
+        if(prev_mqtt_payload.compare(mqtt_payload) !=0 )
         {
-            prev_payload = mqtt_payload
+            prev_mqtt_payload = mqtt_payload
             return mqtt_payload
         }else{
             return ""
