@@ -504,6 +504,13 @@ namespace cw01 {
         serial.writeBuffer(qos)
 
         basic.pause(1000)
+
+        serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
+        basic.pause(300)
+
+        serial.onDataReceived(",", function () {
+            cw01.IoTMQTTGetData()
+        })
     }
 
     //% weight=91
