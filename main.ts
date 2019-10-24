@@ -489,7 +489,7 @@ namespace cw01 {
         let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
 
         //Msg part one
-        let ctrl_pkt:Buffer = pins.packBuffer("!B", [0x82])
+        let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
         let remain_len: Buffer = pins.packBuffer("!B", [pid.length + topic_len.length + topic.length + qos.length])
 
         serial.writeString("AT+CIPSEND=" + (ctrl_pkt.length + remain_len.length + pid.length + topic_len.length + topic.length + qos.length) + NEWLINE)
@@ -504,6 +504,16 @@ namespace cw01 {
         serial.writeBuffer(qos)
 
         basic.pause(1000)
+    }
+
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTMQTTGetData" block="CW01 get data"
+    export function IoTMQTTGetData(Topic: string): void {
+        serial.writeString("AT+CIPRECVDATA=4" + NEWLINE)
+        basic.pause(300)
+        serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
+        basic.pause(300)
     }
 
 
