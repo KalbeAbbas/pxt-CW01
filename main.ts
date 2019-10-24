@@ -538,8 +538,8 @@ namespace cw01 {
         let colon_index: number = local_payload.indexOf(":")
         let lf_index: number = local_payload.indexOf("\n", colon_index)
         payload = local_payload.substr(colon_index, lf_index - colon_index )
-        basic.showString("Hello",10)
-        basic.showString(payload,10)
+        basic.showString("Hello")
+        basic.showString(payload)
         basic.pause(100)
     }
 
