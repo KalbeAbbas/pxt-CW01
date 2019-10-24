@@ -517,12 +517,18 @@ namespace cw01 {
     //% weight=91
     //% group="MQTT"
     //% blockId="IoTMQTTGetData" block="CW01 get data"
-    export function IoTMQTTGetData(): void {
+    export function IoTMQTTGetData(): string {
+        let payload:string
         basic.pause(300)
         serial.writeString("AT+CIPRECVDATA=4" + NEWLINE)
         basic.pause(300)
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(300)
+
+        payload =  serial.readString()
+        basic.pause(100)
+
+        return payload
     }
 
 
