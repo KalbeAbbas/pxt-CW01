@@ -509,6 +509,7 @@ namespace cw01 {
         serial.readString()
         basic.pause(100)
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
+        basic.pause(100)
         serial.readBuffer(9)
 
         serial.onDataReceived("\n", function () {
