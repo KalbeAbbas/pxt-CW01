@@ -527,13 +527,15 @@ namespace cw01 {
 
     function IoTMQTTGetData(): void {
         basic.pause(500)
-        serial.writeString("AT+CIPRECVDATA=10" + NEWLINE)
-        basic.pause(300)
+       /* serial.writeString("AT+CIPRECVDATA=4" + NEWLINE)
+        basic.pause(300)*/
         serial.readString()
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(300)
 
         payload = serial.readString()
+        let colon_index: number = payload.indexOf(":")
+        payload = payload.substr(colon_index)
         basic.showString("Hello")
         basic.showString(payload)
         basic.pause(100)
