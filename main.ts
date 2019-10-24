@@ -509,7 +509,7 @@ namespace cw01 {
     //% weight=91
     //% group="MQTT"
     //% blockId="IoTMQTTGetData" block="CW01 get data"
-    export function IoTMQTTGetData(Topic: string): void {
+    export function IoTMQTTGetData(): void {
         serial.writeString("AT+CIPRECVDATA=4" + NEWLINE)
         basic.pause(300)
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
