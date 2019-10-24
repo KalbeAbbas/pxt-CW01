@@ -504,7 +504,7 @@ namespace cw01 {
         serial.writeString(topic)
         serial.writeBuffer(qos)
 
-        basic.pause(1000)
+        basic.pause(2000)
 
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(100)
@@ -525,8 +525,8 @@ namespace cw01 {
     }
 
     function IoTMQTTGetData(): void {
-        basic.pause(300)
-        serial.writeString("AT+CIPRECVDATA=4" + NEWLINE)
+        basic.pause(500)
+        serial.writeString("AT+CIPRECVDATA=10" + NEWLINE)
         basic.pause(300)
         serial.readBuffer(4)
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
