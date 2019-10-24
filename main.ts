@@ -482,6 +482,8 @@ namespace cw01 {
     //% blockId="IoTMQTTSubscribe" block="CW01 subscribe to topic %Topic"
     export function IoTMQTTSubscribe(Topic: string): void {
 
+        let ipd: string
+
         //Msg part two
         let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
         let qos: Buffer = pins.packBuffer("!B", [0x00])
@@ -508,8 +510,12 @@ namespace cw01 {
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(300)
 
-        serial.onDataReceived("+", function () {
-            cw01.IoTMQTTGetData()
+        serial.onDataReceived(",", function () {
+            ipd = serial.readString()
+            if(ipd.includes("IPD"))
+            {
+                cw01.IoTMQTTGetData()
+            }
         })
     }
 
