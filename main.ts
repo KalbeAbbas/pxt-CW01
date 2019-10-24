@@ -527,7 +527,7 @@ namespace cw01 {
 
     function IoTMQTTGetData(): void {
         basic.pause(500)
-        serial.writeString("AT+CIPRECVDATA=10" + NEWLINE)
+        serial.writeString("AT+CIPRECVDATA=4" + NEWLINE)
         basic.pause(300)
         serial.readString()
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
