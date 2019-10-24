@@ -535,7 +535,7 @@ namespace cw01 {
 
         let local_payload:string
         local_payload = serial.readString()
-        let colon_index: number = payload.indexOf(":")
+        let colon_index: number = local_payload.indexOf(":")
         payload = local_payload.substr(colon_index)
         basic.showString("Hello")
         basic.showString(payload)
