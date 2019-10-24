@@ -536,10 +536,10 @@ namespace cw01 {
         let local_payload: string
         local_payload = serial.readString()
         let colon_index: number = local_payload.indexOf(":")
-        let lf_index: number = local_payload.indexOf("\"", colon_index)
+        let lf_index: number = local_payload.indexOf("\n", colon_index)
         payload = local_payload.substr(colon_index, lf_index - colon_index )
-        basic.showString("Hello",400)
-        basic.showString(payload)
+        basic.showString("Hello",10)
+        basic.showString(payload,10)
         basic.pause(100)
     }
 
