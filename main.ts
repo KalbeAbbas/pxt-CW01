@@ -520,14 +520,7 @@ namespace cw01 {
     //% group="MQTT"
     //% blockId="IoTMQTTGetLatestData" block="CW01 get latest data"
     export function IoTMQTTGetLatestData(): string {
-        let prev_payload: string = ""
-
-        if(prev_payload.compare(payload) != 0)
-        {
-            return payload
-        }else{
-            return null
-        }
+        return payload
     }
 
     function IoTMQTTGetData(): void {
