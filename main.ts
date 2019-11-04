@@ -62,9 +62,9 @@ namespace cw01 {
             }
 
             serial.writeString("AT+TEST=0" + NEWLINE)
-            basic.pause(300)
+            basic.pause(3000)
             serial.writeString("AT+TEST" + NEWLINE)
-            basic.pause(300)
+            basic.pause(3000)
             serial.writeString("AT+TEST=1" + NEWLINE)
             basic.pause(300)
 
