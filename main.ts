@@ -59,14 +59,6 @@ namespace cw01 {
                 basic.showString("D")
             }
 
-            serial.writeString("AT+TEST=0" + NEWLINE)
-            basic.pause(300)
-            serial.writeString("AT+TEST" + NEWLINE)
-            basic.pause(300)
-            serial.writeString("AT+TEST=1" + NEWLINE)
-            basic.pause(300)
-
-
         } else {
             basic.showString("Missed begin block!")
         }
