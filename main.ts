@@ -30,12 +30,12 @@ namespace cw01 {
     basic.pause(2000)
     serial.writeString("AT+RST" + NEWLINE)
     basic.pause(2000)
-    serial.writeString("AT+RST" + NEWLINE)
-    basic.pause(2000)
     serial.writeString("ATE0" + NEWLINE)
-    basic.pause(100)
+    basic.pause(300)
     serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
-    basic.pause(100)
+    basic.pause(300)
+    serial.writeString("AT+TEST" + NEWLINE)
+    basic.pause(300)
 
     /**
     * Connect to W-Fi 
@@ -62,9 +62,9 @@ namespace cw01 {
             }
 
             serial.writeString("AT+TEST=0" + NEWLINE)
-            basic.pause(3000)
+            basic.pause(300)
             serial.writeString("AT+TEST" + NEWLINE)
-            basic.pause(3000)
+            basic.pause(300)
             serial.writeString("AT+TEST=1" + NEWLINE)
             basic.pause(300)
 
