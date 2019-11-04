@@ -40,7 +40,7 @@ namespace cw01 {
     read_and_set_name();
 
     function read_and_set_name(): void {
-        let name: string = ""
+        let name: string = "";
         name = serial.readString()
 
         if (!(name.includes("CW01"))) {
