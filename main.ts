@@ -26,7 +26,7 @@ namespace cw01 {
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
     serial.setRxBufferSize(200)
 
-    basic.showIcon(IconNames.Chessboard);
+    basic.showIcon(IconNames.Chessboard)
     basic.pause(2000)
     serial.writeString("ATE0" + NEWLINE)
     basic.pause(300)
