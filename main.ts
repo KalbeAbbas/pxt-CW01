@@ -26,6 +26,7 @@ namespace cw01 {
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
     serial.setRxBufferSize(200)
 
+    basic.showIcon(IconNames.Chessboard);
     basic.pause(2000)
     serial.writeString("AT+RST" + NEWLINE)
     basic.pause(2000)
@@ -58,6 +59,9 @@ namespace cw01 {
                 basic.showString("D")
             }
 
+            basic.pause(2000)
+            serial.writeString("AT+RST" + NEWLINE)
+            basic.pause(2000)
             serial.writeString("AT+TEST=0" + NEWLINE)
             basic.pause(300)
             serial.writeString("AT+TEST" + NEWLINE)
@@ -524,11 +528,10 @@ namespace cw01 {
     //% blockId="IoTMQTTGetLatestData" block="CW01 get latest data"
     export function IoTMQTTGetLatestData(): string {
 
-        if(prev_mqtt_payload.compare(mqtt_payload) !=0 )
-        {
+        if (prev_mqtt_payload.compare(mqtt_payload) != 0) {
             prev_mqtt_payload = mqtt_payload
             return mqtt_payload
-        }else{
+        } else {
             return ""
         }
     }
