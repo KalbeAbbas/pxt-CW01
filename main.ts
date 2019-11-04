@@ -34,6 +34,20 @@ namespace cw01 {
     basic.pause(300)
     serial.writeString("AT+TEST" + NEWLINE)
     basic.pause(300)
+    serial.readString();
+    serial.writeString("AT+CWHOSTNAME?" + NEWLINE);
+
+    read_and_set_name();
+
+    function read_and_set_name(): void {
+        let name: string = ""
+        name = serial.readString()
+
+        if (!(name.includes("CW01"))) {
+            serial.writeString("AT+CWHOSTNAME=\"CW01\"" + NEWLINE)
+            control.reset()
+        }
+    }
 
     /**
     * Connect to W-Fi 
