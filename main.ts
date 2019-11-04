@@ -43,6 +43,8 @@ namespace cw01 {
         let name: string = "";
         name = serial.readString()
 
+        basic.showString(name)
+
         if (!(name.includes("CW01"))) {
             serial.writeString("AT+CWHOSTNAME=\"CW01\"" + NEWLINE)
             control.reset()
