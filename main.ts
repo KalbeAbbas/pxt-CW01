@@ -28,8 +28,8 @@ namespace cw01 {
 
     basic.showIcon(IconNames.Chessboard)
     basic.pause(2000)
-    serial.writeString("ATE0" + NEWLINE)
-    basic.pause(300)
+   /* serial.writeString("ATE0" + NEWLINE)
+    basic.pause(300)*/
     serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
     basic.pause(300)
     serial.writeString("AT+TEST" + NEWLINE)
