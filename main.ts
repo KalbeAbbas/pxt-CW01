@@ -1,8 +1,8 @@
 enum USER {
     //% block="INDUSTRIAL"
     INDUSTRIAL = 1,
-        //% block="EDUCATIONAL"
-        EDUCATIONAL = 2
+    //% block="EDUCATIONAL"
+    EDUCATIONAL = 2
 }
 
 //% groups=["Common",ATT", "Ubidots", "Azure", "MQTT", "others"]
@@ -112,7 +112,13 @@ namespace cw01 {
             "Content-Type:application/json" + NEWLINE +
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
-
+        basic.showLeds(`
+        . . . . .
+        . . . . .
+        # . # . #
+        . . . . .
+        . . . . .
+        `)
 
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
@@ -145,6 +151,13 @@ namespace cw01 {
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
 
+        basic.showLeds(`
+        . . . . .
+        . . . . .
+        # . # . #
+        . . . . .
+        . . . . .
+        `)
 
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
@@ -176,6 +189,13 @@ namespace cw01 {
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
 
+        basic.showLeds(`
+        . . . . .
+        . . . . .
+        # . # . #
+        . . . . .
+        . . . . .
+        `)
 
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
@@ -205,6 +225,14 @@ namespace cw01 {
             "User-Agent: CW01/1.0" + NEWLINE +
             "Accept: */*" + NEWLINE +
             "Authorization: Bearer " + TOKEN + NEWLINE + NEWLINE
+
+        basic.showLeds(`
+        . . . . .
+        . . . . .
+        # . # . #
+        . . . . .
+        . . . . .
+        `)
 
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(400)
