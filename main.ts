@@ -176,10 +176,18 @@ namespace cw01 {
     //% group="ATT"
     //% blockId="IoTSendStateToATT" block="CW01 send state %state to ATT asset %asset_name"
     export function IoTSendStateToATT(state: boolean, asset: string): void {
+        let stateStr: string
+
+        if (state == true) {
+            stateStr = "true"
+        } else {
+            stateStr = "false"
+        }
+
         asset_name = asset
         serial.writeString("AT+CIPMODE=0" + NEWLINE)
         basic.pause(100)
-        let payload: string = "{\"value\": " + state.toString() + "}"
+        let payload: string = "{\"value\": " + stateStr + "}"
         let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
             "Host: api.allthingstalk.io" + NEWLINE +
             "User-Agent: CW01/1.0" + NEWLINE +
