@@ -221,7 +221,7 @@ namespace cw01 {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendBtnClkToATT" block="CW01 button click to to ATT asset %asset
+    //% blockId="IoTSendBtnClkToATT" block="CW01 button click to to ATT asset %asset"
     export function IoTSendBtnClkToATT(asset: string)
     {
         
