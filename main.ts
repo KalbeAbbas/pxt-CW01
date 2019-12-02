@@ -215,6 +215,18 @@ namespace cw01 {
         get_status()
     }
 
+
+    /**
+    * Send button click to AllThingsTalk IoT platform
+    */
+    //% weight=91
+    //% group="ATT"
+    //% blockId="IoTSendBtnClkToATT" block="CW01 button click to to ATT asset %asset
+    export function IoTSendBtnClkToATT(asset: string)
+    {
+        
+    }
+
     /**
     * Get latest value of asset from AllThingsTalk IoT platform. Asset can be string, numerical and boolean
     */
