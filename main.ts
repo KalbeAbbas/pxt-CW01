@@ -112,9 +112,9 @@ namespace cw01 {
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
-        basic.pause(100)
+        basic.pause(50)
         serial.writeString(request + NEWLINE)
-        basic.pause(300)
+        basic.pause(150)
         serial.readString()
 
         get_status()
@@ -140,9 +140,9 @@ namespace cw01 {
 
 
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
-        basic.pause(100)
+        basic.pause(50)
         serial.writeString(request + NEWLINE)
-        basic.pause(300)
+        basic.pause(150)
         serial.readString()
 
         get_status()
@@ -175,9 +175,9 @@ namespace cw01 {
 
 
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
-        basic.pause(100)
+        basic.pause(50)
         serial.writeString(request + NEWLINE)
-        basic.pause(300)
+        basic.pause(150)
         serial.readString()
 
         get_status()
@@ -723,16 +723,16 @@ namespace cw01 {
     function get_status(): boolean {
 
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
-        basic.pause(100)
+        basic.pause(50)
         res = serial.readString()
 
         if (res.includes("HTTP/1.1 200") || res.includes("HTTP/1.1 201") || res.includes("HTTP/1.0 202")) {
-            basic.showIcon(IconNames.Yes, 10)
-            basic.showString("", 10)
+            basic.showIcon(IconNames.Yes, 50)
+            basic.showString("", 50)
             return true
         } else {
-            basic.showIcon(IconNames.No, 10)
-            basic.showString("", 10)
+            basic.showIcon(IconNames.No, 50)
+            basic.showString("", 50)
             return false
         }
     }
