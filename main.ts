@@ -143,6 +143,7 @@ namespace cw01 {
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
         if (block) {
+            basic.showString("Working",10000)
             basic.pause(1800)
             block = false
         }
@@ -220,7 +221,7 @@ namespace cw01 {
         basic.pause(50)
         serial.writeString(request + NEWLINE)
 
-        basic.pause(250)
+        basic.pause(500)
 
         payload = "{\"value\": false}"
         request = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
