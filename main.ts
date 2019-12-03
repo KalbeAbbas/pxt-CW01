@@ -762,12 +762,12 @@ namespace cw01 {
 
         if (res.includes("HTTP/1.1 200") || res.includes("HTTP/1.1 201") || res.includes("HTTP/1.0 202")) {
             basic.showIcon(IconNames.Yes)
-            basic.pause(100)
+            basic.pause(50)
             basic.showString("")
             return true
         } else {
             basic.showIcon(IconNames.No)
-            basic.pause(100)
+            basic.pause(50)
             basic.showString("")
             return false
         }
