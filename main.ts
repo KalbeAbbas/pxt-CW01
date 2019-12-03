@@ -122,7 +122,7 @@ namespace cw01 {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(request + NEWLINE)
-        basic.pause(200)
+        basic.pause(300)
         serial.readString()
 
         get_status()
@@ -158,7 +158,7 @@ namespace cw01 {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(request + NEWLINE)
-        basic.pause(200)
+        basic.pause(300)
         serial.readString()
 
         get_status()
@@ -201,7 +201,7 @@ namespace cw01 {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(request + NEWLINE)
-        basic.pause(200)
+        basic.pause(300)
         serial.readString()
 
         get_status()
@@ -759,12 +759,12 @@ namespace cw01 {
 
         if (res.includes("HTTP/1.1 200") || res.includes("HTTP/1.1 201") || res.includes("HTTP/1.0 202")) {
             basic.showIcon(IconNames.Yes)
-            basic.pause(50)
+            basic.pause(10)
             basic.showString("")
             return true
         } else {
             basic.showIcon(IconNames.No)
-            basic.pause(50)
+            basic.pause(10)
             basic.showString("")
             return false
         }
