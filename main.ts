@@ -605,11 +605,12 @@ namespace cw01 {
     //% blockId="IoTMQTTGetLatestData" block="CW01 get latest payload data"
     export function IoTMQTTGetLatestData(): string {
         let index: number = mqtt_payload.indexOf(mqtt_topic) + mqtt_topic.length
+        let payload_length: number = mqtt_payload.length - index
         let payload: string 
 
         if (prev_mqtt_payload.compare(mqtt_payload) != 0) {
             basic.showString("Message")
-            payload = mqtt_payload.substr(index)
+            payload = mqtt_payload.substr(index, payload_length)
 
             return payload
         } else {
