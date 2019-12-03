@@ -111,14 +111,6 @@ namespace cw01 {
             "Content-Type:application/json" + NEWLINE +
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
-        basic.showLeds(`
-        . . . . .
-        . . . . .
-        # . # . #
-        . . . . .
-        . . . . .
-        `)
-
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(request + NEWLINE)
@@ -146,14 +138,6 @@ namespace cw01 {
             "Content-Type:application/json" + NEWLINE +
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
-
-        basic.showLeds(`
-        . . . . .
-        . . . . .
-        # . # . #
-        . . . . .
-        . . . . .
-        `)
 
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
@@ -189,14 +173,6 @@ namespace cw01 {
             "Content-Type:application/json" + NEWLINE +
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
-
-        basic.showLeds(`
-        . . . . .
-        . . . . .
-        # . # . #
-        . . . . .
-        . . . . .
-        `)
 
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
@@ -759,12 +735,10 @@ namespace cw01 {
 
         if (res.includes("HTTP/1.1 200") || res.includes("HTTP/1.1 201") || res.includes("HTTP/1.0 202")) {
             basic.showIcon(IconNames.Yes)
-            basic.pause(10)
             basic.showString("")
             return true
         } else {
             basic.showIcon(IconNames.No)
-            basic.pause(10)
             basic.showString("")
             return false
         }
