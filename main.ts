@@ -22,7 +22,7 @@ namespace cw01 {
     let mqtt_payload: string = ""
     let prev_mqtt_payload: string = ""
     let block: boolean = false
-    let mqtt_topic: string =""
+    let mqtt_topic: string = ""
 
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -605,12 +605,16 @@ namespace cw01 {
     //% blockId="IoTMQTTGetLatestData" block="CW01 get latest payload data"
     export function IoTMQTTGetLatestData(): string {
         let index: number = mqtt_payload.indexOf(mqtt_topic) + mqtt_topic.length
-        let payload:string = mqtt_payload.substr(index)
+        let payload: string 
 
-        basic.showString("Index")
-        basic.showNumber(index)
+        if (prev_mqtt_payload.compare(mqtt_payload) != 0) {
+            basic.showString("Message")
+            payload = mqtt_payload.substr(index)
 
-        return payload
+            return payload
+        } else {
+            return ""
+        }
 
     }
 
