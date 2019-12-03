@@ -21,6 +21,7 @@ namespace cw01 {
     let azureAccess: string
     let mqtt_payload: string = ""
     let prev_mqtt_payload: string = ""
+    let block: boolean = false
 
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -28,8 +29,8 @@ namespace cw01 {
 
     basic.showIcon(IconNames.Chessboard)
     basic.pause(2000)
-    serial.writeString("ATE0" + NEWLINE)
-    basic.pause(300)
+    /*serial.writeString("ATE0" + NEWLINE)
+    basic.pause(300)*/
     serial.writeString("AT+CWMODE_DEF=3" + NEWLINE)
     basic.pause(300)
     serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
@@ -125,7 +126,7 @@ namespace cw01 {
         serial.writeString(request + NEWLINE)
         basic.pause(10)
         serial.readString()
-        basic.pause(1000)
+        basic.pause(200)
 
         get_status()
 
@@ -164,7 +165,7 @@ namespace cw01 {
         serial.writeString(request + NEWLINE)
         basic.pause(10)
         serial.readString()
-        basic.pause(1000)
+        basic.pause(200)
 
         get_status()
     }
@@ -210,7 +211,7 @@ namespace cw01 {
         serial.writeString(request + NEWLINE)
         basic.pause(10)
         serial.readString()
-        basic.pause(1000)
+        basic.pause(200)
 
         get_status()
     }
@@ -221,10 +222,41 @@ namespace cw01 {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendBtnClkToATT" block="CW01 button click to to ATT asset %asset"
-    export function IoTSendBtnClkToATT(asset: string)
-    {
-        
+    //% blockId="IoTSendBtnClkToATT" block="CW01 send button click to to ATT asset %asset"
+    export function IoTSendBtnClkToATT(asset: string) {
+        block = true
+
+        basic.pause(50)
+
+        let payload: string = "{\"value\": true}"
+        let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
+            "Host: api.allthingstalk.io" + NEWLINE +
+            "User-Agent: CW01/1.0" + NEWLINE +
+            "Accept: */*" + NEWLINE +
+            "Authorization: Bearer " + TOKEN + NEWLINE +
+            "Content-Type:application/json" + NEWLINE +
+            "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
+
+        serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
+        basic.pause(100)
+        serial.writeString(request + NEWLINE)
+
+        basic.pause(50)
+
+        payload = "{\"value\": false}"
+        request = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
+            "Host: api.allthingstalk.io" + NEWLINE +
+            "User-Agent: CW01/1.0" + NEWLINE +
+            "Accept: */*" + NEWLINE +
+            "Authorization: Bearer " + TOKEN + NEWLINE +
+            "Content-Type:application/json" + NEWLINE +
+            "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
+
+        serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
+        basic.pause(100)
+        serial.writeString(request + NEWLINE)
+
+        basic.pause(50)
     }
 
     /**
