@@ -734,12 +734,12 @@ namespace cw01 {
         res = serial.readString()
 
         if (res.includes("HTTP/1.1 200") || res.includes("HTTP/1.1 201") || res.includes("HTTP/1.0 202")) {
-            basic.showIcon(IconNames.Yes)
-            basic.showString("")
+            basic.showIcon(IconNames.Yes,10)
+            basic.showString("",10)
             return true
         } else {
-            basic.showIcon(IconNames.No)
-            basic.showString("")
+            basic.showIcon(IconNames.No,10)
+            basic.showString("",10)
             return false
         }
     }
