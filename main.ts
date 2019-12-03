@@ -122,9 +122,8 @@ namespace cw01 {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(request + NEWLINE)
-        basic.pause(10)
-        serial.readString()
         basic.pause(200)
+        serial.readString()
 
         get_status()
 
@@ -159,9 +158,8 @@ namespace cw01 {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(request + NEWLINE)
-        basic.pause(10)
-        serial.readString()
         basic.pause(200)
+        serial.readString()
 
         get_status()
     }
@@ -203,9 +201,8 @@ namespace cw01 {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(100)
         serial.writeString(request + NEWLINE)
-        basic.pause(10)
-        serial.readString()
         basic.pause(200)
+        serial.readString()
 
         get_status()
     }
