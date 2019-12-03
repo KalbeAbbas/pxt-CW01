@@ -22,6 +22,7 @@ namespace cw01 {
     let mqtt_payload: string = ""
     let prev_mqtt_payload: string = ""
     let block: boolean = false
+    let mqtt_topic: string =""
 
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -555,6 +556,8 @@ namespace cw01 {
         let topic: string = Topic
         let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
 
+        mqtt_topic = topic
+
         //Msg part one
         let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
         let remain_len: Buffer = pins.packBuffer("!B", [pid.length + topic_len.length + topic.length + qos.length])
@@ -586,8 +589,8 @@ namespace cw01 {
 
     //% weight=91
     //% group="MQTT"
-    //% blockId="IoTMQTTGetLatestData" block="CW01 get latest data"
-    export function IoTMQTTGetLatestData(): string {
+    //% blockId="IoTMQTTGetLatestRawData" block="CW01 get latest raw data"
+    export function IoTMQTTGetLatestRawData(): string {
 
         if (prev_mqtt_payload.compare(mqtt_payload) != 0) {
             prev_mqtt_payload = mqtt_payload
@@ -595,6 +598,20 @@ namespace cw01 {
         } else {
             return ""
         }
+    }
+
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTMQTTGetLatestData" block="CW01 get latest payload data"
+    export function IoTMQTTGetLatestData(): string {
+        let index: number = mqtt_payload.indexOf(mqtt_topic) + mqtt_topic.length
+        let payload:string = mqtt_payload.substr(index)
+
+        basic.showString("Index")
+        basic.showNumber(index)
+
+        return payload
+
     }
 
     function IoTMQTTGetData(): void {
