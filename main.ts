@@ -102,8 +102,6 @@ namespace cw01 {
     //% blockId="IoTSendStringToATT" block="CW01 send string %value to ATT asset %asset"
     export function IoTSendStringToATT(value: string, asset: string): void {
         asset_name = asset
-        serial.writeString("AT+CIPMODE=0" + NEWLINE)
-        basic.pause(100)
         let payload: string = "{\"value\": " + value + "}"
         let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
             "Host: api.allthingstalk.io" + NEWLINE +
@@ -140,8 +138,6 @@ namespace cw01 {
     //% blockId="IoTSendValueToATT" block="CW01 send value %value to ATT asset %asset"
     export function IoTSendValueToATT(value: number, asset: string): void {
         asset_name = asset
-        serial.writeString("AT+CIPMODE=0" + NEWLINE)
-        basic.pause(100)
         let payload: string = "{\"value\": " + value.toString() + "}"
         let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
             "Host: api.allthingstalk.io" + NEWLINE +
@@ -186,8 +182,6 @@ namespace cw01 {
         }
 
         asset_name = asset
-        serial.writeString("AT+CIPMODE=0" + NEWLINE)
-        basic.pause(100)
         let payload: string = "{\"value\": " + stateStr + "}"
         let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
             "Host: api.allthingstalk.io" + NEWLINE +
