@@ -206,7 +206,7 @@ namespace cw01 {
         asset_name = asset
         block = true
 
-        basic.pause(800)
+        basic.pause(400)
 
         let payload: string = "{\"value\": true}"
         let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
