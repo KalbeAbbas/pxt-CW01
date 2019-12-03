@@ -609,7 +609,6 @@ namespace cw01 {
         let payload: string
 
         if (prev_mqtt_payload.compare(mqtt_payload) != 0) {
-            basic.showString("Message")
             payload = mqtt_payload.substr(index, payload_length)
 
             return payload
