@@ -112,7 +112,7 @@ namespace cw01 {
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
         if (block) {
-            basic.pause(1300)
+            basic.pause(1800)
             block = false
         }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
@@ -182,7 +182,7 @@ namespace cw01 {
 
 
         if (block) {
-            basic.pause(1300)
+            basic.pause(1800)
             block = false
         }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
