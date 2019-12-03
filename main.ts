@@ -144,7 +144,6 @@ namespace cw01 {
 
         block.toString()
         if (block) {
-            basic.showString("Working")
             basic.pause(3000)
             block = false
         }
