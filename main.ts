@@ -144,7 +144,7 @@ namespace cw01 {
 
         block.toString()
         if (block) {
-            basic.pause(3000)
+            basic.pause(3000);
             block = false
         }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
