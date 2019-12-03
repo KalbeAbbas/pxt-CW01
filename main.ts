@@ -195,6 +195,7 @@ namespace cw01 {
     //% group="ATT"
     //% blockId="IoTSendBtnClkToATT" block="CW01 send button click to to ATT asset %asset"
     export function IoTSendBtnClkToATT(asset: string) {
+        asset_name = asset
         block = true
 
         basic.pause(350)
@@ -228,6 +229,9 @@ namespace cw01 {
         serial.writeString(request + NEWLINE)
 
         basic.pause(250)
+
+        serial.readString()
+        get_status()
     }
 
     /**
