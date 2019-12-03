@@ -245,13 +245,6 @@ namespace cw01 {
             "Accept: */*" + NEWLINE +
             "Authorization: Bearer " + TOKEN + NEWLINE + NEWLINE
 
-        basic.showLeds(`
-        . . . . .
-        . . . . .
-        # . # . #
-        . . . . .
-        . . . . .
-        `)
 
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(400)
@@ -734,12 +727,12 @@ namespace cw01 {
         res = serial.readString()
 
         if (res.includes("HTTP/1.1 200") || res.includes("HTTP/1.1 201") || res.includes("HTTP/1.0 202")) {
-            basic.showIcon(IconNames.Yes,10)
-            basic.showString("",10)
+            basic.showIcon(IconNames.Yes, 10)
+            basic.showString("", 10)
             return true
         } else {
-            basic.showIcon(IconNames.No,10)
-            basic.showString("",10)
+            basic.showIcon(IconNames.No, 10)
+            basic.showString("", 10)
             return false
         }
     }
