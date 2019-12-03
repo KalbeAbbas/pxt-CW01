@@ -111,6 +111,10 @@ namespace cw01 {
             "Content-Type:application/json" + NEWLINE +
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
+        if (block) {
+            basic.pause(1000)
+            block = false
+        }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(50)
         serial.writeString(request + NEWLINE)
@@ -193,7 +197,7 @@ namespace cw01 {
     export function IoTSendBtnClkToATT(asset: string) {
         block = true
 
-        basic.pause(50)
+        basic.pause(350)
 
         let payload: string = "{\"value\": true}"
         let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
@@ -205,10 +209,10 @@ namespace cw01 {
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
-        basic.pause(100)
+        basic.pause(50)
         serial.writeString(request + NEWLINE)
 
-        basic.pause(50)
+        basic.pause(250)
 
         payload = "{\"value\": false}"
         request = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
@@ -220,10 +224,10 @@ namespace cw01 {
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
-        basic.pause(100)
+        basic.pause(50)
         serial.writeString(request + NEWLINE)
 
-        basic.pause(50)
+        basic.pause(250)
     }
 
     /**
