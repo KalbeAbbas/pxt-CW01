@@ -152,6 +152,9 @@ namespace cw01 {
         if (!get_status()) {
             basic.showNumber(fail_count)
             fail_count++
+            if (fail_count > 3) {
+                connectToATT(TOKEN, DEVICE_ID)
+            }
             IoTSendStringToATT(value, asset, loop)
         } else {
             fail_count = 0
@@ -194,13 +197,12 @@ namespace cw01 {
         if (!get_status()) {
             basic.showNumber(fail_count)
             fail_count++
+            if (fail_count > 3) {
+                connectToATT(TOKEN, DEVICE_ID)
+            }
             IoTSendValueToATT(value, asset, loop)
         } else {
             fail_count = 0
-        }
-
-        if (fail_count > 3) {
-            connectToATT(TOKEN, DEVICE_ID)
         }
 
     }
@@ -245,14 +247,14 @@ namespace cw01 {
         if (!get_status()) {
             basic.showNumber(fail_count)
             fail_count++
+            if (fail_count > 3) {
+                connectToATT(TOKEN, DEVICE_ID)
+            }
             IoTSendStateToATT(state, asset, loop)
         } else {
             fail_count = 0
         }
 
-        if (fail_count > 3) {
-            connectToATT(TOKEN, DEVICE_ID)
-        }
     }
 
 
