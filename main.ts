@@ -134,7 +134,7 @@ namespace cw01 {
         basic.pause(300)
         serial.readString()
 
-        /*while (fail_count <= 3)  //Four attempts
+        while (fail_count <= 3)  //Four attempts
         {
             if (!get_status()) {
                 IoTSendStringToATT(value, asset, loop)
@@ -147,9 +147,9 @@ namespace cw01 {
 
         if (fail_count > 3) {
             connectToATT(TOKEN, DEVICE_ID)
-        }*/
+        }
 
-        if (!get_status()) {
+        /*if (!get_status()) {
             basic.showNumber(fail_count)
             if (fail_count > 3) {
                 fail_count = 0
@@ -164,7 +164,7 @@ namespace cw01 {
 
         if (fail_count > 3) {
             connectToATT(TOKEN, DEVICE_ID)
-        }
+        }*/
 
     }
 
@@ -196,17 +196,20 @@ namespace cw01 {
         basic.pause(300)
         serial.readString()
 
-        if (!get_status()) {
-            basic.showNumber(fail_count)
-            if (fail_count > 3) {
+
+        while (fail_count <= 3)  //Four attempts
+        {
+            if (!get_status()) {
+                IoTSendValueToATT(value, asset, loop)
+            } else {
                 fail_count = 0
-                basic.showString("Reconnecting to server...")
-                connectToATT(TOKEN, DEVICE_ID)
+                break
             }
             fail_count++
-            IoTSendValueToATT(value, asset, loop)
-        } else {
-            fail_count = 0
+        }
+
+        if (fail_count > 3) {
+            connectToATT(TOKEN, DEVICE_ID)
         }
 
     }
@@ -248,17 +251,19 @@ namespace cw01 {
         basic.pause(300)
         serial.readString()
 
-        if (!get_status()) {
-            basic.showNumber(fail_count)
-            if (fail_count > 3) {
+        while (fail_count <= 3)  //Four attempts
+        {
+            if (!get_status()) {
+                IoTSendStateToATT(state, asset, loop)
+            } else {
                 fail_count = 0
-                basic.showString("Reconnecting to server...")
-                connectToATT(TOKEN, DEVICE_ID)
+                break
             }
             fail_count++
-            IoTSendStateToATT(state, asset, loop)
-        } else {
-            fail_count = 0
+        }
+
+        if (fail_count > 3) {
+            connectToATT(TOKEN, DEVICE_ID)
         }
 
     }
