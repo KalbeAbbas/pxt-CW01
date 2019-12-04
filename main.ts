@@ -196,8 +196,9 @@ namespace cw01 {
         basic.pause(500)
         serial.readString()
 
+        get_status()
 
-        while (fail_count <= 3)  //Four attempts
+       /* while (fail_count <= 3)  //Four attempts
         {
             if (!get_status()) {
                 IoTSendValueToATT(value, asset, loop)
@@ -210,7 +211,7 @@ namespace cw01 {
 
         if (fail_count > 3) {
             connectToATT(TOKEN, DEVICE_ID)
-        }
+        }*/
 
     }
 
