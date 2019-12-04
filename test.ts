@@ -3,7 +3,7 @@
 cw01.connectToWifi("SSID", "PSK")
 cw01.connectToATT("DEVICE_TOKEN", "DEVICE_ID")
 basic.forever(function () {
-    cw01.IoTSendStateToATT(true, "boolTest")
+    cw01.IoTSendStateToATT(true, "boolTest", true)
     basic.showString(cw01.IoTgetATTAssetValue("6"))
-    cw01.IoTSendStateToATT(false, "boolTest")
+    cw01.IoTSendStateToATT(false, "boolTest", true)
 })

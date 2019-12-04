@@ -28,6 +28,15 @@ namespace cw01 {
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
     serial.setRxBufferSize(200)
 
+
+    input.onButtonPressed(Button.A, function () {
+        block = true
+    })
+
+    input.onButtonPressed(Button.B, function () {
+        block = true
+    })
+
     basic.showIcon(IconNames.Chessboard)
     basic.pause(2000)
     /*serial.writeString("ATE0" + NEWLINE)
@@ -100,8 +109,8 @@ namespace cw01 {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendStringToATT" block="CW01 send string %value to ATT asset %asset"
-    export function IoTSendStringToATT(value: string, asset: string): void {
+    //% blockId="IoTSendStringToATT" block="CW01 send string %value to ATT asset %asset, inside loop %loop"
+    export function IoTSendStringToATT(value: string, asset: string, loop: boolean): void {
         asset_name = asset
         let payload: string = "{\"value\": " + value + "}"
         let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
@@ -112,8 +121,8 @@ namespace cw01 {
             "Content-Type:application/json" + NEWLINE +
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
-        if (block) {
-            basic.pause(1800)
+        if (block && !loop) {
+            basic.pause(30000)
             block = false
         }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
@@ -131,8 +140,8 @@ namespace cw01 {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendValueToATT" block="CW01 send value %value to ATT asset %asset"
-    export function IoTSendValueToATT(value: number, asset: string): void {
+    //% blockId="IoTSendValueToATT" block="CW01 send value %value to ATT asset %asset, inside loop %loop"
+    export function IoTSendValueToATT(value: number, asset: string, loop: boolean): void {
         asset_name = asset
         let payload: string = "{\"value\": " + value.toString() + "}"
         let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
@@ -144,8 +153,8 @@ namespace cw01 {
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
         block.toString()
-        if (block) {
-            basic.pause(3000);
+        if (block && !loop) {
+            basic.pause(30000);
             block = false
         }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
@@ -162,8 +171,8 @@ namespace cw01 {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendStateToATT" block="CW01 send state %state to ATT asset %asset_name"
-    export function IoTSendStateToATT(state: boolean, asset: string): void {
+    //% blockId="IoTSendStateToATT" block="CW01 send state %state to ATT asset %asset_name, inside loop %loop"
+    export function IoTSendStateToATT(state: boolean, asset: string, loop: boolean): void {
         let stateStr: string
 
         if (state == true) {
@@ -183,8 +192,8 @@ namespace cw01 {
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
 
-        if (block) {
-            basic.pause(1800)
+        if (block && !loop) {
+            basic.pause(30000)
             block = false
         }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
