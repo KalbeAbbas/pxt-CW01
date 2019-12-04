@@ -151,10 +151,12 @@ namespace cw01 {
 
         if (!get_status()) {
             basic.showNumber(fail_count)
-            fail_count++
             if (fail_count > 3) {
+                fail_count = 0
+                basic.showString("Reconnecting to server...")
                 connectToATT(TOKEN, DEVICE_ID)
             }
+            fail_count++
             IoTSendStringToATT(value, asset, loop)
         } else {
             fail_count = 0
@@ -196,10 +198,12 @@ namespace cw01 {
 
         if (!get_status()) {
             basic.showNumber(fail_count)
-            fail_count++
             if (fail_count > 3) {
+                fail_count = 0
+                basic.showString("Reconnecting to server...")
                 connectToATT(TOKEN, DEVICE_ID)
             }
+            fail_count++
             IoTSendValueToATT(value, asset, loop)
         } else {
             fail_count = 0
@@ -246,10 +250,12 @@ namespace cw01 {
 
         if (!get_status()) {
             basic.showNumber(fail_count)
-            fail_count++
             if (fail_count > 3) {
+                fail_count = 0
+                basic.showString("Reconnecting to server...")
                 connectToATT(TOKEN, DEVICE_ID)
             }
+            fail_count++
             IoTSendStateToATT(state, asset, loop)
         } else {
             fail_count = 0
