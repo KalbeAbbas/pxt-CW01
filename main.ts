@@ -182,6 +182,7 @@ namespace cw01 {
         while (fail_count <= 3)  //Four attempts
         {
             if (!get_status()) {
+                basic.showString("Error!")
                 IoTSendValueToATT(value, asset, loop)
             } else {
                 fail_count = 0
@@ -812,7 +813,7 @@ namespace cw01 {
     function get_status(): boolean {
 
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
-        basic.pause(1000);
+        basic.pause(50);
         res = serial.readString()
 
         if (res.includes("HTTP/1.1 200") || res.includes("HTTP/1.1 201") || res.includes("HTTP/1.0 202")) {
