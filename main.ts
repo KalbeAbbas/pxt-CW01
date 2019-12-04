@@ -189,7 +189,7 @@ namespace cw01 {
         basic.pause(50)
         serial.writeString(request + NEWLINE)
         basic.pause(300)
-        serial.readString()
+        serial.readString();
 
         if (!get_status()) {
             basic.showNumber(fail_count)
