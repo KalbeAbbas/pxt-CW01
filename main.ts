@@ -150,6 +150,7 @@ namespace cw01 {
         }*/
 
         if (!get_status()) {
+            basic.showNumber(fail_count)
             fail_count++
             IoTSendStringToATT(value, asset, loop)
         } else {
@@ -191,6 +192,7 @@ namespace cw01 {
         serial.readString()
 
         if (!get_status()) {
+            basic.showNumber(fail_count)
             fail_count++
             IoTSendValueToATT(value, asset, loop)
         } else {
@@ -241,6 +243,7 @@ namespace cw01 {
         serial.readString()
 
         if (!get_status()) {
+            basic.showNumber(fail_count)
             fail_count++
             IoTSendStateToATT(state, asset, loop)
         } else {
