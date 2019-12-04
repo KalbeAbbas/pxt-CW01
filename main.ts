@@ -153,7 +153,7 @@ namespace cw01 {
             "Content-Type:application/json" + NEWLINE +
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
-        block.toString()
+        basic.showString(block.toString())
         if (block && loop) {
             basic.showString("Working")
             basic.pause(30000);
