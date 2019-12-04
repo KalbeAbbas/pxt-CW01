@@ -134,7 +134,7 @@ namespace cw01 {
         basic.pause(200)
         serial.readString()
 
-        while (fail_count <= 3)  //Four attempts
+        /*while (fail_count <= 3)  //Four attempts
         {
             if (!get_status()) {
                 IoTSendStringToATT(value, asset, loop)
@@ -143,6 +143,17 @@ namespace cw01 {
                 break
             }
             fail_count++
+        }
+
+        if (fail_count > 3) {
+            connectToATT(TOKEN, DEVICE_ID)
+        }*/
+
+        if (!get_status()) {
+            fail_count++
+            IoTSendStringToATT(value, asset, loop)
+        } else {
+            fail_count = 0
         }
 
         if (fail_count > 3) {
@@ -179,21 +190,17 @@ namespace cw01 {
         basic.pause(300)
         serial.readString()
 
-        while (fail_count <= 3)  //Four attempts
-        {
-            if (!get_status()) {
-                basic.showString("Error!")
-                IoTSendValueToATT(value, asset, loop)
-            } else {
-                fail_count = 0
-                break
-            }
+        if (!get_status()) {
             fail_count++
+            IoTSendValueToATT(value, asset, loop)
+        } else {
+            fail_count = 0
         }
 
         if (fail_count > 3) {
             connectToATT(TOKEN, DEVICE_ID)
         }
+
     }
 
     /**
@@ -230,18 +237,14 @@ namespace cw01 {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(50)
         serial.writeString(request + NEWLINE)
-        basic.pause(200)
+        basic.pause(300)
         serial.readString()
 
-        while (fail_count <= 3)  //Four attempts
-        {
-            if (!get_status()) {
-                IoTSendStateToATT(state, asset, loop)
-            } else {
-                fail_count = 0
-                break
-            }
+        if (!get_status()) {
             fail_count++
+            IoTSendStateToATT(state, asset, loop)
+        } else {
+            fail_count = 0
         }
 
         if (fail_count > 3) {
