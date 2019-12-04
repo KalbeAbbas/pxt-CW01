@@ -23,6 +23,7 @@ namespace cw01 {
     let prev_mqtt_payload: string = ""
     let block: boolean = false
     let mqtt_topic: string = ""
+    let fail_count: number = 0
 
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -113,7 +114,6 @@ namespace cw01 {
     //% blockId="IoTSendStringToATT" block="CW01 send string %value to ATT asset %asset, inside loop %loop"
     export function IoTSendStringToATT(value: string, asset: string, loop: boolean): void {
         asset_name = asset
-        let count: number = 0
         let payload: string = "{\"value\": " + value + "}"
         let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
             "Host: api.allthingstalk.io" + NEWLINE +
@@ -134,11 +134,21 @@ namespace cw01 {
         basic.pause(200)
         serial.readString()
 
-        if (!get_status()) {
-            if (count > 3) {
-                connectToATT(TOKEN, DEVICE_ID)
+        while(fail_count <= 3)  //Four attempts
+        {
+            if(!get_status())
+            {
+                IoTSendStringToATT(value, asset, loop)
+            }else{
+                fail_count=0
+                break
             }
-            count++
+            fail_count++
+        }
+
+        if(fail_count >= 3)
+        {
+            connectToATT(TOKEN, DEVICE_ID)
         }
 
     }
@@ -151,7 +161,6 @@ namespace cw01 {
     //% blockId="IoTSendValueToATT" block="CW01 send value %value to ATT asset %asset, inside loop %loop"
     export function IoTSendValueToATT(value: number, asset: string, loop: boolean): void {
         asset_name = asset
-        let count: number = 0
         let payload: string = "{\"value\": " + value.toString() + "}"
         let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
             "Host: api.allthingstalk.io" + NEWLINE +
@@ -172,11 +181,19 @@ namespace cw01 {
         basic.pause(200)
         serial.readString()
 
-        if (!get_status()) {
-            if (count > 3) {
-                connectToATT(TOKEN, DEVICE_ID)
+        while (fail_count <= 3)  //Four attempts
+        {
+            if (!get_status()) {
+                IoTSendValueToATT(value, asset, loop)
+            } else {
+                fail_count = 0
+                break
             }
-            count++
+            fail_count++
+        }
+
+        if (fail_count >= 3) {
+            connectToATT(TOKEN, DEVICE_ID)
         }
     }
 
@@ -217,11 +234,19 @@ namespace cw01 {
         basic.pause(200)
         serial.readString()
 
-        if (!get_status()) {
-            if (count > 3) {
-                connectToATT(TOKEN, DEVICE_ID)
+        while (fail_count <= 3)  //Four attempts
+        {
+            if (!get_status()) {
+                IoTSendStateToATT(state, asset, loop)
+            } else {
+                fail_count = 0
+                break
             }
-            count++
+            fail_count++
+        }
+
+        if (fail_count >= 3) {
+            connectToATT(TOKEN, DEVICE_ID)
         }
     }
 
