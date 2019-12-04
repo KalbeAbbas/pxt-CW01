@@ -131,7 +131,7 @@ namespace cw01 {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(50)
         serial.writeString(request + NEWLINE)
-        basic.pause(300)
+        basic.pause(500)
         serial.readString()
 
         while (fail_count <= 3)  //Four attempts
@@ -193,7 +193,7 @@ namespace cw01 {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(50)
         serial.writeString(request + NEWLINE)
-        basic.pause(300)
+        basic.pause(500)
         serial.readString()
 
 
@@ -248,7 +248,7 @@ namespace cw01 {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(50)
         serial.writeString(request + NEWLINE)
-        basic.pause(300)
+        basic.pause(500)
         serial.readString()
 
         while (fail_count <= 3)  //Four attempts
