@@ -812,7 +812,7 @@ namespace cw01 {
     function get_status(): boolean {
 
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
-        basic.pause(50)
+        basic.pause(100)
         res = serial.readString()
 
         if (res.includes("HTTP/1.1 200") || res.includes("HTTP/1.1 201") || res.includes("HTTP/1.0 202")) {
