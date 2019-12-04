@@ -176,7 +176,7 @@ namespace cw01 {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(50)
         serial.writeString(request + NEWLINE)
-        basic.pause(200)
+        basic.pause(300)
         serial.readString()
 
         while (fail_count <= 3)  //Four attempts
@@ -813,7 +813,7 @@ namespace cw01 {
     function get_status(): boolean {
 
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
-        basic.pause(50);
+        basic.pause(100);
         res = serial.readString()
 
         if (res.includes("HTTP/1.1 200") || res.includes("HTTP/1.1 201") || res.includes("HTTP/1.0 202")) {
