@@ -130,7 +130,7 @@ namespace cw01 {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(50)
         serial.writeString(request + NEWLINE)
-        basic.pause(250)
+        basic.pause(200)
         serial.readString()
 
         get_status()
@@ -162,7 +162,7 @@ namespace cw01 {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(50)
         serial.writeString(request + NEWLINE)
-        basic.pause(250)
+        basic.pause(200)
         serial.readString()
 
         get_status()
@@ -202,7 +202,7 @@ namespace cw01 {
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(50)
         serial.writeString(request + NEWLINE)
-        basic.pause(250)
+        basic.pause(200)
         serial.readString()
 
         get_status()
@@ -234,7 +234,7 @@ namespace cw01 {
         basic.pause(50)
         serial.writeString(request + NEWLINE)
 
-        basic.pause(500)
+        basic.pause(200)
 
         payload = "{\"value\": false}"
         request = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
