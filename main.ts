@@ -29,13 +29,14 @@ namespace cw01 {
     serial.setRxBufferSize(200)
 
 
-    input.onButtonPressed(Button.A, function () {
+    control.onEvent(control.eventSourceId(EventBusSource.MICROBIT_ID_BUTTON_A), control.eventValueId(EventBusValue.MICROBIT_EVT_ANY), function () {
         block = true
     })
 
-    input.onButtonPressed(Button.B, function () {
+    control.onEvent(control.eventSourceId(EventBusSource.MICROBIT_ID_BUTTON_B), control.eventValueId(EventBusValue.MICROBIT_EVT_ANY), function () {
         block = true
     })
+
 
     basic.showIcon(IconNames.Chessboard)
     basic.pause(2000)
