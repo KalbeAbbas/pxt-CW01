@@ -124,7 +124,7 @@ namespace cw01 {
 
         block.toString()
         if (block && loop) {
-            basic.pause(30000)
+            basic.pause(2000)
             block = false
         }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
@@ -154,10 +154,9 @@ namespace cw01 {
             "Content-Type:application/json" + NEWLINE +
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
-        basic.showString(block.toString())
+        block.toString()
         if (block && loop) {
-            basic.showString("Working")
-            basic.pause(30000);
+            basic.pause(2000);
             block = false
         }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
@@ -197,7 +196,7 @@ namespace cw01 {
 
         block.toString()
         if (block && loop) {
-            basic.pause(30000)
+            basic.pause(2000)
             block = false
         }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
