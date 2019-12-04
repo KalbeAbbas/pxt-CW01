@@ -134,10 +134,8 @@ namespace cw01 {
         basic.pause(200)
         serial.readString()
 
-        if(!get_status())
-        {
-            if(count > 3)
-            {
+        if (!get_status()) {
+            if (count > 3) {
                 connectToATT(TOKEN, DEVICE_ID)
             }
             count++
@@ -153,7 +151,7 @@ namespace cw01 {
     //% blockId="IoTSendValueToATT" block="CW01 send value %value to ATT asset %asset, inside loop %loop"
     export function IoTSendValueToATT(value: number, asset: string, loop: boolean): void {
         asset_name = asset
-        let count:number = 0
+        let count: number = 0
         let payload: string = "{\"value\": " + value.toString() + "}"
         let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
             "Host: api.allthingstalk.io" + NEWLINE +
