@@ -122,7 +122,7 @@ namespace cw01 {
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
         block.toString()
-        if (block && !loop) {
+        if (block && loop) {
             basic.pause(30000)
             block = false
         }
@@ -154,7 +154,7 @@ namespace cw01 {
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
         block.toString()
-        if (block && !loop) {
+        if (block && loop) {
             basic.showString("Working")
             basic.pause(30000);
             block = false
@@ -195,7 +195,7 @@ namespace cw01 {
 
 
         block.toString()
-        if (block && !loop) {
+        if (block && loop) {
             basic.pause(30000)
             block = false
         }
