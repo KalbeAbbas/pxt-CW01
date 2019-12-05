@@ -41,8 +41,8 @@ namespace cw01 {
 
     basic.showIcon(IconNames.Chessboard)
     basic.pause(2000)
-    serial.writeString("ATE0" + NEWLINE)
-    basic.pause(300)
+    /*serial.writeString("ATE0" + NEWLINE)
+    basic.pause(300)*/
     serial.writeString("AT+CWMODE_DEF=3" + NEWLINE)
     basic.pause(300)
     serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
@@ -198,20 +198,20 @@ namespace cw01 {
 
         get_status()
 
-       /* while (fail_count <= 3)  //Four attempts
-        {
-            if (!get_status()) {
-                IoTSendValueToATT(value, asset, loop)
-            } else {
-                fail_count = 0
-                break
-            }
-            fail_count++
-        }
-
-        if (fail_count > 3) {
-            connectToATT(TOKEN, DEVICE_ID)
-        }*/
+        /* while (fail_count <= 3)  //Four attempts
+         {
+             if (!get_status()) {
+                 IoTSendValueToATT(value, asset, loop)
+             } else {
+                 fail_count = 0
+                 break
+             }
+             fail_count++
+         }
+ 
+         if (fail_count > 3) {
+             connectToATT(TOKEN, DEVICE_ID)
+         }*/
 
     }
 
