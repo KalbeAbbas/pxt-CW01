@@ -200,7 +200,6 @@ namespace cw01 {
         {
             let status: boolean = get_status()
             if (status == false) {
-                basic.showNumber(fail_count)
                 fail_count++
                 IoTSendValueToATT(value, asset, loop)
             } else {
