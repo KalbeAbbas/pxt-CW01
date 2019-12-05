@@ -196,7 +196,6 @@ namespace cw01 {
         basic.pause(500)
         serial.readString()
 
-        get_status()
 
         while (fail_count <= 3)  //Four attempts
         {
