@@ -196,8 +196,9 @@ namespace cw01 {
         basic.pause(500)
         serial.readString()
 
+        get_status()
 
-        while (fail_count <= 3)  //Four attempts
+        /*while (fail_count <= 3)  //Four attempts
         {
             if (!get_status()) {
                 basic.showString("Hello!")
@@ -212,7 +213,7 @@ namespace cw01 {
         if (fail_count > 3) {
             fail_count = 0
             connectToATT(TOKEN, DEVICE_ID)
-        }
+        }*/
 
     }
 
