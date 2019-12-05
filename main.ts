@@ -200,6 +200,7 @@ namespace cw01 {
         while (fail_count <= 3)  //Four attempts
         {
             if (!get_status()) {
+                basic.showString("Hello!")
                 IoTSendValueToATT(value, asset, loop)
             } else {
                 fail_count = 0
