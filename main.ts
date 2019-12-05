@@ -196,24 +196,23 @@ namespace cw01 {
         basic.pause(500)
         serial.readString()
 
-        get_status()
-
-        /*while (fail_count <= 3)  //Four attempts
+        while (fail_count <= 3)  //Four attempts
         {
-            if (!get_status()) {
-                basic.showString("Hello!")
+            let status: boolean = get_status()
+            if (status == false) {
+                basic.showNumber(fail_count)
+                fail_count++
                 IoTSendValueToATT(value, asset, loop)
             } else {
                 fail_count = 0
                 break
             }
-            fail_count++
         }
 
         if (fail_count > 3) {
             fail_count = 0
             connectToATT(TOKEN, DEVICE_ID)
-        }*/
+        }
 
     }
 
