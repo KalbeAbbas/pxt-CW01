@@ -102,7 +102,7 @@ namespace cw01 {
         DEVICE_ID = ID
         TOKEN = TKN
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + NEWLINE)
-        basic.pause(500)
+        basic.pause(1000)
     }
 
 
