@@ -685,20 +685,11 @@ namespace cw01 {
     export function IoTMQTTGetLatestData(): string {
         let index: number = mqtt_payload.indexOf(mqtt_topic) + mqtt_topic.length
         let payload_length: number = mqtt_payload.length - index - 6
-        let topic_rcv: string = ""
         let payload: string
 
-        for (let i: number = 0; i < topics.length; i++) {
-            if (mqtt_payload.includes(topics[i])) topic_rcv = topics[i]
-        }
+        payload = mqtt_payload.substr(index, payload_length)
 
-        if (prev_mqtt_payload.compare(mqtt_payload) != 0) {
-            payload = mqtt_payload.substr(index, payload_length)
-
-            return payload, topic_rcv
-        } else {
-            return ""
-        }
+        return payload
 
     }
 
