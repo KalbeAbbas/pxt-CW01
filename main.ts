@@ -671,19 +671,19 @@ namespace cw01 {
     //% blockId="IoTMQTTping" block="CW01 ping MQTT"
     export function IoTMQTTClientloop() {
         //Header
-        if((input.runningTime() - timer) > 5000)
+        if((input.runningTime() - timer) > 3600000)
         {
             timer = input.runningTime()
             let header_one: Buffer = pins.packBuffer("!B", [0xC0])
             let header_two: Buffer = pins.packBuffer("!B", [0x00])
 
             serial.writeString("AT+CIPSEND=" + (header_one.length + header_two.length) + NEWLINE)
-            basic.pause(1000)
+            basic.pause(100)
 
             serial.writeBuffer(header_one)
             serial.writeBuffer(header_two)
 
-            basic.pause(1000)
+            basic.pause(500)
         }
 
     }
