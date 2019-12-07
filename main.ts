@@ -26,6 +26,7 @@ namespace cw01 {
     let fail_count: number = 0
     let topics: string[] = []
     let topic_count: number = 0
+    let topic_rcv: string
 
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -683,11 +684,21 @@ namespace cw01 {
     //% group="MQTT"
     //% blockId="IoTMQTTGetLatestData" block="CW01 get latest payload data"
     export function IoTMQTTGetLatestData(): string {
-        let index: number = mqtt_payload.indexOf(mqtt_topic) + mqtt_topic.length
-        let payload_length: number = mqtt_payload.length - index - 6
+
         let payload: string
 
+        for (let i: number = 0; i < topics.length; i++) {
+            if (mqtt_payload.includes(topics[i])) {
+                topic_rcv = topics[i]
+                break
+            } else {
+                continue
+            }
+        }
+
         if (prev_mqtt_payload.compare(mqtt_payload) != 0) {
+            let index: number = mqtt_payload.indexOf(topic_rcv) + topic_rcv.length
+            let payload_length: number = mqtt_payload.length - index - 6
             payload = mqtt_payload.substr(index, payload_length)
         } else {
             payload = ""
@@ -701,17 +712,6 @@ namespace cw01 {
     //% group="MQTT"
     //% blockId="IoTMQTTGetLatestTopic" block="CW01 get latest payload topic"
     export function IoTMQTTGetLatestTopic(): string {
-
-        let topic_rcv: string = ""
-
-        for (let i: number = 0; i < topics.length; i++) {
-            if (mqtt_payload.includes(topics[i])) {
-                topic_rcv = topics[i]
-                break
-            } else {
-                continue
-            }
-        }
 
         return topic_rcv
 
