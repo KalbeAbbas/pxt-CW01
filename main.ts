@@ -27,6 +27,7 @@ namespace cw01 {
     let topics: string[] = []
     let topic_count: number = 0
     let topic_rcv: string = ""
+    let timer: number = 0
 
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -593,6 +594,10 @@ namespace cw01 {
         serial.writeString(password)
 
         basic.pause(1000)
+
+        timer = input.runningTime()
+
+
     }
 
 
@@ -663,19 +668,23 @@ namespace cw01 {
 
     //% weight=91
     //% group="MQTT"
-    //% blockId="IoTMQTTClientloop" block="CW01 client loop"
+    //% blockId="IoTMQTTping" block="CW01 ping MQTT"
     export function IoTMQTTClientloop() {
         //Header
-        let header_one: Buffer = pins.packBuffer("!B", [0xC0])
-        let header_two: Buffer = pins.packBuffer("!B", [0x00])
+        if((input.runningTime() - timer) > 3600)
+        {
+            timer = input.runningTime()
+            let header_one: Buffer = pins.packBuffer("!B", [0xC0])
+            let header_two: Buffer = pins.packBuffer("!B", [0x00])
 
-        serial.writeString("AT+CIPSEND=" + (header_one.length + header_two.length) + NEWLINE)
-        basic.pause(1000)
+            serial.writeString("AT+CIPSEND=" + (header_one.length + header_two.length) + NEWLINE)
+            basic.pause(1000)
 
-        serial.writeBuffer(header_one)
-        serial.writeBuffer(header_two)
+            serial.writeBuffer(header_one)
+            serial.writeBuffer(header_two)
 
-        basic.pause(1000)
+            basic.pause(1000)
+        }
 
     }
 
