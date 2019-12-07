@@ -24,6 +24,8 @@ namespace cw01 {
     let block: boolean = false
     let mqtt_topic: string = ""
     let fail_count: number = 0
+    let topics: string[] = []
+    let topic_count: number = 0
 
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -632,6 +634,9 @@ namespace cw01 {
 
         mqtt_topic = topic
 
+        topics[topic_count] = topic
+        topic_count++
+
         //Msg part one
         let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
         let remain_len: Buffer = pins.packBuffer("!B", [pid.length + topic_len.length + topic.length + qos.length])
@@ -689,6 +694,27 @@ namespace cw01 {
         } else {
             return ""
         }
+
+    }
+
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTMQTTGetLatestTopic" block="CW01 get latest payload topic"
+    export function IoTMQTTGetLatestTopic(): string {
+
+        let topic_rcv: string = ""
+
+        for (let i: number = 0; i < topics.length; i++) {
+            if (mqtt_payload.includes(topics[i]))
+            {
+                topic_rcv = topics[i]
+                break
+            }else{
+                continue
+            }
+        }
+
+        return topic_rcv
 
     }
 
