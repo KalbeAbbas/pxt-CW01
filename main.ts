@@ -671,8 +671,7 @@ namespace cw01 {
     //% blockId="IoTMQTTping" block="CW01 ping MQTT"
     export function IoTMQTTClientloop() {
         //Header
-        if((input.runningTime() - timer) > 3600000)
-        {
+        if ((input.runningTime() - timer) > 3600000) {
             timer = input.runningTime()
             let header_one: Buffer = pins.packBuffer("!B", [0xC0])
             let header_two: Buffer = pins.packBuffer("!B", [0x00])
@@ -697,6 +696,9 @@ namespace cw01 {
                 IoTMQTTGetData()
             }
         })
+
+    basic.showString("#")
+    basic.showIcon(IconNames.Yes)
     }
 
 
