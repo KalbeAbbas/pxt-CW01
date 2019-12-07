@@ -713,6 +713,15 @@ namespace cw01 {
     //% blockId="IoTMQTTGetLatestTopic" block="CW01 get latest payload topic"
     export function IoTMQTTGetLatestTopic(): string {
 
+        for (let i: number = 0; i < topics.length; i++) {
+            if (mqtt_payload.includes(topics[i])) {
+                topic_rcv = topics[i]
+                break
+            } else {
+                continue
+            }
+        }
+        
         return topic_rcv
 
     }
