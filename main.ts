@@ -26,7 +26,7 @@ namespace cw01 {
     let fail_count: number = 0
     let topics: string[] = []
     let topic_count: number = 0
-    let topic_rcv: string
+    let topic_rcv: string = ""
 
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -721,7 +721,7 @@ namespace cw01 {
                 continue
             }
         }
-        
+
         return topic_rcv
 
     }
