@@ -24,6 +24,8 @@ namespace cw01 {
     let block: boolean = false
     let mqtt_topic: string = ""
     let fail_count: number = 0
+    let topics: string[] = []
+    let topic_count: number = 0
 
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -632,6 +634,9 @@ namespace cw01 {
 
         mqtt_topic = topic
 
+        topics[topic_count] = topic
+        topic_count++
+
         //Msg part one
         let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
         let remain_len: Buffer = pins.packBuffer("!B", [pid.length + topic_len.length + topic.length + qos.length])
@@ -680,12 +685,18 @@ namespace cw01 {
     export function IoTMQTTGetLatestData(): string {
         let index: number = mqtt_payload.indexOf(mqtt_topic) + mqtt_topic.length
         let payload_length: number = mqtt_payload.length - index - 6
+        let topic_rcv: string = ""
         let payload: string
+
+        for (let i:number = 0; i<topics.length;i++)
+        {
+            if(mqtt_payload.includes(topics[i])) topic_rcv = topics[i]
+        }
 
         if (prev_mqtt_payload.compare(mqtt_payload) != 0) {
             payload = mqtt_payload.substr(index, payload_length)
 
-            return payload
+            return payload, topic_rcv
         } else {
             return ""
         }
