@@ -549,6 +549,17 @@ namespace cw01 {
 
     //% weight=91
     //% group="MQTT"
+    //% blockId="IoTMQTTRecordMessages" block="CW01 record MQTT messages"
+    export function IoTMQTTRecordMessages(): void {
+        serial.onDataReceived("\n", function () {
+            if ((serial.readString()).includes("IPD")) {
+                IoTMQTTGetData()
+            }
+        })
+    }
+
+    //% weight=91
+    //% group="MQTT"
     //% blockId="IoTMQTTConnect" block="CW01 connect to MQTT broker URL %broker with Username %Username and Password %Password"
     export function IoTMQTTConnect(broker: string, Username: string, Password: string): void {
 
@@ -658,12 +669,6 @@ namespace cw01 {
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(100)
         serial.readString()
-
-        serial.onDataReceived("\n", function () {
-            if ((serial.readString()).includes("IPD")) {
-                IoTMQTTGetData()
-            }
-        })
     }
 
 
@@ -737,7 +742,7 @@ namespace cw01 {
         mqtt_payload = serial.readString()
         basic.showIcon(IconNames.Yes)
         basic.showString("")
-    
+
         basic.pause(100)
     }
 
