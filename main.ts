@@ -703,6 +703,27 @@ namespace cw01 {
 
     }
 
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTMQTTGetLatestTopic" block="CW01 get latest payload topic"
+    export function IoTMQTTGetLatestTopic(): string {
+
+        let topic_rcv: string = ""
+
+        for (let i: number = 0; i < topics.length; i++) {
+            if (mqtt_payload.includes(topics[i]))
+            {
+                topic_rcv = topics[i]
+                break
+            }else{
+                continue
+            }
+        }
+
+        return topic_rcv
+
+    }
+
     function IoTMQTTGetData(): void {
         basic.pause(500)
         serial.writeString("AT+CIPRECVDATA=4" + NEWLINE)
