@@ -735,7 +735,9 @@ namespace cw01 {
         basic.pause(300)
 
         mqtt_payload = serial.readString()
-        basic.showString("Message received", 80)
+        basic.showIcon(IconNames.Yes)
+        basic.showString("")
+    
         basic.pause(100)
     }
 
