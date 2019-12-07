@@ -547,16 +547,6 @@ namespace cw01 {
         }
     }
 
-    //% weight=91
-    //% group="MQTT"
-    //% blockId="IoTMQTTRecordMessages" block="CW01 record MQTT messages"
-    export function IoTMQTTRecordMessages(): void {
-        serial.onDataReceived("\n", function () {
-            if ((serial.readString()).includes("IPD")) {
-                IoTMQTTGetData()
-            }
-        })
-    }
 
     //% weight=91
     //% group="MQTT"
@@ -571,7 +561,7 @@ namespace cw01 {
         let protocol_lvl: Buffer = pins.packBuffer("!B", [4])
         //let msg_part_one: string = protocol_name + protocol_lvl
         let connect_flags: Buffer = (pins.packBuffer("!B", [(1 << 7) | (1 << 6) | (1 << 1)]))
-        let keep_alive: Buffer = pins.packBuffer("!H", [200])
+        let keep_alive: Buffer = pins.packBuffer("!H", [3600])
         let client_id: string = "CW01/1.1"
         let client_id_len: Buffer = pins.packBuffer("!H", [client_id.length])
         let username: string = Username
@@ -669,6 +659,35 @@ namespace cw01 {
         serial.writeString("AT+CIPRECVDATA=200" + NEWLINE)
         basic.pause(100)
         serial.readString()
+    }
+
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTMQTTClientloop" block="CW01 client loop"
+    export function IoTMQTTClientloop() {
+        //Header
+        let header_one: Buffer = pins.packBuffer("!B", [0xC0])
+        let header_two: Buffer = pins.packBuffer("!B", [0x00])
+
+        serial.writeString("AT+CIPSEND=" + (header_one.length + header_two.length) + NEWLINE)
+        basic.pause(1000)
+
+        serial.writeBuffer(header_one)
+        serial.writeBuffer(header_two)
+
+        basic.pause(1000)
+
+    }
+
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTMQTTRecordMessages" block="CW01 record MQTT messages"
+    export function IoTMQTTRecordMessages(): void {
+        serial.onDataReceived("\n", function () {
+            if ((serial.readString()).includes("IPD")) {
+                IoTMQTTGetData()
+            }
+        })
     }
 
 
