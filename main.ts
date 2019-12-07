@@ -569,7 +569,7 @@ namespace cw01 {
         //let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
 
         serial.writeString("AT+CIPSEND=" + (1 + 1 + protocol_name_prior.length + protocol_name.length + protocol_lvl.length + connect_flags.length + keep_alive.length + client_id_len.length + client_id.length + username_len.length + username.length + password_len.length + password.length) + NEWLINE)
-        basic.pause(1000)
+        basic.pause(5000)
         /*serial.writeBuffer(pins.packBuffer("!B", [4]))
         serial.writeBuffer(pins.packBuffer("!B", [4]))*/
 
@@ -688,9 +688,8 @@ namespace cw01 {
         let topic_rcv: string = ""
         let payload: string
 
-        for (let i:number = 0; i<topics.length;i++)
-        {
-            if(mqtt_payload.includes(topics[i])) topic_rcv = topics[i]
+        for (let i: number = 0; i < topics.length; i++) {
+            if (mqtt_payload.includes(topics[i])) topic_rcv = topics[i]
         }
 
         if (prev_mqtt_payload.compare(mqtt_payload) != 0) {
@@ -711,11 +710,10 @@ namespace cw01 {
         let topic_rcv: string = ""
 
         for (let i: number = 0; i < topics.length; i++) {
-            if (mqtt_payload.includes(topics[i]))
-            {
+            if (mqtt_payload.includes(topics[i])) {
                 topic_rcv = topics[i]
                 break
-            }else{
+            } else {
                 continue
             }
         }
