@@ -43,8 +43,8 @@ namespace cw01 {
 
     basic.showIcon(IconNames.Chessboard)
     basic.pause(2000)
-    /*serial.writeString("ATE0" + NEWLINE)
-    basic.pause(300)*/
+    serial.writeString("ATE0" + NEWLINE)
+    basic.pause(300)
     serial.writeString("AT+CWMODE_DEF=3" + NEWLINE)
     basic.pause(300)
     serial.writeString("AT+CIPRECVMODE=1" + NEWLINE)
@@ -689,7 +689,7 @@ namespace cw01 {
 
         if (prev_mqtt_payload.compare(mqtt_payload) != 0) {
             payload = mqtt_payload.substr(index, payload_length)
-        }else{
+        } else {
             payload = ""
         }
 
