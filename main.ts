@@ -46,7 +46,7 @@ namespace cw01 {
             this.latitude = 0
             this.longitude = 0
             this.select = false
-            this.azureAccess= ""
+            this.azureAccess = ""
             this.mqtt_payload = ""
             this.prev_mqtt_payload = ""
             this.block = false
@@ -183,22 +183,8 @@ namespace cw01 {
         serial.writeString(request + cw01_vars.NEWLINE)
         basic.pause(500)
 
-        /*if (!get_status()) {
-            basic.showNumber(fail_count)
-            if (fail_count > 3) {
-                fail_count = 0
-                basic.showString("Reconnecting to server...")
-                connectToATT(TOKEN, DEVICE_ID)
-            }
-            fail_count++
-            IoTSendStringToATT(value, asset, loop)
-        } else {
-            fail_count = 0
-        }
-
-        if (fail_count > 3) {
-            connectToATT(TOKEN, DEVICE_ID)
-        }*/
+        serial.readString()
+        get_status()
 
     }
 
@@ -234,6 +220,9 @@ namespace cw01 {
         basic.pause(50)
         serial.writeString(request + cw01_vars.NEWLINE)
         basic.pause(500)
+
+        serial.readString()
+        get_status()
 
     }
 
@@ -279,6 +268,9 @@ namespace cw01 {
         basic.pause(50)
         serial.writeString(request + cw01_vars.NEWLINE)
         basic.pause(500)
+
+        serial.readString()
+        get_status()
 
     }
 
