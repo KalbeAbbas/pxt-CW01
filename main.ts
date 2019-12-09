@@ -164,9 +164,7 @@ namespace cw01 {
             cw01_vars.att_asset = asset
             cw01_vars.block = false
         } else {
-            cw01_vars.att_string = false
-            cw01_vars.att_string_value = ""
-            cw01_vars.att_asset = ""
+
             cw01_vars.asset_name = asset
             let payload: string = "{\"value\": " + value + "}"
             let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
@@ -202,9 +200,6 @@ namespace cw01 {
             cw01_vars.att_asset = asset
             cw01_vars.block = false
         } else {
-            cw01_vars.att_number = false
-            cw01_vars.att_asset = ""
-            cw01_vars.att_number_value = 0
 
 
             cw01_vars.asset_name = asset
@@ -246,9 +241,6 @@ namespace cw01 {
 
         } else {
 
-            cw01_vars.att_state = false
-            cw01_vars.att_asset = ""
-            cw01_vars.att_state_value = false
             let stateStr: string
             let count: number = 0
             if (state == true) {
@@ -301,6 +293,10 @@ namespace cw01 {
             basic.pause(50)
             serial.writeString(request + cw01_vars.NEWLINE)
             basic.pause(500)
+
+            cw01_vars.att_number = false
+            cw01_vars.att_asset = ""
+            cw01_vars.att_number_value = 0
         }
 
         if (cw01_vars.att_string) {
@@ -319,6 +315,10 @@ namespace cw01 {
             basic.pause(50)
             serial.writeString(request + cw01_vars.NEWLINE)
             basic.pause(500)
+
+            cw01_vars.att_string = false
+            cw01_vars.att_string_value = ""
+            cw01_vars.att_asset = ""
         }
 
         if (cw01_vars.att_state) {
@@ -337,6 +337,10 @@ namespace cw01 {
             basic.pause(50)
             serial.writeString(request + cw01_vars.NEWLINE)
             basic.pause(500)
+
+            cw01_vars.att_state = false
+            cw01_vars.att_asset = ""
+            cw01_vars.att_state_value = false
         }
     }
 
