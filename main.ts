@@ -28,6 +28,12 @@ namespace cw01 {
     let topic_count: number = 0
     let topic_rcv: string = ""
     let timer: number = 0
+    let att_string: boolean
+    let att_string_value: string = ""
+    let att_number: boolean
+    let att_number_value: number = 0
+    let att_state: boolean
+    let att_state_value: boolean
 
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -128,9 +134,14 @@ namespace cw01 {
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
         block.toString()
-        if (block && loop) {
-            basic.pause(2000)
+
+        if (block) {
+            att_string = true
+            att_string_value = value
             block = false
+        } else {
+            att_string = false
+            att_string_value = ""
         }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(50)
@@ -190,9 +201,13 @@ namespace cw01 {
             "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
         block.toString()
-        if (block && loop) {
-            basic.pause(2000);
+        if (block) {
+            att_number = true
+            att_number_value = value
             block = false
+        } else {
+            att_number = false
+            att_number_value = 0
         }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(50)
@@ -246,9 +261,13 @@ namespace cw01 {
 
 
         block.toString()
-        if (block && loop) {
-            basic.pause(2000)
+        if (block) {
+            att_state = true
+            att_state_value = state
             block = false
+        } else {
+            att_state = false
+            att_state_value = false
         }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(50)
@@ -697,8 +716,8 @@ namespace cw01 {
             }
         })
 
-    basic.showString("#")
-    basic.showIcon(IconNames.Yes)
+        basic.showString("#")
+        basic.showIcon(IconNames.Yes)
     }
 
 
