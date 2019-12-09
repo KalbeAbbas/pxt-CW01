@@ -37,32 +37,32 @@ namespace cw01 {
         att_state_value: boolean
         att_asset: string
         constructor() {
-            let res: string = ""
-            let TOKEN: string = ""
-            let DEVICE_ID: string = ""
-            let asset_name: string = ""
-            let NEWLINE: string = "\u000D\u000A"
+            this.res = ""
+            this.TOKEN = ""
+            this.DEVICE_ID = ""
+            this.asset_name = ""
+            this.NEWLINE = "\u000D\u000A"
             this.start = false
-            let latitude: number
-            let longitude: number
-            let select: boolean
-            let azureAccess: string
-            let mqtt_payload: string = ""
-            let prev_mqtt_payload: string = ""
-            let block: boolean = false
-            let mqtt_topic: string = ""
-            let fail_count: number = 0
-            let topics: string[] = []
-            let topic_count: number = 0
-            let topic_rcv: string = ""
-            let timer: number = 0
-            let att_string: boolean
-            let att_string_value: string = ""
-            let att_number: boolean
-            let att_number_value: number = 0
-            let att_state: boolean
-            let att_state_value: boolean
-            let att_asset: string = ""
+            this.latitude = 0
+            this.longitude = 0
+            this.select = false
+            this.azureAccess= ""
+            this.mqtt_payload = ""
+            this.prev_mqtt_payload = ""
+            this.block = false
+            this.mqtt_topic = ""
+            this.fail_count = 0
+            this.topics = []
+            this.topic_count = 0
+            this.topic_rcv = ""
+            this.timer = 0
+            this.att_string = false
+            this.att_string_value = ""
+            this.att_number = false
+            this.att_number_value = 0
+            this.att_state = false
+            this.att_state_value = false
+            this.att_asset = ""
         }
     }
 
