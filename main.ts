@@ -122,8 +122,8 @@ namespace cw01 {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendStringToATT" block="CW01 send string %value to ATT asset %asset, inside loop %loop"
-    export function IoTSendStringToATT(value: string, asset: string, loop: boolean): void {
+    //% blockId="IoTSendStringToATT" block="CW01 send string %value to ATT asset %asset"
+    export function IoTSendStringToATT(value: string, asset: string): void {
         asset_name = asset
         let payload: string = "{\"value\": " + value + "}"
         let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
@@ -150,22 +150,6 @@ namespace cw01 {
         basic.pause(50)
         serial.writeString(request + NEWLINE)
         basic.pause(500)
-        serial.readString()
-
-        while (fail_count <= 3)  //Four attempts
-        {
-            if (!get_status()) {
-                IoTSendStringToATT(value, asset, loop)
-            } else {
-                fail_count = 0
-                break
-            }
-            fail_count++
-        }
-
-        if (fail_count > 3) {
-            connectToATT(TOKEN, DEVICE_ID)
-        }
 
         /*if (!get_status()) {
             basic.showNumber(fail_count)
@@ -191,8 +175,8 @@ namespace cw01 {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendValueToATT" block="CW01 send value %value to ATT asset %asset, inside loop %loop"
-    export function IoTSendValueToATT(value: number, asset: string, loop: boolean): void {
+    //% blockId="IoTSendValueToATT" block="CW01 send value %value to ATT asset %asset"
+    export function IoTSendValueToATT(value: number, asset: string): void {
         asset_name = asset
         let payload: string = "{\"value\": " + value.toString() + "}"
         let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
@@ -218,24 +202,6 @@ namespace cw01 {
         basic.pause(50)
         serial.writeString(request + NEWLINE)
         basic.pause(500)
-        serial.readString()
-
-        while (fail_count <= 3)  //Four attempts
-        {
-            let status: boolean = get_status()
-            if (status == false) {
-                fail_count++
-                IoTSendValueToATT(value, asset, loop)
-            } else {
-                fail_count = 0
-                break
-            }
-        }
-
-        if (fail_count > 3) {
-            fail_count = 0
-            connectToATT(TOKEN, DEVICE_ID)
-        }
 
     }
 
@@ -245,7 +211,7 @@ namespace cw01 {
     //% weight=91
     //% group="ATT"
     //% blockId="IoTSendStateToATT" block="CW01 send state %state to ATT asset %asset_name, inside loop %loop"
-    export function IoTSendStateToATT(state: boolean, asset: string, loop: boolean): void {
+    export function IoTSendStateToATT(state: boolean, asset: string): void {
         let stateStr: string
         let count: number = 0
         if (state == true) {
@@ -281,23 +247,6 @@ namespace cw01 {
         basic.pause(50)
         serial.writeString(request + NEWLINE)
         basic.pause(500)
-        serial.readString()
-
-        while (fail_count <= 3)  //Four attempts
-        {
-            if (!get_status()) {
-                IoTSendStateToATT(state, asset, loop)
-            } else {
-                fail_count = 0
-                break
-            }
-            fail_count++
-        }
-
-        if (fail_count > 3) {
-            fail_count = 0
-            connectToATT(TOKEN, DEVICE_ID)
-        }
 
     }
 
