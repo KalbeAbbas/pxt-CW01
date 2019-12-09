@@ -156,16 +156,6 @@ namespace cw01 {
     //% group="ATT"
     //% blockId="IoTSendStringToATT" block="CW01 send string %value to ATT asset %asset"
     export function IoTSendStringToATT(value: string, asset: string): void {
-        cw01_vars.asset_name = asset
-        let payload: string = "{\"value\": " + value + "}"
-        let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
-            "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
-            "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
-            "Accept: */*" + cw01_vars.NEWLINE +
-            "Authorization: Bearer " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
-            "Content-Type:application/json" + cw01_vars.NEWLINE +
-            "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
-
         cw01_vars.block.toString()
 
         if (cw01_vars.block) {
@@ -177,14 +167,24 @@ namespace cw01 {
             cw01_vars.att_string = false
             cw01_vars.att_string_value = ""
             cw01_vars.att_asset = ""
-        }
-        serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
-        basic.pause(50)
-        serial.writeString(request + cw01_vars.NEWLINE)
-        basic.pause(500)
+            cw01_vars.asset_name = asset
+            let payload: string = "{\"value\": " + value + "}"
+            let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
+                "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
+                "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
+                "Accept: */*" + cw01_vars.NEWLINE +
+                "Authorization: Bearer " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
+                "Content-Type:application/json" + cw01_vars.NEWLINE +
+                "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
 
-        serial.readString()
-        get_status()
+            serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
+            basic.pause(50)
+            serial.writeString(request + cw01_vars.NEWLINE)
+            basic.pause(500)
+
+            serial.readString()
+            get_status()
+        }
 
     }
 
@@ -195,16 +195,6 @@ namespace cw01 {
     //% group="ATT"
     //% blockId="IoTSendValueToATT" block="CW01 send value %value to ATT asset %asset"
     export function IoTSendValueToATT(value: number, asset: string): void {
-        cw01_vars.asset_name = asset
-        let payload: string = "{\"value\": " + value.toString() + "}"
-        let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
-            "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
-            "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
-            "Accept: */*" + cw01_vars.NEWLINE +
-            "Authorization: Bearer " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
-            "Content-Type:application/json" + cw01_vars.NEWLINE +
-            "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
-
         cw01_vars.block.toString();
         if (cw01_vars.block) {
             cw01_vars.att_number = true
@@ -215,14 +205,26 @@ namespace cw01 {
             cw01_vars.att_number = false
             cw01_vars.att_asset = ""
             cw01_vars.att_number_value = 0
-        }
-        serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
-        basic.pause(50)
-        serial.writeString(request + cw01_vars.NEWLINE)
-        basic.pause(500)
 
-        serial.readString()
-        get_status()
+
+            cw01_vars.asset_name = asset
+            let payload: string = "{\"value\": " + value.toString() + "}"
+            let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
+                "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
+                "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
+                "Accept: */*" + cw01_vars.NEWLINE +
+                "Authorization: Bearer " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
+                "Content-Type:application/json" + cw01_vars.NEWLINE +
+                "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
+
+            serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
+            basic.pause(50)
+            serial.writeString(request + cw01_vars.NEWLINE)
+            basic.pause(500)
+
+            serial.readString()
+            get_status()
+        }
 
     }
 
@@ -233,44 +235,46 @@ namespace cw01 {
     //% group="ATT"
     //% blockId="IoTSendStateToATT" block="CW01 send state %state to ATT asset %asset_name"
     export function IoTSendStateToATT(state: boolean, asset: string): void {
-        let stateStr: string
-        let count: number = 0
-        if (state == true) {
-            stateStr = "true"
-        } else {
-            stateStr = "false"
-        }
-
-        cw01_vars.asset_name = asset
-        let payload: string = "{\"value\": " + stateStr + "}"
-        let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
-            "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
-            "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
-            "Accept: */*" + cw01_vars.NEWLINE +
-            "Authorization: Bearer " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
-            "Content-Type:application/json" + cw01_vars.NEWLINE +
-            "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
-
-
         cw01_vars.block.toString()
 
         if (cw01_vars.block) {
+
             cw01_vars.att_state = true
             cw01_vars.att_state_value = state
             cw01_vars.att_asset = asset
             cw01_vars.block = false
+
         } else {
+
             cw01_vars.att_state = false
             cw01_vars.att_asset = ""
             cw01_vars.att_state_value = false
-        }
-        serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
-        basic.pause(50)
-        serial.writeString(request + cw01_vars.NEWLINE)
-        basic.pause(500)
+            let stateStr: string
+            let count: number = 0
+            if (state == true) {
+                stateStr = "true"
+            } else {
+                stateStr = "false"
+            }
 
-        serial.readString()
-        get_status()
+            cw01_vars.asset_name = asset
+            let payload: string = "{\"value\": " + stateStr + "}"
+            let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
+                "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
+                "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
+                "Accept: */*" + cw01_vars.NEWLINE +
+                "Authorization: Bearer " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
+                "Content-Type:application/json" + cw01_vars.NEWLINE +
+                "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
+
+            serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
+            basic.pause(50)
+            serial.writeString(request + cw01_vars.NEWLINE)
+            basic.pause(500)
+
+            serial.readString()
+            get_status()
+        }
 
     }
 
