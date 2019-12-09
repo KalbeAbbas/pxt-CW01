@@ -205,7 +205,7 @@ namespace cw01 {
             "Content-Type:application/json" + cw01_vars.NEWLINE +
             "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
 
-        cw01_vars.block.toString()
+        cw01_vars.block.toString();
         if (cw01_vars.block) {
             cw01_vars.att_number = true
             cw01_vars.att_number_value = value
