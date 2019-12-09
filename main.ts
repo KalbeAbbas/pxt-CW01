@@ -34,6 +34,7 @@ namespace cw01 {
     let att_number_value: number = 0
     let att_state: boolean
     let att_state_value: boolean
+    let att_asset: string = ""
 
     start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -138,10 +139,12 @@ namespace cw01 {
         if (block) {
             att_string = true
             att_string_value = value
+            att_asset = asset
             block = false
         } else {
             att_string = false
             att_string_value = ""
+            att_asset = ""
         }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
         basic.pause(50)
@@ -204,9 +207,11 @@ namespace cw01 {
         if (block) {
             att_number = true
             att_number_value = value
+            att_asset = asset
             block = false
         } else {
             att_number = false
+            att_asset = ""
             att_number_value = 0
         }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
@@ -261,12 +266,15 @@ namespace cw01 {
 
 
         block.toString()
+
         if (block) {
             att_state = true
             att_state_value = state
+            att_asset = asset
             block = false
         } else {
             att_state = false
+            att_asset = ""
             att_state_value = false
         }
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
@@ -291,6 +299,68 @@ namespace cw01 {
             connectToATT(TOKEN, DEVICE_ID)
         }
 
+    }
+
+    /**
+    * Send boolean data to AllThingsTalk IoT platform
+    */
+    //% weight=91
+    //% group="ATT"
+    //% blockId="IoTProcessATTQueueMessages" block="CW01 process queue messages"
+    export function IoTProcessATTQueueMessages(): void {
+        if (att_number) {
+            asset_name = att_asset
+            let value = att_number_value
+            let payload: string = "{\"value\": " + value.toString() + "}"
+            let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
+                "Host: api.allthingstalk.io" + NEWLINE +
+                "User-Agent: CW01/1.0" + NEWLINE +
+                "Accept: */*" + NEWLINE +
+                "Authorization: Bearer " + TOKEN + NEWLINE +
+                "Content-Type:application/json" + NEWLINE +
+                "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
+
+            serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
+            basic.pause(50)
+            serial.writeString(request + NEWLINE)
+            basic.pause(500)
+        }
+
+        if (att_string) {
+            asset_name = att_asset
+            let value = att_string_value
+            let payload: string = "{\"value\": " + value + "}"
+            let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
+                "Host: api.allthingstalk.io" + NEWLINE +
+                "User-Agent: CW01/1.0" + NEWLINE +
+                "Accept: */*" + NEWLINE +
+                "Authorization: Bearer " + TOKEN + NEWLINE +
+                "Content-Type:application/json" + NEWLINE +
+                "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
+
+            serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
+            basic.pause(50)
+            serial.writeString(request + NEWLINE)
+            basic.pause(500)
+        }
+
+        if (att_state) {
+            asset_name = att_asset
+            let value = att_state_value
+            let payload: string = "{\"value\": " + value.toString() + "}"
+            let request: string = "PUT /device/" + DEVICE_ID + "/asset/" + asset_name + "/state" + " HTTP/1.1" + NEWLINE +
+                "Host: api.allthingstalk.io" + NEWLINE +
+                "User-Agent: CW01/1.0" + NEWLINE +
+                "Accept: */*" + NEWLINE +
+                "Authorization: Bearer " + TOKEN + NEWLINE +
+                "Content-Type:application/json" + NEWLINE +
+                "Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
+
+            serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + NEWLINE)
+            basic.pause(50)
+            serial.writeString(request + NEWLINE)
+            basic.pause(500)
+        }
     }
 
 
