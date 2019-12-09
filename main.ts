@@ -210,7 +210,7 @@ namespace cw01 {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendStateToATT" block="CW01 send state %state to ATT asset %asset_name, inside loop %loop"
+    //% blockId="IoTSendStateToATT" block="CW01 send state %state to ATT asset %asset_name"
     export function IoTSendStateToATT(state: boolean, asset: string): void {
         let stateStr: string
         let count: number = 0
