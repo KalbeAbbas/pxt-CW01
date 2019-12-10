@@ -196,7 +196,7 @@ namespace cw01 {
     //% weight=91
     //% group="ATT"
     //% event.defl=false
-    //% blockId="IoTSendValueToATT" block="CW01 send value %value to ATT asset %asset, button %event"
+    //% blockId="IoTSendValueToATT" block="CW01 send value %value to ATT asset %asset, button event %event"
     export function IoTSendValueToATT(value: number, asset: string, event: boolean): void {
         cw01_vars.block.toString();
         event.toString()
@@ -237,7 +237,7 @@ namespace cw01 {
     //% weight=91
     //% group="ATT"
     //% event.defl=false
-    //% blockId="IoTSendStateToATT" block="CW01 send state %state to ATT asset %asset_name, button %event"
+    //% blockId="IoTSendStateToATT" block="CW01 send state %state to ATT asset %asset_name, button event %event"
     export function IoTSendStateToATT(state: boolean, asset: string, event: boolean): void {
         cw01_vars.block.toString()
         event.toString()
