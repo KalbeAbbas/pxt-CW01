@@ -767,7 +767,7 @@ namespace cw01 {
 
         let payload: string
 
-        if ((input.runningTime() - cw01_vars.timer) > 540000) {
+        if ((input.runningTime() - cw01_vars.timer) > 180000) {
             cw01_vars.timer = input.runningTime()
             let header_one: Buffer = pins.packBuffer("!B", [0xC0])
             let header_two: Buffer = pins.packBuffer("!B", [0x00])
