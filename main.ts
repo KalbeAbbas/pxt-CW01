@@ -154,11 +154,13 @@ namespace cw01 {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendStringToATT" block="CW01 send string %value to ATT asset %asset"
-    export function IoTSendStringToATT(value: string, asset: string): void {
+    //% event.defl=false
+    //% blockId="IoTSendStringToATT" block="CW01 send string %value to ATT asset %asset, button event %event"
+    export function IoTSendStringToATT(value: string, asset: string, event: boolean): void {
         cw01_vars.block.toString()
+        event.toString()
 
-        if (cw01_vars.block) {
+        if (cw01_vars.block && event) {
             cw01_vars.att_string = true
             cw01_vars.att_string_value = value
             cw01_vars.att_asset = asset
@@ -193,10 +195,12 @@ namespace cw01 {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendValueToATT" block="CW01 send value %value to ATT asset %asset"
-    export function IoTSendValueToATT(value: number, asset: string): void {
+    //% event.defl=false
+    //% blockId="IoTSendValueToATT" block="CW01 send value %value to ATT asset %asset, button %event"
+    export function IoTSendValueToATT(value: number, asset: string, event: boolean): void {
         cw01_vars.block.toString();
-        if (cw01_vars.block) {
+        event.toString()
+        if (cw01_vars.block && event) {
             cw01_vars.att_number = true
             cw01_vars.att_number_value = value
             cw01_vars.att_asset = asset
@@ -232,11 +236,13 @@ namespace cw01 {
     */
     //% weight=91
     //% group="ATT"
-    //% blockId="IoTSendStateToATT" block="CW01 send state %state to ATT asset %asset_name"
-    export function IoTSendStateToATT(state: boolean, asset: string): void {
+    //% event.defl=false
+    //% blockId="IoTSendStateToATT" block="CW01 send state %state to ATT asset %asset_name, button %event"
+    export function IoTSendStateToATT(state: boolean, asset: string, event: boolean): void {
         cw01_vars.block.toString()
+        event.toString()
 
-        if (cw01_vars.block) {
+        if (cw01_vars.block && event) {
 
             cw01_vars.att_state = true
             cw01_vars.att_state_value = state
