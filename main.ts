@@ -277,7 +277,11 @@ namespace cw01 {
     //% group="ATT"
     //% blockId="IoTProcessATTQueueMessages" block="CW01 process queue messages"
     export function IoTProcessATTQueueMessages(): void {
+        cw01_vars.att_number.toString()
+        cw01_vars.att_string.toString()
+        cw01_vars.att_state.toString()
         if (cw01_vars.att_number) {
+            basic.showString("Triggered")
             cw01_vars.asset_name = cw01_vars.att_asset
             let value = cw01_vars.att_number_value
             let payload: string = "{\"value\": " + value.toString() + "}"
