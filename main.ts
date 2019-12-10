@@ -20,10 +20,11 @@ namespace cw01 {
         longitude: number
         select: boolean
         azureAccess: string
-        mqtt_payload: string
-        prev_mqtt_payload: string
+        mqtt_message: string
+        prev_mqtt_message: string
         block: boolean
         mqtt_topic: string
+        mqtt_payload: string
         fail_count: number
         topics: string[]
         topic_count: number
@@ -47,10 +48,11 @@ namespace cw01 {
             this.longitude = 0
             this.select = false
             this.azureAccess = ""
-            this.mqtt_payload = ""
-            this.prev_mqtt_payload = ""
+            this.mqtt_message = ""
+            this.prev_mqtt_message = ""
             this.block = false
             this.mqtt_topic = ""
+            this.mqtt_payload = ""
             this.fail_count = 0
             this.topics = []
             this.topic_count = 0
@@ -750,13 +752,21 @@ namespace cw01 {
         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
         basic.pause(100)
         serial.readString()
+
+        serial.onDataReceived("\n", function () {
+            if ((serial.readString()).includes("IPD")) {
+                IoTMQTTGetData()
+            }
+        })
     }
 
     //% weight=91
     //% group="MQTT"
-    //% blockId="IoTMQTTping" block="CW01 ping MQTT"
-    export function IoTMQTTClientloop() {
-        //Header
+    //% blockId="IoTMQTTGetLatestTopicAndPayload" block="CW01 get latest topic and payload""
+    export function IoTMQTTGetLatestTopicAndPayload(): void {
+
+        let payload: string
+
         if ((input.runningTime() - cw01_vars.timer) > 3600000) {
             cw01_vars.timer = input.runningTime()
             let header_one: Buffer = pins.packBuffer("!B", [0xC0])
@@ -771,45 +781,8 @@ namespace cw01 {
             basic.pause(500)
         }
 
-    }
-
-    //% weight=91
-    //% group="MQTT"
-    //% blockId="IoTMQTTRecordMessages" block="CW01 record MQTT messages"
-    export function IoTMQTTRecordMessages(): void {
-        serial.onDataReceived("\n", function () {
-            if ((serial.readString()).includes("IPD")) {
-                IoTMQTTGetData()
-            }
-        })
-
-        basic.showString("#")
-        basic.showIcon(IconNames.Yes)
-    }
-
-
-    //% weight=91
-    //% group="MQTT"
-    //% blockId="IoTMQTTGetLatestRawData" block="CW01 get latest raw data"
-    export function IoTMQTTGetLatestRawData(): string {
-
-        if (cw01_vars.prev_mqtt_payload.compare(cw01_vars.mqtt_payload) != 0) {
-            cw01_vars.prev_mqtt_payload = cw01_vars.mqtt_payload
-            return cw01_vars.mqtt_payload
-        } else {
-            return ""
-        }
-    }
-
-    //% weight=91
-    //% group="MQTT"
-    //% blockId="IoTMQTTGetLatestData" block="CW01 get latest payload data"
-    export function IoTMQTTGetLatestData(): string {
-
-        let payload: string
-
         for (let i: number = 0; i < cw01_vars.topics.length; i++) {
-            if (cw01_vars.mqtt_payload.includes(cw01_vars.topics[i])) {
+            if (cw01_vars.mqtt_message.includes(cw01_vars.topics[i])) {
                 cw01_vars.topic_rcv = cw01_vars.topics[i]
                 break
             } else {
@@ -817,31 +790,31 @@ namespace cw01 {
             }
         }
 
-        if (cw01_vars.prev_mqtt_payload.compare(cw01_vars.mqtt_payload) != 0) {
-            let index: number = cw01_vars.mqtt_payload.indexOf(cw01_vars.topic_rcv) + cw01_vars.topic_rcv.length
-            let payload_length: number = cw01_vars.mqtt_payload.length - index - 6
-            payload = cw01_vars.mqtt_payload.substr(index, payload_length)
+        if (cw01_vars.prev_mqtt_message.compare(cw01_vars.mqtt_message) != 0) {
+            let index: number = cw01_vars.mqtt_message.indexOf(cw01_vars.topic_rcv) + cw01_vars.topic_rcv.length
+            let payload_length: number = cw01_vars.mqtt_message.length - index - 6
+            payload = cw01_vars.mqtt_message.substr(index, payload_length)
         } else {
             payload = ""
         }
 
-        return payload
+        cw01_vars.mqtt_payload = payload
+    }
+
+
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="payload" block="payload"
+    export function IoTMQTTGetLatestData(): string {
+
+        return cw01_vars.mqtt_payload
 
     }
 
     //% weight=91
     //% group="MQTT"
-    //% blockId="IoTMQTTGetLatestTopic" block="CW01 get latest payload topic"
-    export function IoTMQTTGetLatestTopic(): string {
-
-        for (let i: number = 0; i < cw01_vars.topics.length; i++) {
-            if (cw01_vars.mqtt_payload.includes(cw01_vars.topics[i])) {
-                cw01_vars.topic_rcv = cw01_vars.topics[i]
-                break
-            } else {
-                continue
-            }
-        }
+    //% blockId="topic" block="topic"
+    export function topic(): string {
 
         return cw01_vars.topic_rcv
 
@@ -855,7 +828,7 @@ namespace cw01 {
         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
         basic.pause(300)
 
-        cw01_vars.mqtt_payload = serial.readString()
+        cw01_vars.mqtt_message = serial.readString()
         basic.showIcon(IconNames.Yes)
         basic.showString("")
 
