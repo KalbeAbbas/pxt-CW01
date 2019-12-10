@@ -182,6 +182,8 @@ namespace cw01 {
 
             serial.readString()
             get_status()
+
+            basic.pause(500)
         }
 
     }
@@ -219,6 +221,8 @@ namespace cw01 {
 
             serial.readString()
             get_status()
+
+            basic.pause(500)
         }
 
     }
@@ -266,6 +270,8 @@ namespace cw01 {
 
             serial.readString()
             get_status()
+
+            basic.pause(500)
         }
 
     }
