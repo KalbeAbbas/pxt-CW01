@@ -284,6 +284,7 @@ namespace cw01 {
             cw01_vars.asset_name = cw01_vars.att_asset
             let value = cw01_vars.att_number_value
             basic.showNumber(cw01_vars.att_number_value)
+            basic.showString(cw01_vars.asset_name)
             let payload: string = "{\"value\": " + value.toString() + "}"
             let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
                 "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
