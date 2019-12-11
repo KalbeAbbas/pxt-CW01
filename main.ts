@@ -37,6 +37,7 @@ namespace cw01 {
         att_state: boolean
         att_state_value: boolean
         att_asset: string
+        subscribe_count: number
         constructor() {
             this.res = ""
             this.TOKEN = ""
@@ -65,6 +66,7 @@ namespace cw01 {
             this.att_state = false
             this.att_state_value = false
             this.att_asset = ""
+            this.subscribe_count = 0
         }
     }
 
@@ -686,6 +688,23 @@ namespace cw01 {
         cw01_vars.timer = input.runningTime()
 
 
+        control.inBackground(function () {
+            if (((input.runningTime() - cw01_vars.timer) > 180000)) {
+                cw01_vars.timer = input.runningTime()
+                let header_one: Buffer = pins.packBuffer("!B", [0xC0])
+                let header_two: Buffer = pins.packBuffer("!B", [0x00])
+
+                serial.writeString("AT+CIPSEND=" + (header_one.length + header_two.length) + cw01_vars.NEWLINE)
+                basic.pause(100)
+
+                serial.writeBuffer(header_one)
+                serial.writeBuffer(header_two)
+
+                basic.pause(500)
+            }
+        })
+
+
     }
 
 
@@ -801,6 +820,60 @@ namespace cw01 {
         cw01_vars.mqtt_payload = payload
     }
 
+    /**
+    * Events can have arguments before the handler
+    */
+    //% weight=91
+    //% group="MQTT"
+    //% block="on Subscribe topic $Topic"
+    export function onSubscribe(Topic: string, handler: () => void) {
+
+        basic.pause(30000)
+
+        basic.pause(cw01_vars.subscribe_count * 1000)
+
+        cw01_vars.subscribe_count++
+
+        //Msg part two
+        let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
+        let qos: Buffer = pins.packBuffer("!B", [0x00])
+        let topic: string = Topic
+        let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
+
+        cw01_vars.mqtt_topic = topic
+
+        cw01_vars.topics[cw01_vars.topic_count] = topic
+        cw01_vars.topic_count++
+
+        //Msg part one
+        let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
+        let remain_len: Buffer = pins.packBuffer("!B", [pid.length + topic_len.length + topic.length + qos.length])
+
+        serial.writeString("AT+CIPSEND=" + (ctrl_pkt.length + remain_len.length + pid.length + topic_len.length + topic.length + qos.length) + cw01_vars.NEWLINE)
+
+        basic.pause(1000)
+
+        serial.writeBuffer(ctrl_pkt)
+        serial.writeBuffer(remain_len)
+        serial.writeBuffer(pid)
+        serial.writeBuffer(topic_len)
+        serial.writeString(topic)
+        serial.writeBuffer(qos)
+
+        basic.pause(2000)
+
+        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
+        basic.pause(100)
+        serial.readString()
+
+        serial.onDataReceived("\n", function () {
+            if ((serial.readString()).includes("IPD")) {
+                IoTMQTTGetData()
+            }
+        })
+
+    }
+
 
     //% weight=91
     //% group="MQTT"
@@ -821,6 +894,8 @@ namespace cw01 {
     }
 
     function IoTMQTTGetData(): void {
+        let payload: string
+
         basic.pause(500)
         serial.writeString("AT+CIPRECVDATA=4" + cw01_vars.NEWLINE)
         basic.pause(300)
@@ -831,6 +906,25 @@ namespace cw01 {
         cw01_vars.mqtt_message = serial.readString()
         basic.showIcon(IconNames.Yes)
         basic.showString("")
+
+        for (let i: number = 0; i < cw01_vars.topics.length; i++) {
+            if (cw01_vars.mqtt_message.includes(cw01_vars.topics[i])) {
+                cw01_vars.topic_rcv = cw01_vars.topics[i]
+                break
+            } else {
+                continue
+            }
+        }
+
+        if (cw01_vars.prev_mqtt_message.compare(cw01_vars.mqtt_message) != 0) {
+            let index: number = cw01_vars.mqtt_message.indexOf(cw01_vars.topic_rcv) + cw01_vars.topic_rcv.length
+            let payload_length: number = cw01_vars.mqtt_message.length - index - 6
+            payload = cw01_vars.mqtt_message.substr(index, payload_length)
+        } else {
+            payload = ""
+        }
+
+        cw01_vars.mqtt_payload = payload
 
         basic.pause(100)
     }
