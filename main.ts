@@ -846,9 +846,6 @@ namespace cw01 {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
-            cw01_vars.subscribe_count++
-            basic.showNumber(cw01_vars.subscribe_count)
-
             //Msg part two
             let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
             let qos: Buffer = pins.packBuffer("!B", [0x00])
