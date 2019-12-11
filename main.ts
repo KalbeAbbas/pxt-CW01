@@ -38,6 +38,7 @@ namespace cw01 {
         att_state_value: boolean
         att_asset: string
         subscribe_count: number
+        start_subscribe: boolean
         constructor() {
             this.res = ""
             this.TOKEN = ""
@@ -67,6 +68,7 @@ namespace cw01 {
             this.att_state_value = false
             this.att_asset = ""
             this.subscribe_count = 0
+            this.start_subscribe = true
         }
     }
 
@@ -690,6 +692,7 @@ namespace cw01 {
 
         control.raiseEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK)
 
+
         /*control.inBackground(function () {
             while (true) {
                 if (((input.runningTime() - cw01_vars.timer) > 180000)) {
@@ -783,13 +786,13 @@ namespace cw01 {
     //% group="MQTT"
     //% block="callback with topic $topic and payload $payload"
     export function callback(topic: string, payload: string, handler: () => void) {
-        control.inBackground(function () {
 
-            basic.pause(30000)
+        control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
             serial.onDataReceived("\n", function () {
                 if ((serial.readString()).includes("IPD")) {
                     IoTMQTTGetData()
+                    handler()
                 }
             })
         })
