@@ -879,6 +879,9 @@ namespace cw01 {
             basic.pause(100)
             serial.readString()
 
+            handler()
+            basic.pause(1000)
+
 
         })
 
