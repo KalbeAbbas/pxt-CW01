@@ -780,10 +780,15 @@ namespace cw01 {
     //% group="MQTT"
     //% block="callback"
     export function callback(handler: () => void) {
-        serial.onDataReceived("\n", function () {
-            if ((serial.readString()).includes("IPD")) {
-                IoTMQTTGetData()
-            }
+        control.inBackground(function () {
+
+            basic.pause(30000)
+            
+            serial.onDataReceived("\n", function () {
+                if ((serial.readString()).includes("IPD")) {
+                    IoTMQTTGetData()
+                }
+            })
         })
     }
 
