@@ -884,10 +884,9 @@ namespace cw01 {
             serial.onDataReceived("\n", function () {
                 if ((serial.readString()).includes("IPD")) {
                     IoTMQTTGetData()
-                    /*if (cw01_vars.topic_rcv.compare(Topic) == 0) {
-                        basic.showString(Topic)
+                    if (cw01_vars.topic_rcv.compare(Topic) == 0) {
                         handler()
-                    }*/
+                    }
                 }
             })
 
@@ -948,8 +947,6 @@ namespace cw01 {
         }
 
         cw01_vars.mqtt_payload = payload
-
-        basic.showString(cw01_vars.topic_rcv)
 
         basic.pause(100)
     }
