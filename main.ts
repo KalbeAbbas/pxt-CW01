@@ -687,8 +687,6 @@ namespace cw01 {
 
         cw01_vars.timer = input.runningTime()
 
-        control.raiseEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK)
-
         control.inBackground(function () {
             while (true) {
                 if (((input.runningTime() - cw01_vars.timer) > 180000)) {
@@ -775,6 +773,13 @@ namespace cw01 {
         basic.pause(100)
         serial.readString()
 
+    }
+
+
+    //% weight=91
+    //% group="MQTT"
+    //% block="callback"
+    export function callback(handler: () => void) {
         serial.onDataReceived("\n", function () {
             if ((serial.readString()).includes("IPD")) {
                 IoTMQTTGetData()
