@@ -687,6 +687,7 @@ namespace cw01 {
 
         cw01_vars.timer = input.runningTime()
 
+        control.raiseEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK)
 
         control.inBackground(function () {
             while (true) {
@@ -705,8 +706,6 @@ namespace cw01 {
                 }
             }
         })
-
-        control.raiseEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK)
 
 
     }
