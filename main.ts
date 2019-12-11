@@ -844,10 +844,13 @@ namespace cw01 {
     //% block="on Subscribe topic $Topic"
     export function onSubscribe(Topic: string, handler: () => void) {
 
-        control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
+        cw01_vars.topics[cw01_vars.topic_count] = Topic
+        cw01_vars.topic_count++
 
-            cw01_vars.topics[cw01_vars.topic_count] = Topic
-            cw01_vars.topic_count++
+        basic.showNumber(cw01_vars.topic_count)
+
+
+        control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
             //Msg part two
             let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
@@ -856,9 +859,6 @@ namespace cw01 {
             let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
 
             cw01_vars.mqtt_topic = topic
-
-            cw01_vars.topics[cw01_vars.topic_count] = topic
-            cw01_vars.topic_count++
 
             //Msg part one
             let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
