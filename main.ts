@@ -830,50 +830,51 @@ namespace cw01 {
 
         control.inBackground(function () {
 
-        basic.pause(30000)
+            basic.pause(30000)
 
-        basic.pause(cw01_vars.subscribe_count * 1000)
+            cw01_vars.subscribe_count++
+            basic.pause(100)
 
-        cw01_vars.subscribe_count++
+            basic.pause(cw01_vars.subscribe_count * 500)
 
-        //Msg part two
-        let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
-        let qos: Buffer = pins.packBuffer("!B", [0x00])
-        let topic: string = Topic
-        let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
+            //Msg part two
+            let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
+            let qos: Buffer = pins.packBuffer("!B", [0x00])
+            let topic: string = Topic
+            let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
 
-        cw01_vars.mqtt_topic = topic
+            cw01_vars.mqtt_topic = topic
 
-        cw01_vars.topics[cw01_vars.topic_count] = topic
-        cw01_vars.topic_count++
+            cw01_vars.topics[cw01_vars.topic_count] = topic
+            cw01_vars.topic_count++
 
-        //Msg part one
-        let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
-        let remain_len: Buffer = pins.packBuffer("!B", [pid.length + topic_len.length + topic.length + qos.length])
+            //Msg part one
+            let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
+            let remain_len: Buffer = pins.packBuffer("!B", [pid.length + topic_len.length + topic.length + qos.length])
 
-        serial.writeString("AT+CIPSEND=" + (ctrl_pkt.length + remain_len.length + pid.length + topic_len.length + topic.length + qos.length) + cw01_vars.NEWLINE)
+            serial.writeString("AT+CIPSEND=" + (ctrl_pkt.length + remain_len.length + pid.length + topic_len.length + topic.length + qos.length) + cw01_vars.NEWLINE)
 
-        basic.pause(1000)
+            basic.pause(1000)
 
-        serial.writeBuffer(ctrl_pkt)
-        serial.writeBuffer(remain_len)
-        serial.writeBuffer(pid)
-        serial.writeBuffer(topic_len)
-        serial.writeString(topic)
-        serial.writeBuffer(qos)
+            serial.writeBuffer(ctrl_pkt)
+            serial.writeBuffer(remain_len)
+            serial.writeBuffer(pid)
+            serial.writeBuffer(topic_len)
+            serial.writeString(topic)
+            serial.writeBuffer(qos)
 
-        basic.pause(2000)
+            basic.pause(2000)
 
-        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
-        basic.pause(100)
-        serial.readString()
+            serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
+            basic.pause(100)
+            serial.readString()
 
-        serial.onDataReceived("\n", function () {
-            if ((serial.readString()).includes("IPD")) {
-                IoTMQTTGetData()
-            }
-        })
-        
+            serial.onDataReceived("\n", function () {
+                if ((serial.readString()).includes("IPD")) {
+                    IoTMQTTGetData()
+                }
+            })
+
         })
 
     }
