@@ -834,6 +834,7 @@ namespace cw01 {
 
             cw01_vars.subscribe_count++
             basic.pause(100)
+            basic.showNumber(cw01_vars.subscribe_count)
 
             basic.pause(cw01_vars.subscribe_count * 500)
 
