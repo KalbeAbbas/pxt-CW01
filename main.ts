@@ -687,7 +687,7 @@ namespace cw01 {
 
         cw01_vars.timer = input.runningTime()
 
-        control.inBackground(function () {
+        /*control.inBackground(function () {
             while (true) {
                 if (((input.runningTime() - cw01_vars.timer) > 180000)) {
                     cw01_vars.timer = input.runningTime()
@@ -703,7 +703,7 @@ namespace cw01 {
                     basic.pause(500)
                 }
             }
-        })
+        })*/
 
 
     }
@@ -783,7 +783,7 @@ namespace cw01 {
         control.inBackground(function () {
 
             basic.pause(30000)
-            
+
             serial.onDataReceived("\n", function () {
                 if ((serial.readString()).includes("IPD")) {
                     IoTMQTTGetData()
