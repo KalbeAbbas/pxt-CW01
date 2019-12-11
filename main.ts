@@ -943,10 +943,6 @@ namespace cw01 {
 
         cw01_vars.mqtt_payload = payload
 
-        basic.showString("Topic and payload")
-        basic.showString(cw01_vars.topic_rcv)
-        basic.showString(cw01_vars.mqtt_payload)
-
         basic.pause(100)
     }
 
