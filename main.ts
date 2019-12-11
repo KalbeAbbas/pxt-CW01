@@ -832,12 +832,6 @@ namespace cw01 {
 
             basic.pause(30000)
 
-            cw01_vars.subscribe_count++
-            basic.pause(100)
-            basic.showNumber(cw01_vars.subscribe_count)
-
-            basic.pause(cw01_vars.subscribe_count * 500)
-
             //Msg part two
             let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
             let qos: Buffer = pins.packBuffer("!B", [0x00])
