@@ -844,6 +844,9 @@ namespace cw01 {
     //% block="on Subscribe topic $Topic"
     export function onSubscribe(Topic: string, handler: () => void) {
 
+        cw01_vars.topics[cw01_vars.topic_count] = Topic
+        cw01_vars.topic_count++
+
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
             //Msg part two
