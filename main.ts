@@ -706,6 +706,8 @@ namespace cw01 {
             }
         })
 
+        control.raiseEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK)
+
 
     }
 
@@ -829,7 +831,8 @@ namespace cw01 {
     //% group="MQTT"
     //% block="on Subscribe topic $Topic"
     export function onSubscribe(Topic: string, handler: () => void) {
-        control.inBackground(function () {
+
+        control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
             basic.pause(20000)
 
@@ -875,6 +878,7 @@ namespace cw01 {
             })
 
         })
+
 
     }
 
