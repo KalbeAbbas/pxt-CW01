@@ -687,6 +687,9 @@ namespace cw01 {
 
         cw01_vars.timer = input.runningTime()
 
+
+        control.raiseEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK)
+
         /*control.inBackground(function () {
             while (true) {
                 if (((input.runningTime() - cw01_vars.timer) > 180000)) {
@@ -778,8 +781,8 @@ namespace cw01 {
 
     //% weight=91
     //% group="MQTT"
-    //% block="callback"
-    export function callback(handler: () => void) {
+    //% block="callback with topic $topic and payload $payload"
+    export function callback(topic: string, payload: string, handler: () => void) {
         control.inBackground(function () {
 
             basic.pause(30000)
@@ -843,8 +846,6 @@ namespace cw01 {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
-            basic.pause(20000)
-
             cw01_vars.subscribe_count++
             basic.showNumber(cw01_vars.subscribe_count)
 
@@ -885,6 +886,8 @@ namespace cw01 {
                     IoTMQTTGetData()
                 }
             })
+
+            handler()
 
         })
 
