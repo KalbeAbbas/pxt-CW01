@@ -784,8 +784,8 @@ namespace cw01 {
 
     //% weight=91
     //% group="MQTT"
-    //% block="callback with topic $topic and payload $payload"
-    export function callback(topic: string, payload: string, handler: () => void) {
+    //% block="callback"
+    export function callback(handler: () => void) {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
