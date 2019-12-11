@@ -844,10 +844,10 @@ namespace cw01 {
     //% block="on Subscribe topic $Topic"
     export function onSubscribe(Topic: string, handler: () => void) {
 
-        cw01_vars.topics[cw01_vars.topic_count] = Topic
-        cw01_vars.topic_count++
-
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
+
+            cw01_vars.topics[cw01_vars.topic_count] = Topic
+            cw01_vars.topic_count++
 
             //Msg part two
             let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
@@ -884,7 +884,7 @@ namespace cw01 {
             serial.onDataReceived("\n", function () {
                 if ((serial.readString()).includes("IPD")) {
                     IoTMQTTGetData()
-                    if (cw01_vars.topic_rcv.compare(Topic) == 0) {
+                    if (topic.compare(cw01_vars.topic_rcv) == 0) {
                         handler()
                     }
                 }
