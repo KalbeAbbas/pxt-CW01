@@ -881,10 +881,10 @@ namespace cw01 {
             serial.onDataReceived("\n", function () {
                 if ((serial.readString()).includes("IPD")) {
                     IoTMQTTGetData()
+                    handler()
                 }
             })
 
-            handler()
 
         })
 
