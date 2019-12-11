@@ -881,7 +881,8 @@ namespace cw01 {
             serial.onDataReceived("\n", function () {
                 if ((serial.readString()).includes("IPD")) {
                     IoTMQTTGetData()
-                    handler()
+                    if (topic.compare(cw01_vars.topic_rcv))
+                        handler()
                 }
             })
 
