@@ -830,6 +830,8 @@ namespace cw01 {
     //% block="on Subscribe topic $Topic"
     export function onSubscribe(Topic: string, handler: () => void) {
 
+        basic.pause(20000)
+
         cw01_vars.subscribe_count++
         basic.showNumber(cw01_vars.subscribe_count)
 
