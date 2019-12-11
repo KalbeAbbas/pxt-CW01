@@ -828,6 +828,8 @@ namespace cw01 {
     //% block="on Subscribe topic $Topic"
     export function onSubscribe(Topic: string, handler: () => void) {
 
+        control.inBackground(function () {
+
         basic.pause(30000)
 
         basic.pause(cw01_vars.subscribe_count * 1000)
@@ -870,6 +872,8 @@ namespace cw01 {
             if ((serial.readString()).includes("IPD")) {
                 IoTMQTTGetData()
             }
+        })
+        
         })
 
     }
