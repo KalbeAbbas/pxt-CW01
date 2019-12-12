@@ -40,8 +40,8 @@ namespace cw01 {
         subscribe_count: number
         start_subscribe: boolean
         /*new_payload: string
-        prev_payload: string
-        new_topic: string*/
+        prev_payload: string*/
+        new_topic: string
         prev_topic: string
         enable_event: boolean
         constructor() {
@@ -75,8 +75,8 @@ namespace cw01 {
             this.subscribe_count = 0
             this.start_subscribe = true
             /*this.new_payload = ""
-            this.prev_payload = ""
-            this.new_topic = ""*/
+            this.prev_payload = ""*/
+            this.new_topic = ""
             this.prev_topic = ""
             this.enable_event = false
 
