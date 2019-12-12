@@ -811,6 +811,7 @@ namespace cw01 {
 
                 if ((serial.readString()).includes("IPD")) {
                     IoTMQTTGetData()
+                    basic.showString(cw01_mqtt_vars.enable_event.toString())
                     if (cw01_mqtt_vars.enable_event)
                         handler()
                 }
