@@ -78,14 +78,16 @@ namespace cw01 {
         prev_payload: string
         new_topic: string
         prev_topic: string
-        enable_event: boolean
+        enable_event_1: boolean
+        enable_event_2: boolean
 
         constructor() {
             this.new_payload = ""
             this.prev_payload = ""
             this.new_topic = ""
             this.prev_topic = ""
-            this.enable_event = false
+            this.enable_event_1 = false
+            this.enable_event_2 = false
         }
     }
 
@@ -814,7 +816,7 @@ namespace cw01 {
                 if ((serial.readString()).includes("IPD")) {
                     IoTMQTTGetData()
                     basic.showString("Hello!")
-                    if (cw01_mqtt_vars.enable_event)
+                    if (cw01_mqtt_vars.enable_event_1 || cw01_mqtt_vars.enable_event_2)
                         handler()
                 }
             })
@@ -964,18 +966,20 @@ namespace cw01 {
         cw01_vars.mqtt_payload = payload
 
         if (cw01_mqtt_vars.prev_payload.compare(cw01_vars.mqtt_payload) != 0) {
-            cw01_mqtt_vars.enable_event = true
+            cw01_mqtt_vars.enable_event_1 = true
             cw01_mqtt_vars.new_payload = cw01_vars.mqtt_payload
             cw01_mqtt_vars.prev_payload = cw01_vars.mqtt_payload
         } else {
-            cw01_mqtt_vars.enable_event = false
+            cw01_mqtt_vars.enable_event_1 = false
             cw01_mqtt_vars.new_payload = " "
         }
 
         if (cw01_mqtt_vars.prev_topic.compare(cw01_vars.topic_rcv) != 0) {
+            cw01_mqtt_vars.enable_event_2 = true
             cw01_mqtt_vars.new_topic = cw01_vars.topic_rcv
             cw01_mqtt_vars.prev_topic = cw01_vars.topic_rcv
         } else {
+            cw01_mqtt_vars.enable_event_2 = false
             cw01_mqtt_vars.new_topic = " "
         }
 
