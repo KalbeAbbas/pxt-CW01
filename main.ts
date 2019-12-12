@@ -690,10 +690,7 @@ namespace cw01 {
         cw01_vars.timer = input.runningTime()
 
 
-        control.raiseEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK)
-
-
-        /*control.inBackground(function () {
+        control.inBackground(function () {
             while (true) {
                 if (((input.runningTime() - cw01_vars.timer) > 180000)) {
                     cw01_vars.timer = input.runningTime()
@@ -706,10 +703,12 @@ namespace cw01 {
                     serial.writeBuffer(header_one)
                     serial.writeBuffer(header_two)
 
-                    basic.pause(500)
+                    basic.pause(30000)
                 }
             }
-        })*/
+        })
+
+        control.raiseEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK)
 
 
     }
