@@ -39,6 +39,8 @@ namespace cw01 {
         att_asset: string
         subscribe_count: number
         start_subscribe: boolean
+        new_payload: string
+        new_topic: string
         constructor() {
             this.res = ""
             this.TOKEN = ""
@@ -69,6 +71,8 @@ namespace cw01 {
             this.att_asset = ""
             this.subscribe_count = 0
             this.start_subscribe = true
+            this.new_payload = ""
+            this.new_topic = ""
         }
     }
 
@@ -904,7 +908,13 @@ namespace cw01 {
     //% blockId="payload" block="payload"
     export function IoTMQTTGetLatestData(): string {
 
-        return cw01_vars.mqtt_payload
+        if (cw01_vars.new_payload.compare(cw01_vars.mqtt_payload) != 0) {
+            cw01_vars.new_payload = cw01_vars.mqtt_payload
+        } else {
+            cw01_vars.new_payload = " "
+        }
+
+        return cw01_vars.new_payload
 
     }
 
@@ -913,7 +923,13 @@ namespace cw01 {
     //% blockId="topic" block="topic"
     export function topic(): string {
 
-        return cw01_vars.topic_rcv
+        if (cw01_vars.new_topic.compare(cw01_vars.topic_rcv) != 0) {
+            cw01_vars.new_topic = cw01_vars.topic_rcv
+        } else {
+            cw01_vars.new_topic = " "
+        }
+
+        return cw01_vars.new_topic
 
     }
 
