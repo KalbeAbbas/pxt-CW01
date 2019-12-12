@@ -43,7 +43,7 @@ namespace cw01 {
         //prev_payload: string
         new_topic: string
         prev_topic: string
-        //enable_event: boolean
+        enable_event: boolean
         constructor() {
             this.res = ""
             this.TOKEN = ""
