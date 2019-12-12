@@ -702,9 +702,10 @@ namespace cw01 {
 
                     serial.writeBuffer(header_one)
                     serial.writeBuffer(header_two)
-
-                    basic.pause(30000)
                 }
+
+                basic.pause(30000)
+
             }
         })
 
@@ -789,6 +790,7 @@ namespace cw01 {
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
             serial.onDataReceived("\n", function () {
+
                 if ((serial.readString()).includes("IPD")) {
                     IoTMQTTGetData()
                     handler()
