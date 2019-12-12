@@ -39,11 +39,11 @@ namespace cw01 {
         att_asset: string
         subscribe_count: number
         start_subscribe: boolean
-        new_payload: string
+        /*new_payload: string
         prev_payload: string
         new_topic: string
         prev_topic: string
-        enable_event: boolean
+        enable_event: boolean*/
         constructor() {
             this.res = ""
             this.TOKEN = ""
@@ -74,11 +74,11 @@ namespace cw01 {
             this.att_asset = ""
             this.subscribe_count = 0
             this.start_subscribe = true
-            this.new_payload = ""
+           /* this.new_payload = ""
             this.prev_payload = ""
             this.new_topic = ""
             this.prev_topic = ""
-            this.enable_event = false
+            this.enable_event = false*/
 
         }
     }
@@ -804,8 +804,8 @@ namespace cw01 {
 
                 if ((serial.readString()).includes("IPD")) {
                     IoTMQTTGetData()
-                    if (cw01_vars.enable_event)
-                        handler()
+                    /*if (cw01_vars.enable_event)
+                        handler()*/
                 }
             })
         })
@@ -910,16 +910,16 @@ namespace cw01 {
     //% blockId="payload" block="payload"
     export function IoTMQTTGetLatestData(): string {
 
-        if (cw01_vars.prev_payload.compare(cw01_vars.mqtt_payload) != 0) {
-            cw01_vars.enable_event = true
-            cw01_vars.new_payload = cw01_vars.mqtt_payload
-            cw01_vars.prev_payload = cw01_vars.mqtt_payload
-        } else {
-            cw01_vars.enable_event = false
-            cw01_vars.new_payload = " "
-        }
+        /* if (cw01_vars.prev_payload.compare(cw01_vars.mqtt_payload) != 0) {
+             cw01_vars.enable_event = true
+             cw01_vars.new_payload = cw01_vars.mqtt_payload
+             cw01_vars.prev_payload = cw01_vars.mqtt_payload
+         } else {
+             cw01_vars.enable_event = false
+             cw01_vars.new_payload = " "
+         }*/
 
-        return cw01_vars.new_payload
+        return "cw01_vars.new_payload"
 
     }
 
@@ -928,14 +928,14 @@ namespace cw01 {
     //% blockId="topic" block="topic"
     export function topic(): string {
 
-        if (cw01_vars.prev_topic.compare(cw01_vars.topic_rcv) != 0) {
+        /*if (cw01_vars.prev_topic.compare(cw01_vars.topic_rcv) != 0) {
             cw01_vars.new_topic = cw01_vars.topic_rcv
             cw01_vars.prev_topic = cw01_vars.topic_rcv
         } else {
             cw01_vars.new_topic = " "
-        }
+        }*/
 
-        return cw01_vars.new_topic
+        return "cw01_vars.new_topic"
 
     }
 
