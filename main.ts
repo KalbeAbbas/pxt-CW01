@@ -983,8 +983,7 @@ namespace cw01 {
             cw01_mqtt_vars.new_topic = " "
         }
 
-        basic.showString(cw01_vars.topic_rcv)
-        basic.showString(cw01_vars.mqtt_payload)
+        basic.showString(cw01_vars.mqtt_message)
 
         basic.pause(100)
     }
