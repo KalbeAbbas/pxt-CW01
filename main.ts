@@ -782,7 +782,7 @@ namespace cw01 {
 
         serial.writeString("AT+CIPSEND=" + (ctrl_pkt.length + remain_len.length + pid.length + topic_len.length + topic.length + qos.length) + cw01_vars.NEWLINE)
 
-        basic.pause(2000)
+        basic.pause(1000)
 
         serial.writeBuffer(ctrl_pkt)
         serial.writeBuffer(remain_len)
@@ -806,6 +806,8 @@ namespace cw01 {
     export function callback(handler: () => void) {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
+
+            basic.pause(10000)
 
             serial.onDataReceived("\n", function () {
 
