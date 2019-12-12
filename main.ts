@@ -790,12 +790,13 @@ namespace cw01 {
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
             serial.onDataReceived("\n", function () {
-                let valid_topic: boolean = false
+                let valid_topic: boolean = false;
 
                 if ((serial.readString()).includes("IPD")) {
                     IoTMQTTGetData()
                     for (let i = 0; i < cw01_vars.topic_count; i++) {
                         if (cw01_vars.topic_rcv.compare(cw01_vars.topics[cw01_vars.topic_count]) == 0) {
+                            basic.showString("Topic found")
                             valid_topic = true
                             break
                         }
