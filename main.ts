@@ -811,8 +811,6 @@ namespace cw01 {
 
                 if ((serial.readString()).includes("IPD")) {
                     IoTMQTTGetData()
-                    cw01.IoTMQTTGetLatestData()
-                    basic.showString(cw01_mqtt_vars.enable_event.toString())
                     if (cw01_mqtt_vars.enable_event)
                         handler()
                 }
@@ -919,15 +917,6 @@ namespace cw01 {
     //% blockId="payload" block="payload"
     export function IoTMQTTGetLatestData(): string {
 
-        if (cw01_mqtt_vars.prev_payload.compare(cw01_vars.mqtt_payload) != 0) {
-            cw01_mqtt_vars.enable_event = true
-            cw01_mqtt_vars.new_payload = cw01_vars.mqtt_payload
-            cw01_mqtt_vars.prev_payload = cw01_vars.mqtt_payload
-        } else {
-            cw01_mqtt_vars.enable_event = false
-            cw01_mqtt_vars.new_payload = " "
-        }
-
         return cw01_mqtt_vars.new_payload
 
     }
@@ -936,13 +925,6 @@ namespace cw01 {
     //% group="MQTT"
     //% blockId="topic" block="topic"
     export function topic(): string {
-
-        if (cw01_mqtt_vars.prev_topic.compare(cw01_vars.topic_rcv) != 0) {
-            cw01_mqtt_vars.new_topic = cw01_vars.topic_rcv
-            cw01_mqtt_vars.prev_topic = cw01_vars.topic_rcv
-        } else {
-            cw01_mqtt_vars.new_topic = " "
-        }
 
         return cw01_mqtt_vars.new_topic
 
@@ -971,15 +953,28 @@ namespace cw01 {
             }
         }
 
-        if (cw01_vars.prev_mqtt_message.compare(cw01_vars.mqtt_message) != 0) {
-            let index: number = cw01_vars.mqtt_message.indexOf(cw01_vars.topic_rcv) + cw01_vars.topic_rcv.length
-            let payload_length: number = cw01_vars.mqtt_message.length - index - 6
-            payload = cw01_vars.mqtt_message.substr(index, payload_length)
-        } else {
-            payload = ""
-        }
+        let index: number = cw01_vars.mqtt_message.indexOf(cw01_vars.topic_rcv) + cw01_vars.topic_rcv.length
+        let payload_length: number = cw01_vars.mqtt_message.length - index - 6
+        payload = cw01_vars.mqtt_message.substr(index, payload_length)
+
 
         cw01_vars.mqtt_payload = payload
+
+        if (cw01_mqtt_vars.prev_payload.compare(cw01_vars.mqtt_payload) != 0) {
+            cw01_mqtt_vars.enable_event = true
+            cw01_mqtt_vars.new_payload = cw01_vars.mqtt_payload
+            cw01_mqtt_vars.prev_payload = cw01_vars.mqtt_payload
+        } else {
+            cw01_mqtt_vars.enable_event = false
+            cw01_mqtt_vars.new_payload = " "
+        }
+
+        if (cw01_mqtt_vars.prev_topic.compare(cw01_vars.topic_rcv) != 0) {
+            cw01_mqtt_vars.new_topic = cw01_vars.topic_rcv
+            cw01_mqtt_vars.prev_topic = cw01_vars.topic_rcv
+        } else {
+            cw01_mqtt_vars.new_topic = " "
+        }
 
         basic.pause(100)
     }
