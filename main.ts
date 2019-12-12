@@ -90,6 +90,7 @@ namespace cw01 {
     }
 
     let cw01_vars = new cw01_int_var123()
+    let cw01_mqtt_vars = new cw01_mqtt()
 
     cw01_vars.start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -810,8 +811,8 @@ namespace cw01 {
 
                 if ((serial.readString()).includes("IPD")) {
                     IoTMQTTGetData()
-                    /*if (cw01_vars.enable_event)
-                        handler()*/
+                    if (cw01_mqtt_vars.enable_event)
+                        handler()
                 }
             })
         })
@@ -916,16 +917,16 @@ namespace cw01 {
     //% blockId="payload" block="payload"
     export function IoTMQTTGetLatestData(): string {
 
-        /* if (cw01_vars.prev_payload.compare(cw01_vars.mqtt_payload) != 0) {
-             cw01_vars.enable_event = true
-             cw01_vars.new_payload = cw01_vars.mqtt_payload
-             cw01_vars.prev_payload = cw01_vars.mqtt_payload
-         } else {
-             cw01_vars.enable_event = false
-             cw01_vars.new_payload = " "
-         }*/
+        if (cw01_mqtt_vars.prev_payload.compare(cw01_vars.mqtt_payload) != 0) {
+            cw01_mqtt_vars.enable_event = true
+            cw01_mqtt_vars.new_payload = cw01_vars.mqtt_payload
+            cw01_mqtt_vars.prev_payload = cw01_vars.mqtt_payload
+        } else {
+            cw01_mqtt_vars.enable_event = false
+            cw01_mqtt_vars.new_payload = " "
+        }
 
-        return "cw01_vars.new_payload"
+        return cw01_mqtt_vars.new_payload
 
     }
 
@@ -934,14 +935,14 @@ namespace cw01 {
     //% blockId="topic" block="topic"
     export function topic(): string {
 
-        /*if (cw01_vars.prev_topic.compare(cw01_vars.topic_rcv) != 0) {
-            cw01_vars.new_topic = cw01_vars.topic_rcv
-            cw01_vars.prev_topic = cw01_vars.topic_rcv
+        if (cw01_mqtt_vars.prev_topic.compare(cw01_vars.topic_rcv) != 0) {
+            cw01_mqtt_vars.new_topic = cw01_vars.topic_rcv
+            cw01_mqtt_vars.prev_topic = cw01_vars.topic_rcv
         } else {
-            cw01_vars.new_topic = " "
-        }*/
+            cw01_mqtt_vars.new_topic = " "
+        }
 
-        return "cw01_vars.new_topic"
+        return cw01_mqtt_vars.new_topic
 
     }
 
