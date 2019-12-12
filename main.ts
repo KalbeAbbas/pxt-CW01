@@ -43,6 +43,7 @@ namespace cw01 {
         prev_payload: string
         new_topic: string
         prev_topic: string
+        enable_event: boolean
         constructor() {
             this.res = ""
             this.TOKEN = ""
@@ -76,7 +77,9 @@ namespace cw01 {
             this.new_payload = ""
             this.prev_payload = ""
             this.new_topic = ""
-            this.prev_payload = ""
+            this.prev_topic = ""
+            this.enable_event = false
+
         }
     }
 
@@ -801,6 +804,7 @@ namespace cw01 {
 
                 if ((serial.readString()).includes("IPD")) {
                     IoTMQTTGetData()
+                    if (cw01_vars.enable_event)
                         handler()
                 }
             })
@@ -907,9 +911,11 @@ namespace cw01 {
     export function IoTMQTTGetLatestData(): string {
 
         if (cw01_vars.prev_payload.compare(cw01_vars.mqtt_payload) != 0) {
+            cw01_vars.enable_event = true
             cw01_vars.new_payload = cw01_vars.mqtt_payload
             cw01_vars.prev_payload = cw01_vars.mqtt_payload
         } else {
+            cw01_vars.enable_event = false
             cw01_vars.new_payload = " "
         }
 
