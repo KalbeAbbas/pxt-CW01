@@ -794,6 +794,7 @@ namespace cw01 {
 
                 if ((serial.readString()).includes("IPD")) {
                     IoTMQTTGetData()
+                    basic.showString(cw01_vars.topic_rcv)
                     for (let i = 0; i < cw01_vars.topic_count; i++) {
                         if (cw01_vars.topic_rcv.compare(cw01_vars.topics[cw01_vars.topic_count]) == 0) {
                             basic.showString("Topic found")
