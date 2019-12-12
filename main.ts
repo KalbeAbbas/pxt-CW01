@@ -40,10 +40,10 @@ namespace cw01 {
         subscribe_count: number
         start_subscribe: boolean
         new_payload: string
-        prev_payload: string
+        //prev_payload: string
         new_topic: string
         prev_topic: string
-        enable_event: boolean
+        //enable_event: boolean
         constructor() {
             this.res = ""
             this.TOKEN = ""
@@ -74,7 +74,7 @@ namespace cw01 {
             this.att_asset = ""
             this.subscribe_count = 0
             this.start_subscribe = true
-            this.enable_event = false
+            //this.enable_event = false
 
         }
     }
