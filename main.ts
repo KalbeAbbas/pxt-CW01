@@ -703,13 +703,14 @@ namespace cw01 {
         serial.writeBuffer(password_len)
         serial.writeString(password)
 
-        basic.pause(1000)
+        basic.pause(3000)
 
         cw01_vars.timer = input.runningTime()
 
 
         control.inBackground(function () {
             while (true) {
+                basic.pause(30000)
                 if (((input.runningTime() - cw01_vars.timer) > 180000)) {
                     cw01_vars.timer = input.runningTime()
                     let header_one: Buffer = pins.packBuffer("!B", [0xC0])
@@ -722,7 +723,6 @@ namespace cw01 {
                     serial.writeBuffer(header_two)
                 }
 
-                basic.pause(30000)
 
             }
         })
