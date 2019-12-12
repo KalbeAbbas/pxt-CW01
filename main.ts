@@ -782,7 +782,7 @@ namespace cw01 {
 
         serial.writeString("AT+CIPSEND=" + (ctrl_pkt.length + remain_len.length + pid.length + topic_len.length + topic.length + qos.length) + cw01_vars.NEWLINE)
 
-        basic.pause(1000)
+        basic.pause(2000)
 
         serial.writeBuffer(ctrl_pkt)
         serial.writeBuffer(remain_len)
