@@ -792,8 +792,14 @@ namespace cw01 {
             serial.onDataReceived("\n", function () {
 
                 if ((serial.readString()).includes("IPD")) {
-                    IoTMQTTGetData()
-                    handler()
+                    basic.showString(cw01.topic())
+                    basic.showString("Topic ended")
+                    for (let i = 0; i < cw01_vars.topic_count; i++) {
+                        if (((cw01.topic()).compare(cw01_vars.topics[i]))) {
+                            IoTMQTTGetData()
+                            handler()
+                        }
+                    }
                 }
             })
         })
