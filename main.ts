@@ -1,3 +1,4 @@
+
 enum USER {
     //% block="INDUSTRIAL"
     INDUSTRIAL = 1,
@@ -5,10 +6,10 @@ enum USER {
     EDUCATIONAL = 2
 }
 
+
 //% groups=["Common",ATT", "Ubidots", "Azure", "MQTT", "others"]
 //% weight=6 color=#2699BF icon="\uf110" block="CW01"
 namespace cw01 {
-
     class cw01_int_var123 {
         res: string
         TOKEN: string
@@ -20,11 +21,10 @@ namespace cw01 {
         longitude: number
         select: boolean
         azureAccess: string
-        mqtt_message: string
-        prev_mqtt_message: string
+        mqtt_payload: string
+        prev_mqtt_payload: string
         block: boolean
         mqtt_topic: string
-        mqtt_payload: string
         fail_count: number
         topics: string[]
         topic_count: number
@@ -37,8 +37,7 @@ namespace cw01 {
         att_state: boolean
         att_state_value: boolean
         att_asset: string
-        subscribe_count: number
-        start_subscribe: boolean
+        mqtt_message: string
         constructor() {
             this.res = ""
             this.TOKEN = ""
@@ -50,11 +49,10 @@ namespace cw01 {
             this.longitude = 0
             this.select = false
             this.azureAccess = ""
-            this.mqtt_message = ""
-            this.prev_mqtt_message = ""
+            this.mqtt_payload = ""
+            this.prev_mqtt_payload = ""
             this.block = false
             this.mqtt_topic = ""
-            this.mqtt_payload = ""
             this.fail_count = 0
             this.topics = []
             this.topic_count = 0
@@ -67,9 +65,7 @@ namespace cw01 {
             this.att_state = false
             this.att_state_value = false
             this.att_asset = ""
-            this.subscribe_count = 0
-            this.start_subscribe = true
-
+            this.mqtt_message = ""
         }
     }
 
@@ -80,6 +76,13 @@ namespace cw01 {
         prev_topic: string
         enable_event_1: boolean
         enable_event_2: boolean
+        id: string
+        id_enable: boolean
+        timer_enable: boolean
+        sending_payload: boolean
+        sending_pingreq: boolean
+        receiving_msg: boolean
+        mac_addr: string
 
         constructor() {
             this.new_payload = ""
@@ -88,30 +91,38 @@ namespace cw01 {
             this.prev_topic = ""
             this.enable_event_1 = false
             this.enable_event_2 = false
+            this.id = ""
+            this.id_enable = false
+            this.timer_enable = true
+            this.sending_payload = false
+            this.sending_pingreq = false
+            this.receiving_msg = false
+            this.mac_addr = ""
+        }
+    }
+
+    class button_class {
+        sending_data: boolean
+
+        constructor() {
+            this.sending_data = false
         }
     }
 
     let cw01_vars = new cw01_int_var123()
     let cw01_mqtt_vars = new cw01_mqtt()
+    let cw01_button_object = new button_class()
 
     cw01_vars.start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
     serial.setRxBufferSize(200)
 
-
-    control.onEvent(control.eventSourceId(EventBusSource.MICROBIT_ID_BUTTON_A), control.eventValueId(EventBusValue.MICROBIT_EVT_ANY), function () {
-        cw01_vars.block = true
-    })
-
-    control.onEvent(control.eventSourceId(EventBusSource.MICROBIT_ID_BUTTON_B), control.eventValueId(EventBusValue.MICROBIT_EVT_ANY), function () {
-        cw01_vars.block = true
-    })
-
-
     basic.showIcon(IconNames.Chessboard)
     basic.pause(2000)
     serial.writeString("ATE0" + cw01_vars.NEWLINE)
     basic.pause(300)
+    serial.readString()
+    cw01_mqtt_vars.mac_addr = extract_mac()
     serial.writeString("AT+CWMODE_DEF=3" + cw01_vars.NEWLINE)
     basic.pause(300)
     serial.writeString("AT+CIPRECVMODE=1" + cw01_vars.NEWLINE)
@@ -133,14 +144,28 @@ namespace cw01 {
         }
     }
 
+    function extract_mac(): string {
+        let raw_str: string = ""
+        let mac_addr: string = ""
+        let index: number = 0
+        serial.writeString("AT+CIPSTAMAC_CUR?" + cw01_vars.NEWLINE)
+        basic.pause(500)
+        raw_str = serial.readString()
+        index = raw_str.indexOf("\"") + 1
+
+        mac_addr = raw_str.substr(index, 17)
+
+        return mac_addr
+    }
+
     /**
     * Connect to W-Fi 
     */
     //% weight=91 color=#ad0303
     //% group="Common"
-    //% blockId="connectToWifi" block="CW01 connect to WiFi SSID %SSID, password %PSK"
+    //% blockId="connectToWifi" block="CW01 connect to WiFi SSID %SSID password %PSK"
     export function connectToWifi(SSID: string, PSK: string): void {
-        if (cw01_vars.start) {
+        if (true) {
             serial.writeString("AT+CWMODE=1" + cw01_vars.NEWLINE)
             basic.pause(100)
             serial.readString()
@@ -161,6 +186,7 @@ namespace cw01 {
             basic.showString("Missed begin block!")
         }
     }
+
     /**
     * Connect to AllThingsTalk IoT platform
     */
@@ -171,7 +197,7 @@ namespace cw01 {
         cw01_vars.DEVICE_ID = ID
         cw01_vars.TOKEN = TKN
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + cw01_vars.NEWLINE)
-        basic.pause(1000)
+        basic.pause(500)
     }
 
 
@@ -180,227 +206,18 @@ namespace cw01 {
     */
     //% weight=91
     //% group="ATT"
-    //% event.defl=false
-    //% blockId="IoTSendStringToATT" block="CW01 send string %value to ATT asset %asset, button event %event"
-    export function IoTSendStringToATT(value: string, asset: string, event: boolean): void {
-        cw01_vars.block.toString()
-        event.toString()
+    //% blockId="IoTSendStringToATT" block="CW01 send string %value to ATT asset %asset"
+    export function IoTSendStringToATT(value: string, asset: string): void {
 
-        if (cw01_vars.block && event) {
-            cw01_vars.att_string = true
-            cw01_vars.att_string_value = value
-            cw01_vars.att_asset = asset
-            cw01_vars.block = false
-        } else {
-
-            cw01_vars.asset_name = asset
-            let payload: string = "{\"value\": " + value + "}"
-            let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
-                "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
-                "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
-                "Accept: */*" + cw01_vars.NEWLINE +
-                "Authorization: Bearer " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
-                "Content-Type:application/json" + cw01_vars.NEWLINE +
-                "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
-
-            serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
-            basic.pause(50)
-            serial.writeString(request + cw01_vars.NEWLINE)
-            basic.pause(500)
-
-            serial.readString()
-            get_status()
-
-            basic.pause(500)
+        while (cw01_button_object.sending_data) {
+            basic.pause(100)
         }
 
-    }
-
-    /**
-    * Send numerical data to AllThingsTalk IoT platform
-    */
-    //% weight=91
-    //% group="ATT"
-    //% event.defl=false
-    //% blockId="IoTSendValueToATT" block="CW01 send value %value to ATT asset %asset, button event %event"
-    export function IoTSendValueToATT(value: number, asset: string, event: boolean): void {
-        cw01_vars.block.toString();
-        event.toString()
-        if (cw01_vars.block && event) {
-            cw01_vars.att_number = true
-            cw01_vars.att_number_value = value
-            cw01_vars.att_asset = asset
-            cw01_vars.block = false
-        } else {
-
-
-            cw01_vars.asset_name = asset
-            let payload: string = "{\"value\": " + value.toString() + "}"
-            let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
-                "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
-                "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
-                "Accept: */*" + cw01_vars.NEWLINE +
-                "Authorization: Bearer " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
-                "Content-Type:application/json" + cw01_vars.NEWLINE +
-                "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
-
-            serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
-            basic.pause(50)
-            serial.writeString(request + cw01_vars.NEWLINE)
-            basic.pause(500)
-
-            serial.readString()
-            get_status()
-
-            basic.pause(500)
-        }
-
-    }
-
-    /**
-    * Send boolean data to AllThingsTalk IoT platform
-    */
-    //% weight=91
-    //% group="ATT"
-    //% event.defl=false
-    //% blockId="IoTSendStateToATT" block="CW01 send state %state to ATT asset %asset_name, button event %event"
-    export function IoTSendStateToATT(state: boolean, asset: string, event: boolean): void {
-        cw01_vars.block.toString()
-        event.toString()
-
-        if (cw01_vars.block && event) {
-
-            cw01_vars.att_state = true
-            cw01_vars.att_state_value = state
-            cw01_vars.att_asset = asset
-            cw01_vars.block = false
-
-        } else {
-
-            let stateStr: string
-            let count: number = 0
-            if (state == true) {
-                stateStr = "true"
-            } else {
-                stateStr = "false"
-            }
-
-            cw01_vars.asset_name = asset
-            let payload: string = "{\"value\": " + stateStr + "}"
-            let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
-                "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
-                "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
-                "Accept: */*" + cw01_vars.NEWLINE +
-                "Authorization: Bearer " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
-                "Content-Type:application/json" + cw01_vars.NEWLINE +
-                "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
-
-            serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
-            basic.pause(50)
-            serial.writeString(request + cw01_vars.NEWLINE)
-            basic.pause(500)
-
-            serial.readString()
-            get_status()
-
-            basic.pause(500)
-        }
-
-    }
-
-    /**
-    * Send boolean data to AllThingsTalk IoT platform
-    */
-    //% weight=91
-    //% group="ATT"
-    //% blockId="IoTProcessATTQueueMessages" block="CW01 process queue messages"
-    export function IoTProcessATTQueueMessages(): void {
-        cw01_vars.att_number.toString()
-        cw01_vars.att_string.toString()
-        cw01_vars.att_state.toString()
-        if (cw01_vars.att_number) {
-            cw01_vars.asset_name = cw01_vars.att_asset
-            let value = cw01_vars.att_number_value
-            basic.showNumber(cw01_vars.att_number_value)
-            basic.showString(cw01_vars.asset_name)
-            let payload: string = "{\"value\": " + value.toString() + "}"
-            let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
-                "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
-                "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
-                "Accept: */*" + cw01_vars.NEWLINE +
-                "Authorization: Bearer " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
-                "Content-Type:application/json" + cw01_vars.NEWLINE +
-                "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
-
-            serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
-            basic.pause(50)
-            serial.writeString(request + cw01_vars.NEWLINE)
-            basic.pause(500)
-
-            cw01_vars.att_number = false
-            cw01_vars.att_asset = ""
-            cw01_vars.att_number_value = 0
-        }
-
-        if (cw01_vars.att_string) {
-            cw01_vars.asset_name = cw01_vars.att_asset
-            let value = cw01_vars.att_string_value
-            let payload: string = "{\"value\": " + value + "}"
-            let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
-                "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
-                "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
-                "Accept: */*" + cw01_vars.NEWLINE +
-                "Authorization: Bearer " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
-                "Content-Type:application/json" + cw01_vars.NEWLINE +
-                "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
-
-            serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
-            basic.pause(50)
-            serial.writeString(request + cw01_vars.NEWLINE)
-            basic.pause(500)
-
-            cw01_vars.att_string = false
-            cw01_vars.att_string_value = ""
-            cw01_vars.att_asset = ""
-        }
-
-        if (cw01_vars.att_state) {
-            cw01_vars.asset_name = cw01_vars.att_asset
-            let value = cw01_vars.att_state_value
-            let payload: string = "{\"value\": " + value.toString() + "}"
-            let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
-                "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
-                "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
-                "Accept: */*" + cw01_vars.NEWLINE +
-                "Authorization: Bearer " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
-                "Content-Type:application/json" + cw01_vars.NEWLINE +
-                "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
-
-            serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
-            basic.pause(50)
-            serial.writeString(request + cw01_vars.NEWLINE)
-            basic.pause(500)
-
-            cw01_vars.att_state = false
-            cw01_vars.att_asset = ""
-            cw01_vars.att_state_value = false
-        }
-    }
-
-
-    /**
-    * Send button click to AllThingsTalk IoT platform
-    */
-    //% weight=91
-    //% group="ATT"
-    //% blockId="IoTSendBtnClkToATT" block="CW01 send button click to to ATT asset %asset"
-    export function IoTSendBtnClkToATT(asset: string) {
+        cw01_button_object.sending_data = true
         cw01_vars.asset_name = asset
-        cw01_vars.block = true
-
-        basic.pause(400)
-
-        let payload: string = "{\"value\": true}"
+        serial.writeString("AT+CIPMODE=0" + cw01_vars.NEWLINE)
+        basic.pause(100)
+        let payload: string = "{\"value\": " + value + "}"
         let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
             "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
             "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
@@ -409,14 +226,38 @@ namespace cw01 {
             "Content-Type:application/json" + cw01_vars.NEWLINE +
             "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
 
+
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
         basic.pause(50)
         serial.writeString(request + cw01_vars.NEWLINE)
+        basic.pause(1000)
 
-        basic.pause(200)
+        serial.readString()
+        get_status()
 
-        payload = "{\"value\": false}"
-        request = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
+        cw01_button_object.sending_data = false
+
+    }
+
+    /**
+    * Send numerical data to AllThingsTalk IoT platform
+    */
+    //% weight=91
+    //% group="ATT"
+    //% blockId="IoTSendValueToATT" block="CW01 send value %value to ATT asset %asset"
+    export function IoTSendValueToATT(value: number, asset: string): void {
+
+        while (cw01_button_object.sending_data) {
+            basic.pause(100)
+        }
+
+        cw01_button_object.sending_data = true
+
+        cw01_vars.asset_name = asset
+        serial.writeString("AT+CIPMODE=0" + cw01_vars.NEWLINE)
+        basic.pause(100)
+        let payload: string = "{\"value\": " + value.toString() + "}"
+        let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
             "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
             "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
             "Accept: */*" + cw01_vars.NEWLINE +
@@ -424,14 +265,64 @@ namespace cw01 {
             "Content-Type:application/json" + cw01_vars.NEWLINE +
             "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
 
+
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
         basic.pause(50)
         serial.writeString(request + cw01_vars.NEWLINE)
-
-        basic.pause(250)
+        basic.pause(1000)
 
         serial.readString()
         get_status()
+
+        cw01_button_object.sending_data = false
+    }
+
+    /**
+    * Send boolean data to AllThingsTalk IoT platform
+    */
+    //% weight=91
+    //% group="ATT"
+    //% blockId="IoTSendStateToATT" block="CW01 send state %state to ATT asset %asset_name"
+    export function IoTSendStateToATT(state: boolean, asset: string): void {
+
+        while (cw01_button_object.sending_data) {
+            basic.pause(100)
+        }
+
+        cw01_button_object.sending_data = true
+
+        let stateStr: string
+
+        if (state == true) {
+            stateStr = "true"
+        } else {
+            stateStr = "false"
+        }
+
+        cw01_vars.asset_name = asset
+        serial.writeString("AT+CIPMODE=0" + cw01_vars.NEWLINE)
+        basic.pause(100)
+        let payload: string = "{\"value\": " + stateStr + "}"
+        let request: string = "PUT /device/" + cw01_vars.DEVICE_ID + "/asset/" + cw01_vars.asset_name + "/state" + " HTTP/1.1" + cw01_vars.NEWLINE +
+            "Host: api.allthingstalk.io" + cw01_vars.NEWLINE +
+            "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
+            "Accept: */*" + cw01_vars.NEWLINE +
+            "Authorization: Bearer " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
+            "Content-Type:application/json" + cw01_vars.NEWLINE +
+            "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
+
+
+        serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
+        basic.pause(50)
+        serial.writeString(request + cw01_vars.NEWLINE)
+        basic.pause(1000)
+
+        serial.readString()
+        get_status()
+
+        cw01_button_object.sending_data = false
+
+
     }
 
     /**
@@ -441,6 +332,12 @@ namespace cw01 {
     //% group="ATT"
     //% blockId="IoTgetATTAssetValue" block="CW01 get ATT asset %asset value"
     export function IoTgetATTAssetValue(asset: string): string {
+        while (cw01_button_object.sending_data) {
+            basic.pause(100)
+        }
+
+        cw01_button_object.sending_data = true
+
         cw01_vars.res = ""
         let index1: number
         let index2: number
@@ -455,9 +352,9 @@ namespace cw01 {
 
 
         serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
-        basic.pause(400)
+        basic.pause(50)
         serial.writeString(request + cw01_vars.NEWLINE)
-        basic.pause(400)
+        basic.pause(1200)
         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
         basic.pause(100)
         serial.readString()
@@ -469,7 +366,10 @@ namespace cw01 {
         index2 = cw01_vars.res.indexOf("}", index1)
         value = cw01_vars.res.substr(index1, index2 - index1)
 
+        cw01_button_object.sending_data = false
+
         return value
+
     }
 
     /**
@@ -495,6 +395,13 @@ namespace cw01 {
     //% group="Ubidots"
     //% blockId="IoTgetValuefromUbidots" block="CW01 get value from Ubidots device %device variable %variable"
     export function IoTgetValuefromUbidots(device: string, variable: string): string {
+
+        while (cw01_button_object.sending_data) {
+            basic.pause(100)
+        }
+
+        cw01_button_object.sending_data = true
+
         cw01_vars.res = ""
         let value: string
         let index1: number
@@ -513,6 +420,7 @@ namespace cw01 {
             "Accept: */*" + cw01_vars.NEWLINE +
             "X-Auth-Token: " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
             "Content-Type: application/json" + cw01_vars.NEWLINE + cw01_vars.NEWLINE
+        //"Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
 
 
@@ -537,6 +445,8 @@ namespace cw01 {
         index2 = cw01_vars.res.indexOf("]", index1)
         value = cw01_vars.res.substr(index1, index2 - index1 - 1)
 
+        cw01_button_object.sending_data = false
+
         return value
 
     }
@@ -549,6 +459,12 @@ namespace cw01 {
     //% group="Ubidots"
     //% blockId="IoTSendValueToUbidots" block="CW01 send value %value to Ubidots device %device variable %variable , include location %loc"
     export function IoTSendValueToUbidots(value: number, device: string, variable: string, loc: boolean): void {
+
+        while (cw01_button_object.sending_data) {
+            basic.pause(100)
+        }
+
+        cw01_button_object.sending_data = true
 
         let payload: string = "{\"value\": " + value.toString() + "}"
 
@@ -579,12 +495,27 @@ namespace cw01 {
         serial.writeString(request)
         basic.pause(1000)
 
-        get_status()
+        if (!get_status()) {
+            cw01_vars.fail_count += 1
+            if (cw01_vars.fail_count >= 3) {
+                if (cw01_vars.select) {
+                    cw01_vars.fail_count = 0
+                    basic.showString("Reconnecting...")
+                    connectToUbidots(USER.INDUSTRIAL, cw01_vars.TOKEN)
+                } else {
+                    cw01_vars.fail_count = 0
+                    basic.showString("Reconnecting...")
+                    connectToUbidots(USER.EDUCATIONAL, cw01_vars.TOKEN)
+                }
+            }
+        }
 
         basic.pause(100)
         serial.writeString("AT+CIPRECVDATA=400" + cw01_vars.NEWLINE)
         basic.pause(100)
         serial.readString()
+
+        cw01_button_object.sending_data = false;
     }
 
     /**
@@ -660,10 +591,12 @@ namespace cw01 {
         }
     }
 
-
+    /**
+    * Connect to MQTT broker through port number 1883
+    */
     //% weight=91
     //% group="MQTT"
-    //% blockId="IoTMQTTConnect" block="CW01 connect to MQTT broker URL %broker with Username %Username and Password %Password"
+    //% blockId="IoTMQTTConnect" block="CW01 connect to MQTT broker URL %broker with username %Username and password %Password"
     export function IoTMQTTConnect(broker: string, Username: string, Password: string): void {
 
         serial.writeString("AT+CIPSTART=\"TCP\",\"" + broker + "\",1883" + cw01_vars.NEWLINE)
@@ -675,7 +608,14 @@ namespace cw01 {
         //let msg_part_one: string = protocol_name + protocol_lvl
         let connect_flags: Buffer = (pins.packBuffer("!B", [(1 << 7) | (1 << 6) | (1 << 1)]))
         let keep_alive: Buffer = pins.packBuffer("!H", [3600])
-        let client_id: string = "CW01/1.1"
+        let client_id: string
+
+        if (cw01_mqtt_vars.id_enable) {
+            client_id = cw01_mqtt_vars.id
+        } else {
+            client_id = cw01_mqtt_vars.mac_addr
+        }
+
         let client_id_len: Buffer = pins.packBuffer("!H", [client_id.length])
         let username: string = Username
         let username_len: Buffer = pins.packBuffer("!H", [username.length])
@@ -685,8 +625,6 @@ namespace cw01 {
 
         serial.writeString("AT+CIPSEND=" + (1 + 1 + protocol_name_prior.length + protocol_name.length + protocol_lvl.length + connect_flags.length + keep_alive.length + client_id_len.length + client_id.length + username_len.length + username.length + password_len.length + password.length) + cw01_vars.NEWLINE)
         basic.pause(1000)
-        /*serial.writeBuffer(pins.packBuffer("!B", [4]))
-        serial.writeBuffer(pins.packBuffer("!B", [4]))*/
 
         //Msg part one
         serial.writeBuffer(pins.packBuffer("!B", [1 << 4]))
@@ -713,7 +651,8 @@ namespace cw01 {
         control.inBackground(function () {
             while (true) {
                 basic.pause(30000)
-                if (((input.runningTime() - cw01_vars.timer) > 180000)) {
+                if (((input.runningTime() - cw01_vars.timer) > 180000) && !cw01_mqtt_vars.sending_payload && !cw01_mqtt_vars.receiving_msg) {
+                    cw01_mqtt_vars.sending_pingreq = true
                     cw01_vars.timer = input.runningTime()
                     let header_one: Buffer = pins.packBuffer("!B", [0xC0])
                     let header_two: Buffer = pins.packBuffer("!B", [0x00])
@@ -723,6 +662,8 @@ namespace cw01 {
 
                     serial.writeBuffer(header_one)
                     serial.writeBuffer(header_two)
+
+                    cw01_mqtt_vars.sending_pingreq = false
                 }
 
 
@@ -734,11 +675,34 @@ namespace cw01 {
 
     }
 
-
+    /**
+    * Set client ID of microbit
+    */
     //% weight=91
     //% group="MQTT"
-    //% blockId="IoTMQTTSendValue" block="CW01 send payload %payload to topic %Topic"
-    export function IoTMQTTSendValue(payload: string, Topic: string): void {
+    //% blockId="IoTMQTTSetClientID" block="CW01 set MQTT client ID %ID"
+    //% advanced=true
+    export function IoTMQTTSetClientID(ID: string) {
+        cw01_mqtt_vars.id = ID
+        cw01_mqtt_vars.id_enable = true;
+    }
+
+
+    /**
+    * Send payload to MQTT topic
+    */
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTMQTTSendPayload" block="CW01 send payload %payload to topic %Topic"
+    export function IoTMQTTSendPayload(payload: string, Topic: string): void {
+
+        cw01_mqtt_vars.timer_enable = false
+
+        while (cw01_mqtt_vars.sending_pingreq || cw01_mqtt_vars.receiving_msg) {
+            basic.pause(100)
+        }
+
+        cw01_mqtt_vars.sending_payload = true
 
         //Msg part two
         let topic: string = Topic
@@ -750,7 +714,12 @@ namespace cw01 {
         let msg_part_two_len: Buffer = pins.packBuffer("!B", [topic_len.length + topic.length + value.length])
 
         serial.writeString("AT+CIPSEND=" + (start_byte.length + msg_part_two_len.length + topic_len.length + topic.length + value.length) + cw01_vars.NEWLINE)
-        basic.pause(1000)
+
+        basic.pause(200)
+
+        serial.readString()
+
+        basic.showIcon(IconNames.Target)
 
         serial.writeBuffer(start_byte)
         serial.writeBuffer(msg_part_two_len)
@@ -760,8 +729,13 @@ namespace cw01 {
         serial.writeString(value)
 
         basic.pause(1000)
+        cw01_mqtt_vars.sending_payload = false
+
     }
 
+    /**
+    * Subscribe to MQTT topic
+    */
     //% weight=91
     //% group="MQTT"
     //% blockId="IoTMQTTSubscribe" block="CW01 subscribe to topic %Topic"
@@ -772,7 +746,6 @@ namespace cw01 {
         let qos: Buffer = pins.packBuffer("!B", [0x00])
         let topic: string = Topic
         let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
-
         cw01_vars.mqtt_topic = topic
 
         cw01_vars.topics[cw01_vars.topic_count] = topic
@@ -801,135 +774,53 @@ namespace cw01 {
 
     }
 
-
+    /**
+    * The function is a callback function. It executes block inside the function whenever message from subscribed topic is received
+    */
     //% weight=91
     //% group="MQTT"
-    //% block="callback"
-    export function callback(handler: () => void) {
+    //% block="CW01 on message received"
+    export function onMessageReceived(handler: () => void) {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
             basic.pause(10000)
 
-            serial.onDataReceived("\n", function () {
+            basic.showString("#")
 
-                if ((serial.readString()).includes("IPD")) {
+            serial.onDataReceived("\n", function () {
+                let serial_res: string = serial.readString()
+
+                if (serial_res.includes("IPD")) {
                     IoTMQTTGetData()
-                    basic.showString("Hello!")
-                    if (cw01_mqtt_vars.enable_event_1 || cw01_mqtt_vars.enable_event_2)
+                    //if (cw01_mqtt_vars.enable_event_1 || cw01_mqtt_vars.enable_event_2)
+                    if (!serial_res.includes("+IPD,2"))
                         handler()
                 }
             })
         })
     }
 
-    //% weight=91
-    //% group="MQTT"
-    //% blockId="IoTMQTTGetLatestTopicAndPayload" block="CW01 get latest topic and payload""
-    export function IoTMQTTGetLatestTopicAndPayload(): void {
-
-        let payload: string
-
-        if ((input.runningTime() - cw01_vars.timer) > 180000) {
-            cw01_vars.timer = input.runningTime()
-            let header_one: Buffer = pins.packBuffer("!B", [0xC0])
-            let header_two: Buffer = pins.packBuffer("!B", [0x00])
-
-            serial.writeString("AT+CIPSEND=" + (header_one.length + header_two.length) + cw01_vars.NEWLINE)
-            basic.pause(100)
-
-            serial.writeBuffer(header_one)
-            serial.writeBuffer(header_two)
-
-            basic.pause(500)
-        }
-
-        for (let i: number = 0; i < cw01_vars.topics.length; i++) {
-            if (cw01_vars.mqtt_message.includes(cw01_vars.topics[i])) {
-                cw01_vars.topic_rcv = cw01_vars.topics[i]
-                break
-            } else {
-                continue
-            }
-        }
-
-        if (cw01_vars.prev_mqtt_message.compare(cw01_vars.mqtt_message) != 0) {
-            let index: number = cw01_vars.mqtt_message.indexOf(cw01_vars.topic_rcv) + cw01_vars.topic_rcv.length
-            let payload_length: number = cw01_vars.mqtt_message.length - index - 6
-            payload = cw01_vars.mqtt_message.substr(index, payload_length)
-        } else {
-            payload = ""
-        }
-
-        cw01_vars.mqtt_payload = payload
-    }
 
     /**
-    * Events can have arguments before the handler
+    * Payload received 
     */
     //% weight=91
     //% group="MQTT"
-    //% block="on Subscribe topic $Topic"
-    export function onSubscribe(Topic: string, handler: () => void) {
-
-
-        control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
-
-            //Msg part two
-            let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
-            let qos: Buffer = pins.packBuffer("!B", [0x00])
-            let topic: string = Topic
-            let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
-
-            cw01_vars.mqtt_topic = topic
-
-            cw01_vars.topics[cw01_vars.topic_count] = topic
-            cw01_vars.topic_count++
-
-            //Msg part one
-            let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
-            let remain_len: Buffer = pins.packBuffer("!B", [pid.length + topic_len.length + topic.length + qos.length])
-
-            serial.writeString("AT+CIPSEND=" + (ctrl_pkt.length + remain_len.length + pid.length + topic_len.length + topic.length + qos.length) + cw01_vars.NEWLINE)
-
-            basic.pause(1000)
-
-            serial.writeBuffer(ctrl_pkt)
-            serial.writeBuffer(remain_len)
-            serial.writeBuffer(pid)
-            serial.writeBuffer(topic_len)
-            serial.writeString(topic)
-            serial.writeBuffer(qos)
-
-            basic.pause(2000)
-
-            serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
-            basic.pause(100)
-            serial.readString()
-
-            handler()
-            basic.pause(1000)
-
-
-        })
-
-
-    }
-
-
-    //% weight=91
-    //% group="MQTT"
-    //% blockId="payload" block="payload"
+    //% blockId="IoTMQTTGetLatestData" block="payload"
     export function IoTMQTTGetLatestData(): string {
 
         return cw01_mqtt_vars.new_payload
 
     }
 
+    /**
+    * Topic received 
+    */
     //% weight=91
     //% group="MQTT"
-    //% blockId="topic" block="topic"
-    export function topic(): string {
+    //% blockId="IoTMQTTGetLatestTopic" block="topic"
+    export function IoTMQTTGetLatestTopic(): string {
 
         return cw01_mqtt_vars.new_topic
 
@@ -938,16 +829,22 @@ namespace cw01 {
     function IoTMQTTGetData(): void {
         let payload: string
 
-        basic.pause(500)
+        cw01_mqtt_vars.sending_payload.toString()
+        while (cw01_mqtt_vars.sending_payload || cw01_mqtt_vars.sending_pingreq) {
+            basic.pause(10)
+        }
+
+        cw01_mqtt_vars.receiving_msg = true
+
         serial.writeString("AT+CIPRECVDATA=4" + cw01_vars.NEWLINE)
-        basic.pause(300)
+        basic.pause(200)
         serial.readString()
         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
-        basic.pause(300)
+        basic.pause(200)
 
         cw01_vars.mqtt_message = serial.readString()
-        basic.showIcon(IconNames.Yes)
-        basic.showString("")
+        //basic.showIcon(IconNames.Yes)
+        //basic.showString("")
 
         for (let i: number = 0; i < cw01_vars.topics.length; i++) {
             if (cw01_vars.mqtt_message.includes(cw01_vars.topics[i])) {
@@ -967,25 +864,27 @@ namespace cw01 {
 
         if (cw01_mqtt_vars.prev_payload.compare(cw01_vars.mqtt_payload) != 0) {
             cw01_mqtt_vars.enable_event_1 = true
-            cw01_mqtt_vars.new_payload = cw01_vars.mqtt_payload
-            cw01_mqtt_vars.prev_payload = cw01_vars.mqtt_payload
         } else {
             cw01_mqtt_vars.enable_event_1 = false
-            cw01_mqtt_vars.new_payload = " "
+            //cw01_mqtt_vars.new_payload = " "
         }
+
+        cw01_mqtt_vars.new_payload = cw01_vars.mqtt_payload
+        //cw01_mqtt_vars.prev_payload = cw01_vars.mqtt_payload
 
         if (cw01_mqtt_vars.prev_topic.compare(cw01_vars.topic_rcv) != 0) {
             cw01_mqtt_vars.enable_event_2 = true
-            cw01_mqtt_vars.new_topic = cw01_vars.topic_rcv
-            cw01_mqtt_vars.prev_topic = cw01_vars.topic_rcv
         } else {
             cw01_mqtt_vars.enable_event_2 = false
-            cw01_mqtt_vars.new_topic = " "
+            //cw01_mqtt_vars.new_topic = " "
         }
 
-        basic.showString(cw01_vars.mqtt_message)
+        cw01_mqtt_vars.new_topic = cw01_vars.topic_rcv
+        //cw01_mqtt_vars.prev_topic = cw01_vars.topic_rcv
 
         basic.pause(100)
+
+        cw01_mqtt_vars.receiving_msg = false
     }
 
 
@@ -1116,8 +1015,9 @@ namespace cw01 {
 
     function get_status(): boolean {
 
+        basic.pause(400)
         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
-        basic.pause(100);
+        basic.pause(300)
         cw01_vars.res = serial.readString()
 
         if (cw01_vars.res.includes("HTTP/1.1 200") || cw01_vars.res.includes("HTTP/1.1 201") || cw01_vars.res.includes("HTTP/1.0 202")) {
