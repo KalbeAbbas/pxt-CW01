@@ -1,4 +1,3 @@
-
 enum USER {
     //% block="INDUSTRIAL"
     INDUSTRIAL = 1,
