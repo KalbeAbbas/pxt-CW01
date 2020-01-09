@@ -741,7 +741,7 @@ namespace cw01 {
     //% blockId="IoTMQTTSubscribe" block="CW01 subscribe to topic %Topic"
     export function IoTMQTTSubscribe(Topic: string): void {
 
-        basic.pause(1000)
+        basic.pause(10000)
 
         //Msg part two
         let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
