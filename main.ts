@@ -866,8 +866,8 @@ namespace cw01 {
         basic.showString("N")
         basic.showNumber(topic_len_LSB[0])
 
-        cw01_mqtt_vars.new_topic = cw01_vars.mqtt_message.substr(cw01_vars.mqtt_message.indexOf(":"), topic_len)
-        cw01_mqtt_vars.new_payload = cw01_vars.mqtt_message.substr(cw01_mqtt_vars.new_topic.length, cw01_vars.mqtt_message.length - cw01_mqtt_vars.new_topic.length)
+        cw01_mqtt_vars.new_topic = cw01_vars.mqtt_message.substr(cw01_vars.mqtt_message.indexOf(":") + 1, topic_len)
+        cw01_mqtt_vars.new_payload = cw01_vars.mqtt_message.substr(cw01_vars.mqtt_message.indexOf(":") + 1 + cw01_mqtt_vars.new_topic.length, cw01_vars.mqtt_message.length - cw01_mqtt_vars.new_topic.length)
 
         /*for (let i: number = 0; i < cw01_vars.topics.length; i++) {
             if (cw01_vars.mqtt_message.includes(cw01_vars.topics[i])) {
