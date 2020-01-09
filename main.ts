@@ -764,7 +764,7 @@ namespace cw01 {
 
         serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
         basic.pause(100)
-        serial.readBuffer(15)
+        serial.readBuffer(16)
         basic.showNumber((pins.unpackBuffer("!B", serial.readBuffer(1)))[0])
 
         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
