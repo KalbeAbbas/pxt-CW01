@@ -795,11 +795,10 @@ namespace cw01 {
             serial.onDataReceived("\n", function () {
                 let serial_res: string = serial.readString()
 
-                if (serial_res.includes("IPD")) {
+                if (serial_res.includes("IPD") && !serial_res.includes("+IPD,2") && !serial_res.includes("+IPD,5")) {
                     IoTMQTTGetData()
                     //if (cw01_mqtt_vars.enable_event_1 || cw01_mqtt_vars.enable_event_2)
-                    if (!serial_res.includes("+IPD,2"))
-                        handler()
+                    handler()
                 }
             })
         })
