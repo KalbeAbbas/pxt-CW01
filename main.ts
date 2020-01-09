@@ -857,7 +857,7 @@ namespace cw01 {
 
         cw01_mqtt_vars.receiving_msg = true
 
-        serial.writeString("AT+CIPRECVDATA=2" + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
         basic.pause(200)
         serial.readString()
         serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
