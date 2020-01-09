@@ -671,7 +671,7 @@ namespace cw01 {
 
         control.raiseEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK)
 
-        basic.pause(2000)
+        basic.pause(10000)
 
 
     }
