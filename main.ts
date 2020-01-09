@@ -23,10 +23,7 @@ namespace cw01 {
         mqtt_payload: string
         prev_mqtt_payload: string
         block: boolean
-        mqtt_topic: string
         fail_count: number
-        topics: string[]
-        topic_count: number
         topic_rcv: string
         timer: number
         att_string: boolean
@@ -51,10 +48,7 @@ namespace cw01 {
             this.mqtt_payload = ""
             this.prev_mqtt_payload = ""
             this.block = false
-            this.mqtt_topic = ""
             this.fail_count = 0
-            this.topics = []
-            this.topic_count = 0
             this.topic_rcv = ""
             this.timer = 0
             this.att_string = false
@@ -81,6 +75,7 @@ namespace cw01 {
         sending_payload: boolean
         sending_pingreq: boolean
         receiving_msg: boolean
+        mqtt_busy: boolean
         mac_addr: string
 
         constructor() {
@@ -96,6 +91,7 @@ namespace cw01 {
             this.sending_payload = false
             this.sending_pingreq = false
             this.receiving_msg = false
+            this.mqtt_busy = false
             this.mac_addr = ""
         }
     }
@@ -741,15 +737,19 @@ namespace cw01 {
     //% blockId="IoTMQTTSubscribe" block="CW01 subscribe to topic %Topic"
     export function IoTMQTTSubscribe(Topic: string): void {
 
+        basic.pause(100)
+
+        while (cw01_mqtt_vars.mqtt_busy) {
+            basic.pause(100)
+        }
+
+        cw01_mqtt_vars.mqtt_busy = true
+
         //Msg part two
         let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
         let qos: Buffer = pins.packBuffer("!B", [0x00])
         let topic: string = Topic
         let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
-        cw01_vars.mqtt_topic = topic
-
-        cw01_vars.topics[cw01_vars.topic_count] = topic
-        cw01_vars.topic_count++
 
         //Msg part one
         let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
@@ -768,9 +768,20 @@ namespace cw01 {
 
         basic.pause(2000)
 
+        serial.readString()
+
+        serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
+        basic.pause(100)
+        serial.readBuffer(15)
+        basic.showNumber(pins.unpackBuffer("!B", serial.readBuffer(1))[0])
+
         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
         basic.pause(100)
         serial.readString()
+
+        cw01_mqtt_vars.mqtt_busy = false
+
+        basic.pause(100)
 
     }
 
@@ -784,9 +795,15 @@ namespace cw01 {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
-            basic.pause(10000)
+            /*basic.pause(10000)
 
-            basic.showString("#")
+            basic.showString("#")*/
+
+            while (cw01_mqtt_vars.mqtt_busy) {
+                basic.pause(100)
+            }
+
+            cw01_mqtt_vars.mqtt_busy = true
 
             serial.onDataReceived("\n", function () {
                 let serial_res: string = serial.readString()
@@ -904,8 +921,9 @@ namespace cw01 {
         //cw01_mqtt_vars.prev_topic = cw01_vars.topic_rcv
  
         basic.pause(100)
- 
-        cw01_mqtt_vars.receiving_msg = false*/
+        */
+
+        cw01_mqtt_vars.receiving_msg = false
     }
 
 
