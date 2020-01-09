@@ -671,6 +671,8 @@ namespace cw01 {
 
         control.raiseEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK)
 
+        basic.pause(2000)
+
 
     }
 
@@ -804,251 +806,251 @@ namespace cw01 {
     /**
     * Payload received 
     */
-            //% weight=91
-            //% group="MQTT"
-            //% blockId="IoTMQTTGetLatestData" block="payload"
-            export function IoTMQTTGetLatestData(): string {
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTMQTTGetLatestData" block="payload"
+    export function IoTMQTTGetLatestData(): string {
 
-                return cw01_mqtt_vars.new_payload
+        return cw01_mqtt_vars.new_payload
 
+    }
+
+    /**
+    * Topic received 
+    */
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTMQTTGetLatestTopic" block="topic"
+    export function IoTMQTTGetLatestTopic(): string {
+
+        return cw01_mqtt_vars.new_topic
+
+    }
+
+    function IoTMQTTGetData(): void {
+        let topic_len_MSB: number[]
+        let topic_len_LSB: number[]
+        let topic_len: number = 0
+
+        let payload: string
+
+        cw01_mqtt_vars.sending_payload.toString()
+        while (cw01_mqtt_vars.sending_payload || cw01_mqtt_vars.sending_pingreq) {
+            basic.pause(10)
+        }
+
+        cw01_mqtt_vars.receiving_msg = true
+
+        serial.writeString("AT+CIPRECVDATA=2" + cw01_vars.NEWLINE)
+        basic.pause(200)
+        serial.readString()
+        serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
+        basic.pause(200)
+        serial.readBuffer(17)
+        topic_len_MSB = pins.unpackBuffer("!B", serial.readBuffer(1))
+        serial.readString()
+        serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
+        basic.pause(200)
+        serial.readBuffer(17)
+        topic_len_LSB = pins.unpackBuffer("!B", serial.readBuffer(1))
+        serial.readString()
+
+        topic_len = (topic_len_MSB[0] << 8) + topic_len_LSB[0]
+
+        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
+        basic.pause(200)
+
+        cw01_vars.mqtt_message = serial.readString()
+        //basic.showIcon(IconNames.Yes)
+        //basic.showString("")
+
+
+        cw01_mqtt_vars.new_topic = cw01_vars.mqtt_message.substr(cw01_vars.mqtt_message.indexOf(":") + 1, topic_len)
+        cw01_mqtt_vars.new_payload = cw01_vars.mqtt_message.substr(cw01_vars.mqtt_message.indexOf(":") + 1 + cw01_mqtt_vars.new_topic.length, cw01_vars.mqtt_message.length - (cw01_vars.mqtt_message.indexOf(":") + cw01_mqtt_vars.new_topic.length + 6))
+
+        /*for (let i: number = 0; i < cw01_vars.topics.length; i++) {
+            if (cw01_vars.mqtt_message.includes(cw01_vars.topics[i])) {
+                cw01_vars.topic_rcv = cw01_vars.topics[i]
+                break
+            } else {
+                continue
             }
+        }
+ 
+        let index: number = cw01_vars.mqtt_message.indexOf(cw01_vars.topic_rcv) + cw01_vars.topic_rcv.length
+        let payload_length: number = cw01_vars.mqtt_message.length - index - 6
+        payload = cw01_vars.mqtt_message.substr(index, payload_length)
+ 
+ 
+        cw01_vars.mqtt_payload = payload
+ 
+        if (cw01_mqtt_vars.prev_payload.compare(cw01_vars.mqtt_payload) != 0) {
+            cw01_mqtt_vars.enable_event_1 = true
+        } else {
+            cw01_mqtt_vars.enable_event_1 = false
+            //cw01_mqtt_vars.new_payload = " "
+        }
+ 
+        cw01_mqtt_vars.new_payload = cw01_vars.mqtt_payload
+        //cw01_mqtt_vars.prev_payload = cw01_vars.mqtt_payload
+ 
+        if (cw01_mqtt_vars.prev_topic.compare(cw01_vars.topic_rcv) != 0) {
+            cw01_mqtt_vars.enable_event_2 = true
+        } else {
+            cw01_mqtt_vars.enable_event_2 = false
+            //cw01_mqtt_vars.new_topic = " "
+        }
+ 
+        cw01_mqtt_vars.new_topic = cw01_vars.topic_rcv
+        //cw01_mqtt_vars.prev_topic = cw01_vars.topic_rcv
+ 
+        basic.pause(100)
+ 
+        cw01_mqtt_vars.receiving_msg = false*/
+    }
 
-            /**
-            * Topic received 
-            */
-            //% weight=91
-            //% group="MQTT"
-            //% blockId="IoTMQTTGetLatestTopic" block="topic"
-            export function IoTMQTTGetLatestTopic(): string {
 
-                return cw01_mqtt_vars.new_topic
+    /**
+    * Send boolean state to Microsoft Azure cloud computing platform
+    */
+    //% weight=91 color=#4B0082
+    //% group="Azure"
+    //% blockId="IoTSendStateToAzure" block="CW01 update Azure variable %asset with boolean state %value"
+    export function IoTSendStateToAzure(asset: string, value: boolean): void {
 
+        let payload: string = "{\"" + asset + "\": " + value + "}"
+
+        let request: string = "POST /135/" + cw01_vars.azureAccess + " HTTP/1.1" + cw01_vars.NEWLINE +
+            "Host: proxy.xinabox.cc" + cw01_vars.NEWLINE +
+            "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
+            "Content-Type: application/json" + cw01_vars.NEWLINE +
+            "Accept: */*" + cw01_vars.NEWLINE +
+            "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
+
+
+
+        serial.writeString("AT+CIPSEND=" + (request.length).toString() + cw01_vars.NEWLINE)
+        basic.pause(100)
+        serial.writeString(request)
+        basic.pause(10)
+        serial.readString()
+        basic.pause(1000)
+
+        if (!get_status()) {
+            connectToAzure(cw01_vars.azureAccess)
+        }
+    }
+
+    /**
+    * Get value from Microsoft Azure cloud computing platform. Value can be string, numerical and boolean.
+    */
+    //% weight=91 color=#4B0082
+    //% group="Azure"
+    //% blockId="IoTGetValueFromAzure" block="CW01 get latest value of Azure variable %asset"
+    export function IoTGetValueFromAzure(asset: string): string {
+
+        let value: string
+        let index1: number
+        let index2: number
+        let searchString: string = "\"" + asset + "\":"
+        let i: number = 0
+
+        let payload: string = "{}"
+
+        let request: string = "POST /135/" + cw01_vars.azureAccess + " HTTP/1.1" + cw01_vars.NEWLINE +
+            "Host: proxy.xinabox.cc" + cw01_vars.NEWLINE +
+            "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
+            "Content-Type: application/json" + cw01_vars.NEWLINE +
+            "Accept: */*" + cw01_vars.NEWLINE +
+            "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
+
+
+
+        serial.writeString("AT+CIPSEND=" + (request.length).toString() + cw01_vars.NEWLINE)
+        basic.pause(100)
+        serial.writeString(request)
+        basic.pause(10)
+        serial.readString()
+
+        for (; i < 10; i++) {
+            if (getDataLen() < 1000) {
+                continue
+            } else {
+                break
             }
+        }
 
-            function IoTMQTTGetData(): void {
-                let topic_len_MSB: number[]
-                let topic_len_LSB: number[]
-                let topic_len: number = 0
-
-                let payload: string
-
-                cw01_mqtt_vars.sending_payload.toString()
-                while (cw01_mqtt_vars.sending_payload || cw01_mqtt_vars.sending_pingreq) {
-                    basic.pause(10)
-                }
-
-                cw01_mqtt_vars.receiving_msg = true
-
-                serial.writeString("AT+CIPRECVDATA=2" + cw01_vars.NEWLINE)
-                basic.pause(200)
-                serial.readString()
-                serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
-                basic.pause(200)
-                serial.readBuffer(17)
-                topic_len_MSB = pins.unpackBuffer("!B", serial.readBuffer(1))
-                serial.readString()
-                serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
-                basic.pause(200)
-                serial.readBuffer(17)
-                topic_len_LSB = pins.unpackBuffer("!B", serial.readBuffer(1))
-                serial.readString()
-
-                topic_len = (topic_len_MSB[0] << 8) + topic_len_LSB[0]
-
-                serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
-                basic.pause(200)
-
-                cw01_vars.mqtt_message = serial.readString()
-                //basic.showIcon(IconNames.Yes)
-                //basic.showString("")
+        if (i == 10) {
+            connectToAzure(cw01_vars.azureAccess)
+        }
 
 
-                cw01_mqtt_vars.new_topic = cw01_vars.mqtt_message.substr(cw01_vars.mqtt_message.indexOf(":") + 1, topic_len)
-                cw01_mqtt_vars.new_payload = cw01_vars.mqtt_message.substr(cw01_vars.mqtt_message.indexOf(":") + 1 + cw01_mqtt_vars.new_topic.length, cw01_vars.mqtt_message.length - (cw01_vars.mqtt_message.indexOf(":") + cw01_mqtt_vars.new_topic.length + 6))
+        serial.writeString("AT+CIPRECVDATA=1100" + cw01_vars.NEWLINE)
+        basic.pause(200)
+        serial.readString()
+        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
+        basic.pause(200)
+        cw01_vars.res = serial.readString()
 
-                /*for (let i: number = 0; i < cw01_vars.topics.length; i++) {
-                    if (cw01_vars.mqtt_message.includes(cw01_vars.topics[i])) {
-                        cw01_vars.topic_rcv = cw01_vars.topics[i]
-                        break
-                    } else {
-                        continue
-                    }
-                }
-        
-                let index: number = cw01_vars.mqtt_message.indexOf(cw01_vars.topic_rcv) + cw01_vars.topic_rcv.length
-                let payload_length: number = cw01_vars.mqtt_message.length - index - 6
-                payload = cw01_vars.mqtt_message.substr(index, payload_length)
-        
-        
-                cw01_vars.mqtt_payload = payload
-        
-                if (cw01_mqtt_vars.prev_payload.compare(cw01_vars.mqtt_payload) != 0) {
-                    cw01_mqtt_vars.enable_event_1 = true
-                } else {
-                    cw01_mqtt_vars.enable_event_1 = false
-                    //cw01_mqtt_vars.new_payload = " "
-                }
-        
-                cw01_mqtt_vars.new_payload = cw01_vars.mqtt_payload
-                //cw01_mqtt_vars.prev_payload = cw01_vars.mqtt_payload
-        
-                if (cw01_mqtt_vars.prev_topic.compare(cw01_vars.topic_rcv) != 0) {
-                    cw01_mqtt_vars.enable_event_2 = true
-                } else {
-                    cw01_mqtt_vars.enable_event_2 = false
-                    //cw01_mqtt_vars.new_topic = " "
-                }
-        
-                cw01_mqtt_vars.new_topic = cw01_vars.topic_rcv
-                //cw01_mqtt_vars.prev_topic = cw01_vars.topic_rcv
-        
-                basic.pause(100)
-        
-                cw01_mqtt_vars.receiving_msg = false*/
-            }
+        if (cw01_vars.res.includes(asset)) {
+            index1 = cw01_vars.res.indexOf(searchString) + searchString.length
+            index2 = cw01_vars.res.indexOf("}", index1)
+            value = cw01_vars.res.substr(index1, index2 - index1)
+        } else {
 
+            value = ""
 
-            /**
-            * Send boolean state to Microsoft Azure cloud computing platform
-            */
-            //% weight=91 color=#4B0082
-            //% group="Azure"
-            //% blockId="IoTSendStateToAzure" block="CW01 update Azure variable %asset with boolean state %value"
-            export function IoTSendStateToAzure(asset: string, value: boolean): void {
+        }
 
-                let payload: string = "{\"" + asset + "\": " + value + "}"
+        return value
 
-                let request: string = "POST /135/" + cw01_vars.azureAccess + " HTTP/1.1" + cw01_vars.NEWLINE +
-                    "Host: proxy.xinabox.cc" + cw01_vars.NEWLINE +
-                    "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
-                    "Content-Type: application/json" + cw01_vars.NEWLINE +
-                    "Accept: */*" + cw01_vars.NEWLINE +
-                    "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
+    }
 
+    /**
+    * Add your GPS location
+    */
+    //% weight=91 color=#f2ca00
+    //% group="Ubidots"
+    //% blockId="IoTaddLocation" block="CW01 latitude is %lat and longitude is %lng"
+    export function IoTaddLocation(lat: number, lng: number): void {
+        cw01_vars.latitude = lat
+        cw01_vars.longitude = lng
+    }
 
+    function getDataLen(): number {
 
-                serial.writeString("AT+CIPSEND=" + (request.length).toString() + cw01_vars.NEWLINE)
-                basic.pause(100)
-                serial.writeString(request)
-                basic.pause(10)
-                serial.readString()
-                basic.pause(1000)
+        let index1: number
+        let index2: number
+        let searchString: string = ":"
+        let value: string
 
-                if (!get_status()) {
-                    connectToAzure(cw01_vars.azureAccess)
-                }
-            }
+        serial.writeString("AT+CIPRECVLEN?" + cw01_vars.NEWLINE)
+        basic.pause(300)
+        cw01_vars.res = serial.readString()
+        index1 = cw01_vars.res.indexOf(searchString) + searchString.length
+        index2 = cw01_vars.res.indexOf(",", index1)
+        value = cw01_vars.res.substr(index1, index2 - index1)
 
-            /**
-            * Get value from Microsoft Azure cloud computing platform. Value can be string, numerical and boolean.
-            */
-            //% weight=91 color=#4B0082
-            //% group="Azure"
-            //% blockId="IoTGetValueFromAzure" block="CW01 get latest value of Azure variable %asset"
-            export function IoTGetValueFromAzure(asset: string): string {
+        return parseInt(value)
 
-                let value: string
-                let index1: number
-                let index2: number
-                let searchString: string = "\"" + asset + "\":"
-                let i: number = 0
+    }
 
-                let payload: string = "{}"
+    function get_status(): boolean {
 
-                let request: string = "POST /135/" + cw01_vars.azureAccess + " HTTP/1.1" + cw01_vars.NEWLINE +
-                    "Host: proxy.xinabox.cc" + cw01_vars.NEWLINE +
-                    "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
-                    "Content-Type: application/json" + cw01_vars.NEWLINE +
-                    "Accept: */*" + cw01_vars.NEWLINE +
-                    "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
+        basic.pause(400)
+        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
+        basic.pause(300)
+        cw01_vars.res = serial.readString()
 
+        if (cw01_vars.res.includes("HTTP/1.1 200") || cw01_vars.res.includes("HTTP/1.1 201") || cw01_vars.res.includes("HTTP/1.0 202")) {
+            basic.showIcon(IconNames.Yes, 50)
+            basic.showString("", 50)
+            return true
+        } else {
+            basic.showIcon(IconNames.No, 50)
+            basic.showString("", 50)
+            return false
+        }
+    }
 
-
-                serial.writeString("AT+CIPSEND=" + (request.length).toString() + cw01_vars.NEWLINE)
-                basic.pause(100)
-                serial.writeString(request)
-                basic.pause(10)
-                serial.readString()
-
-                for (; i < 10; i++) {
-                    if (getDataLen() < 1000) {
-                        continue
-                    } else {
-                        break
-                    }
-                }
-
-                if (i == 10) {
-                    connectToAzure(cw01_vars.azureAccess)
-                }
-
-
-                serial.writeString("AT+CIPRECVDATA=1100" + cw01_vars.NEWLINE)
-                basic.pause(200)
-                serial.readString()
-                serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
-                basic.pause(200)
-                cw01_vars.res = serial.readString()
-
-                if (cw01_vars.res.includes(asset)) {
-                    index1 = cw01_vars.res.indexOf(searchString) + searchString.length
-                    index2 = cw01_vars.res.indexOf("}", index1)
-                    value = cw01_vars.res.substr(index1, index2 - index1)
-                } else {
-
-                    value = ""
-
-                }
-
-                return value
-
-            }
-
-            /**
-            * Add your GPS location
-            */
-            //% weight=91 color=#f2ca00
-            //% group="Ubidots"
-            //% blockId="IoTaddLocation" block="CW01 latitude is %lat and longitude is %lng"
-            export function IoTaddLocation(lat: number, lng: number): void {
-                cw01_vars.latitude = lat
-                cw01_vars.longitude = lng
-            }
-
-            function getDataLen(): number {
-
-                let index1: number
-                let index2: number
-                let searchString: string = ":"
-                let value: string
-
-                serial.writeString("AT+CIPRECVLEN?" + cw01_vars.NEWLINE)
-                basic.pause(300)
-                cw01_vars.res = serial.readString()
-                index1 = cw01_vars.res.indexOf(searchString) + searchString.length
-                index2 = cw01_vars.res.indexOf(",", index1)
-                value = cw01_vars.res.substr(index1, index2 - index1)
-
-                return parseInt(value)
-
-            }
-
-            function get_status(): boolean {
-
-                basic.pause(400)
-                serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
-                basic.pause(300)
-                cw01_vars.res = serial.readString()
-
-                if (cw01_vars.res.includes("HTTP/1.1 200") || cw01_vars.res.includes("HTTP/1.1 201") || cw01_vars.res.includes("HTTP/1.0 202")) {
-                    basic.showIcon(IconNames.Yes, 50)
-                    basic.showString("", 50)
-                    return true
-                } else {
-                    basic.showIcon(IconNames.No, 50)
-                    basic.showString("", 50)
-                    return false
-                }
-            }
-
-        } 
+} 
