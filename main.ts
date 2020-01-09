@@ -794,17 +794,25 @@ namespace cw01 {
 
             serial.onDataReceived("\n", function () {
                 let serial_res: string = serial.readString()
+                let ctrl_pkt: number = 0
 
-                if (serial_res.includes("+IPD,2")) {
-                    serial.writeString("AT+CIPRECVDATA=2" + cw01_vars.NEWLINE)
-                    basic.pause(200)
+                if (serial_res.includes("IPD")) {
                     serial.readString()
-                }
 
-                if (serial_res.includes("IPD") && !serial_res.includes("+IPD,2") && !serial_res.includes("+IPD,5")) {
-                    IoTMQTTGetData()
-                    //if (cw01_mqtt_vars.enable_event_1 || cw01_mqtt_vars.enable_event_2)
-                    handler()
+                    serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
+                    basic.pause(100)
+                    serial.readBuffer(17)
+                    ctrl_pkt = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
+                    basic.showNumber(ctrl_pkt)
+
+                    if ((ctrl_pkt != 144) && ctrl_pkt != 160) {
+                        IoTMQTTGetData()
+                        //if (cw01_mqtt_vars.enable_event_1 || cw01_mqtt_vars.enable_event_2)
+                        handler()
+                    } else if (ctrl_pkt == 160) {
+                        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
+                        basic.pause(100)
+                    }
                 }
             })
         })
