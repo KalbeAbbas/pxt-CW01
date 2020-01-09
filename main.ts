@@ -827,6 +827,10 @@ namespace cw01 {
     }
 
     function IoTMQTTGetData(): void {
+        let topic_len_MSB: number[]
+        let topic_len_LSB: number[]
+        let topic_len: number = 0
+
         let payload: string
 
         cw01_mqtt_vars.sending_payload.toString()
@@ -836,9 +840,18 @@ namespace cw01 {
 
         cw01_mqtt_vars.receiving_msg = true
 
-        serial.writeString("AT+CIPRECVDATA=4" + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPRECVDATA=2" + cw01_vars.NEWLINE)
         basic.pause(200)
         serial.readString()
+        serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
+        basic.pause(200)
+        topic_len_MSB = pins.unpackBuffer("!B", serial.readBuffer(1))
+        serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
+        basic.pause(200)
+        topic_len_LSB = pins.unpackBuffer("!B", serial.readBuffer(1))
+
+        topic_len = (topic_len_MSB[0] << 8) + topic_len_LSB[0]
+
         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
         basic.pause(200)
 
@@ -846,7 +859,12 @@ namespace cw01 {
         //basic.showIcon(IconNames.Yes)
         //basic.showString("")
 
-        for (let i: number = 0; i < cw01_vars.topics.length; i++) {
+        basic.showNumber(topic_len)
+
+        cw01_mqtt_vars.new_topic = cw01_vars.mqtt_message.substr(0, topic_len)
+        cw01_mqtt_vars.new_payload = cw01_vars.mqtt_message.substr(cw01_mqtt_vars.new_topic.length, cw01_vars.mqtt_message.length - cw01_mqtt_vars.new_topic.length)
+
+        /*for (let i: number = 0; i < cw01_vars.topics.length; i++) {
             if (cw01_vars.mqtt_message.includes(cw01_vars.topics[i])) {
                 cw01_vars.topic_rcv = cw01_vars.topics[i]
                 break
@@ -884,7 +902,7 @@ namespace cw01 {
 
         basic.pause(100)
 
-        cw01_mqtt_vars.receiving_msg = false
+        cw01_mqtt_vars.receiving_msg = false*/
     }
 
 
