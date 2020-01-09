@@ -844,10 +844,14 @@ namespace cw01 {
         serial.readString()
         serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
         basic.pause(200)
+        serial.readBuffer(17)
         topic_len_MSB = pins.unpackBuffer("!B", serial.readBuffer(1))
+        serial.readString()
         serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
         basic.pause(200)
+        serial.readBuffer(17)
         topic_len_LSB = pins.unpackBuffer("!B", serial.readBuffer(1))
+        serial.readString()
 
         //topic_len = (topic_len_MSB[0] << 8) + topic_len_LSB[0]
 
