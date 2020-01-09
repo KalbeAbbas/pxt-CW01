@@ -765,10 +765,10 @@ namespace cw01 {
 
         serial.readString()
 
-        serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
+        /*serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
         basic.pause(100)
         serial.readBuffer(17)
-        basic.showNumber((pins.unpackBuffer("!B", serial.readBuffer(1)))[0])
+        basic.showNumber((pins.unpackBuffer("!B", serial.readBuffer(1)))[0])*/
 
         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
         basic.pause(100)
@@ -788,9 +788,9 @@ namespace cw01 {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
-            basic.pause(20000)
+            /*basic.pause(20000)
 
-            basic.showString("#")
+            basic.showString("#")*/
 
             serial.onDataReceived("\n", function () {
                 let serial_res: string = serial.readString()
