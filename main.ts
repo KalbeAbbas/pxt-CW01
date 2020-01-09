@@ -849,7 +849,7 @@ namespace cw01 {
         basic.pause(200)
         topic_len_LSB = pins.unpackBuffer("!B", serial.readBuffer(1))
 
-        topic_len = (topic_len_MSB[0] << 8) + topic_len_LSB[0]
+        //topic_len = (topic_len_MSB[0] << 8) + topic_len_LSB[0]
 
         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
         basic.pause(200)
@@ -858,7 +858,9 @@ namespace cw01 {
         //basic.showIcon(IconNames.Yes)
         //basic.showString("")
 
-        basic.showNumber(topic_len)
+        basic.showNumber(topic_len_MSB[0])
+        basic.showString("N")
+        basic.showNumber(topic_len_LSB[0])
 
         cw01_mqtt_vars.new_topic = cw01_vars.mqtt_message.substr(0, topic_len)
         cw01_mqtt_vars.new_payload = cw01_vars.mqtt_message.substr(cw01_mqtt_vars.new_topic.length, cw01_vars.mqtt_message.length - cw01_mqtt_vars.new_topic.length)
