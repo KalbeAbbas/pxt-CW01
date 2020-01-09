@@ -765,7 +765,7 @@ namespace cw01 {
         serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
         basic.pause(100)
         serial.readBuffer(15)
-        basic.showNumber(pins.unpackBuffer("!B", serial.readBuffer(1))[0])
+        basic.showNumber((pins.unpackBuffer("!B", serial.readBuffer(1)))[0])
 
         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
         basic.pause(100)
@@ -785,7 +785,7 @@ namespace cw01 {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
-            basic.pause(10000)
+            basic.pause(20000)
 
             basic.showString("#")
 
