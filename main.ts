@@ -737,14 +737,6 @@ namespace cw01 {
     //% blockId="IoTMQTTSubscribe" block="CW01 subscribe to topic %Topic"
     export function IoTMQTTSubscribe(Topic: string): void {
 
-        basic.pause(100)
-
-        while (cw01_mqtt_vars.mqtt_busy) {
-            basic.pause(100)
-        }
-
-        cw01_mqtt_vars.mqtt_busy = true
-
         //Msg part two
         let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
         let qos: Buffer = pins.packBuffer("!B", [0x00])
@@ -779,8 +771,6 @@ namespace cw01 {
         basic.pause(100)
         serial.readString()
 
-        cw01_mqtt_vars.mqtt_busy = false
-
         basic.pause(100)
 
     }
@@ -795,15 +785,9 @@ namespace cw01 {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
-            /*basic.pause(10000)
+            basic.pause(10000)
 
-            basic.showString("#")*/
-
-            while (cw01_mqtt_vars.mqtt_busy) {
-                basic.pause(100)
-            }
-
-            cw01_mqtt_vars.mqtt_busy = true
+            basic.showString("#")
 
             serial.onDataReceived("\n", function () {
                 let serial_res: string = serial.readString()
