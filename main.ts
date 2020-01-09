@@ -795,6 +795,12 @@ namespace cw01 {
             serial.onDataReceived("\n", function () {
                 let serial_res: string = serial.readString()
 
+                if (serial_res.includes("+IPD,2")) {
+                    serial.writeString("AT+CIPRECVDATA=2" + cw01_vars.NEWLINE)
+                    basic.pause(200)
+                    serial.readString()
+                }
+
                 if (serial_res.includes("IPD") && !serial_res.includes("+IPD,2") && !serial_res.includes("+IPD,5")) {
                     IoTMQTTGetData()
                     //if (cw01_mqtt_vars.enable_event_1 || cw01_mqtt_vars.enable_event_2)
