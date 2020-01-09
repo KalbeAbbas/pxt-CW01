@@ -671,7 +671,6 @@ namespace cw01 {
 
         control.raiseEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK)
 
-        basic.pause(10000)
 
 
     }
@@ -741,6 +740,8 @@ namespace cw01 {
     //% group="MQTT"
     //% blockId="IoTMQTTSubscribe" block="CW01 subscribe to topic %Topic"
     export function IoTMQTTSubscribe(Topic: string): void {
+
+        basic.pause(1000)
 
         //Msg part two
         let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
