@@ -614,7 +614,6 @@ namespace cw01 {
         } else {
             client_id = cw01_mqtt_vars.mac_addr
         }
-        basic.showString(client_id)
 
         let client_id_len: Buffer = pins.packBuffer("!H", [client_id.length])
         let username: string = Username
