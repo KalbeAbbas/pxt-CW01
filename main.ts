@@ -795,6 +795,7 @@ namespace cw01 {
             serial.onDataReceived("\n", function () {
                 let serial_res: string = serial.readString()
                 let ctrl_pkt: number = 0
+                basic.showString("New line")
 
                 if (serial_res.includes("IPD")) {
                     serial.readString()
