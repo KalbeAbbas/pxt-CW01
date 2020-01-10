@@ -794,8 +794,8 @@ namespace cw01 {
 
             serial.onDataReceived("\n", function () {
                 let serial_res: string = serial.readString()
-                let ctrl_pkt: number = 0
-                basic.showString("N")
+                let ctrl_pkt: number
+                ctrl_pkt = 0
 
                 if (serial_res.includes("IPD")) {
                     serial.readString()
@@ -806,7 +806,7 @@ namespace cw01 {
                     ctrl_pkt = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
                     basic.showNumber(ctrl_pkt)
 
-                    if ((ctrl_pkt != 144) && ctrl_pkt != 160) {
+                    if (ctrl_pkt == 48) {
                         IoTMQTTGetData()
                         //if (cw01_mqtt_vars.enable_event_1 || cw01_mqtt_vars.enable_event_2)
                         handler()
