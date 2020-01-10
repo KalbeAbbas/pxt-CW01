@@ -480,6 +480,7 @@ namespace cw01 {
             "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
             "X-Auth-Token: " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
             "Content-Type: application/json" + cw01_vars.NEWLINE +
+            "Connection: keep-alive" + cw01_vars.NEWLINE +
             "Accept: */*" + cw01_vars.NEWLINE +
             "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
 
