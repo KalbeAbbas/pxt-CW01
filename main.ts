@@ -810,7 +810,7 @@ namespace cw01 {
                         IoTMQTTGetData()
                         //if (cw01_mqtt_vars.enable_event_1 || cw01_mqtt_vars.enable_event_2)
                         handler()
-                    } else if (ctrl_pkt == 160) {
+                    } else if (ctrl_pkt == 208) {
                         ctrl_pkt = 0
                         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
                         basic.pause(100)
