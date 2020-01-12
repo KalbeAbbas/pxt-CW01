@@ -167,7 +167,7 @@ namespace cw01 {
             serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"" + cw01_vars.NEWLINE)
             basic.pause(200)
             serial.readString()
-            basic.pause(10000)
+            basic.pause(20000);
             cw01_vars.res = serial.readLine()
 
             if (cw01_vars.res.compare("WIFI CONNECTED\r") == 0) {
