@@ -491,12 +491,12 @@ namespace cw01 {
         serial.writeString(request)
         basic.pause(1000)
 
-        get_status()
+        /*get_status()
 
         basic.pause(100)
         serial.writeString("AT+CIPRECVDATA=400" + cw01_vars.NEWLINE)
         basic.pause(100)
-        serial.readString()
+        serial.readString()*/
 
         cw01_button_object.sending_data = false;
     }
