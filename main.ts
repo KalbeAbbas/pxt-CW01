@@ -508,8 +508,7 @@ namespace cw01 {
             }
         }
 
-        if (!ubi_connected.includes("link is not valid"))
-        {
+        if (!ubi_connected.includes("link is not valid")) {
             get_status()
         }
 
