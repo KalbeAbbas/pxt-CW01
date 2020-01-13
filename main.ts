@@ -421,7 +421,6 @@ namespace cw01 {
                 "Accept: */*" + cw01_vars.NEWLINE +
                 "X-Auth-Token: " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
                 "Content-Type: application/json" + cw01_vars.NEWLINE + cw01_vars.NEWLINE
-            //"Content-Length: " + (payload.length).toString() + NEWLINE + NEWLINE + payload + NEWLINE
 
 
 
@@ -530,34 +529,12 @@ namespace cw01 {
             get_status()
 
 
-            /*if (!get_status()) {
-                cw01_vars.fail_count += 1
-                if (cw01_vars.fail_count >= 3) {
-                    if (cw01_vars.select) {
-                        cw01_vars.fail_count = 0
-                        basic.showString("Reconnecting...")
-                        connectToUbidots(USER.INDUSTRIAL, cw01_vars.TOKEN)
-                    } else {
-                        cw01_vars.fail_count = 0
-                        basic.showString("Reconnecting...")
-                        connectToUbidots(USER.EDUCATIONAL, cw01_vars.TOKEN)
-                    }
-                }
-            }*/
-
             basic.pause(100)
             serial.writeString("AT+CIPRECVDATA=400" + cw01_vars.NEWLINE)
             basic.pause(100)
             serial.readString()
 
         } while (ubi_connected.includes("link is not valid"));
-
-        /*get_status()
-
-        basic.pause(100)
-        serial.writeString("AT+CIPRECVDATA=400" + cw01_vars.NEWLINE)
-        basic.pause(100)
-        serial.readString()*/
 
         cw01_button_object.sending_data = false;
     }
