@@ -492,6 +492,26 @@ namespace cw01 {
         serial.writeString(request)
         basic.pause(1000)
 
+        if (!get_status()) {
+            cw01_vars.fail_count += 1
+            if (cw01_vars.fail_count >= 3) {
+                if (cw01_vars.select) {
+                    cw01_vars.fail_count = 0
+                    basic.showString("Reconnecting...")
+                    connectToUbidots(USER.INDUSTRIAL, cw01_vars.TOKEN)
+                } else {
+                    cw01_vars.fail_count = 0
+                    basic.showString("Reconnecting...")
+                    connectToUbidots(USER.EDUCATIONAL, cw01_vars.TOKEN)
+                }
+            }
+        }
+
+        basic.pause(100)
+        serial.writeString("AT+CIPRECVDATA=400" + cw01_vars.NEWLINE)
+        basic.pause(100)
+        serial.readString()
+
         /*get_status()
 
         basic.pause(100)
