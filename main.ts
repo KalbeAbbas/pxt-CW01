@@ -174,6 +174,7 @@ namespace cw01 {
         } while (!cw01_vars.res.includes("WIFI CONNECTED"));
 
         if (cw01_vars.res.includes("WIFI CONNECTED")) {
+            basic.pause(2000)
             basic.showString("C")
             cw01_vars.res = ""
         } else {
