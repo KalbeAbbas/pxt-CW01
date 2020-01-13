@@ -456,6 +456,9 @@ namespace cw01 {
     //% blockId="IoTSendValueToUbidots" block="CW01 send value %value to Ubidots device %device variable %variable , include location %loc"
     export function IoTSendValueToUbidots(value: number, device: string, variable: string, loc: boolean): void {
 
+        let ubi_connected: string = ""
+        let value_store: number = value
+
         while (cw01_button_object.sending_data) {
             basic.pause(100)
         }
@@ -486,13 +489,32 @@ namespace cw01 {
             "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
 
 
-
         serial.writeString("AT+CIPSEND=" + (request.length).toString() + cw01_vars.NEWLINE)
-        basic.pause(100)
+        basic.pause(300)
         serial.writeString(request)
         basic.pause(1000)
 
-        if (!get_status()) {
+        ubi_connected = serial.readString()
+
+        if (ubi_connected.includes("link is not valid")) {
+            if (cw01_vars.select) {
+                basic.showString("Reconnecting...")
+                connectToUbidots(USER.INDUSTRIAL, cw01_vars.TOKEN)
+                IoTSendValueToUbidots(value_store, device, variable, loc)
+            } else {
+                basic.showString("Reconnecting...")
+                connectToUbidots(USER.EDUCATIONAL, cw01_vars.TOKEN)
+                IoTSendValueToUbidots(value_store, device, variable, loc)
+            }
+        }
+
+        if (!ubi_connected.includes("link is not valid"))
+        {
+            get_status()
+        }
+
+
+        /*if (!get_status()) {
             cw01_vars.fail_count += 1
             if (cw01_vars.fail_count >= 3) {
                 if (cw01_vars.select) {
@@ -505,7 +527,7 @@ namespace cw01 {
                     connectToUbidots(USER.EDUCATIONAL, cw01_vars.TOKEN)
                 }
             }
-        }
+        }*/
 
         basic.pause(100)
         serial.writeString("AT+CIPRECVDATA=400" + cw01_vars.NEWLINE)
