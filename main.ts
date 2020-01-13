@@ -465,73 +465,77 @@ namespace cw01 {
 
         cw01_button_object.sending_data = true
 
-        let payload: string = "{\"value\": " + value.toString() + "}"
+        do {
 
-        if (loc) {
-            payload = "{\"value\": " + value.toString() + ", \"context\": {\"lat\": " + cw01_vars.latitude.toString() + ", \"lng\": " + cw01_vars.longitude.toString() + "}}"
-        }
+            let payload: string = "{\"value\": " + value.toString() + "}"
 
-        let industrial: string = "industrial.api.ubidots.com"
-        let educational: string = "things.ubidots.com"
-        let server: string
-        if (cw01_vars.select) {
-            server = industrial
-        } else {
-            server = educational
-        }
-        let request: string = "POST /api/v1.6/devices/" + device + "/" + variable + "/values HTTP/1.1" + cw01_vars.NEWLINE +
-            "Host: " + server + cw01_vars.NEWLINE +
-            "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
-            "X-Auth-Token: " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
-            "Content-Type: application/json" + cw01_vars.NEWLINE +
-            "Connection: keep-alive" + cw01_vars.NEWLINE +
-            "Accept: */*" + cw01_vars.NEWLINE +
-            "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
-
-
-        serial.writeString("AT+CIPSEND=" + (request.length).toString() + cw01_vars.NEWLINE)
-        basic.pause(300)
-        serial.writeString(request)
-        basic.pause(1000)
-
-        ubi_connected = serial.readString()
-
-        if (ubi_connected.includes("link is not valid")) {
-            if (cw01_vars.select) {
-                basic.showString("Reconnecting...")
-                connectToUbidots(USER.INDUSTRIAL, cw01_vars.TOKEN)
-                IoTSendValueToUbidots(value_store, device, variable, loc)
-            } else {
-                basic.showString("Reconnecting...")
-                connectToUbidots(USER.EDUCATIONAL, cw01_vars.TOKEN)
-                IoTSendValueToUbidots(value_store, device, variable, loc)
+            if (loc) {
+                payload = "{\"value\": " + value.toString() + ", \"context\": {\"lat\": " + cw01_vars.latitude.toString() + ", \"lng\": " + cw01_vars.longitude.toString() + "}}"
             }
-        }
 
-        if (!ubi_connected.includes("link is not valid")) {
-            get_status()
-        }
+            let industrial: string = "industrial.api.ubidots.com"
+            let educational: string = "things.ubidots.com"
+            let server: string
+            if (cw01_vars.select) {
+                server = industrial
+            } else {
+                server = educational
+            }
+            let request: string = "POST /api/v1.6/devices/" + device + "/" + variable + "/values HTTP/1.1" + cw01_vars.NEWLINE +
+                "Host: " + server + cw01_vars.NEWLINE +
+                "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
+                "X-Auth-Token: " + cw01_vars.TOKEN + cw01_vars.NEWLINE +
+                "Content-Type: application/json" + cw01_vars.NEWLINE +
+                "Connection: keep-alive" + cw01_vars.NEWLINE +
+                "Accept: */*" + cw01_vars.NEWLINE +
+                "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
 
 
-        /*if (!get_status()) {
-            cw01_vars.fail_count += 1
-            if (cw01_vars.fail_count >= 3) {
+            serial.writeString("AT+CIPSEND=" + (request.length).toString() + cw01_vars.NEWLINE)
+            basic.pause(300)
+            serial.writeString(request)
+            basic.pause(1000)
+
+            ubi_connected = serial.readString()
+
+            if (ubi_connected.includes("link is not valid")) {
                 if (cw01_vars.select) {
-                    cw01_vars.fail_count = 0
                     basic.showString("Reconnecting...")
                     connectToUbidots(USER.INDUSTRIAL, cw01_vars.TOKEN)
                 } else {
-                    cw01_vars.fail_count = 0
                     basic.showString("Reconnecting...")
                     connectToUbidots(USER.EDUCATIONAL, cw01_vars.TOKEN)
                 }
+            } else {
+                ubi_connected = ""
             }
-        }*/
 
-        basic.pause(100)
-        serial.writeString("AT+CIPRECVDATA=400" + cw01_vars.NEWLINE)
-        basic.pause(100)
-        serial.readString()
+            if (!ubi_connected.includes("link is not valid")) {
+                get_status()
+            }
+
+
+            /*if (!get_status()) {
+                cw01_vars.fail_count += 1
+                if (cw01_vars.fail_count >= 3) {
+                    if (cw01_vars.select) {
+                        cw01_vars.fail_count = 0
+                        basic.showString("Reconnecting...")
+                        connectToUbidots(USER.INDUSTRIAL, cw01_vars.TOKEN)
+                    } else {
+                        cw01_vars.fail_count = 0
+                        basic.showString("Reconnecting...")
+                        connectToUbidots(USER.EDUCATIONAL, cw01_vars.TOKEN)
+                    }
+                }
+            }*/
+
+            basic.pause(100)
+            serial.writeString("AT+CIPRECVDATA=400" + cw01_vars.NEWLINE)
+            basic.pause(100)
+            serial.readString()
+
+        } while (ubi_connected.includes("link is not valid"));
 
         /*get_status()
 
