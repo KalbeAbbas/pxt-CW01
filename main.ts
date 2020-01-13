@@ -161,26 +161,25 @@ namespace cw01 {
     //% group="Common"
     //% blockId="connectToWifi" block="CW01 connect to WiFi SSID %SSID password %PSK"
     export function connectToWifi(SSID: string, PSK: string): void {
-        if (true) {
-            serial.writeString("AT+CWMODE=1" + cw01_vars.NEWLINE)
-            basic.pause(100)
-            serial.readString()
-            serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"" + cw01_vars.NEWLINE)
-            basic.pause(200)
-            serial.readString()
-            basic.pause(20000);
+        serial.writeString("AT+CWMODE=1" + cw01_vars.NEWLINE)
+        basic.pause(100)
+        serial.readString()
+        serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"" + cw01_vars.NEWLINE)
+        basic.pause(200)
+        serial.readString()
+
+        do {
             cw01_vars.res = serial.readLine()
+            basic.pause(1000)
+        } while (!cw01_vars.res.includes("WIFI CONNECTED"));
 
-            if (cw01_vars.res.compare("WIFI CONNECTED\r") == 0) {
-                basic.showString("C")
-                cw01_vars.res = ""
-            } else {
-                basic.showString("D")
-            }
-
+        if (cw01_vars.res.includes("WIFI CONNECTED")) {
+            basic.showString("C")
+            cw01_vars.res = ""
         } else {
-            basic.showString("Missed begin block!")
+            basic.showString("D")
         }
+
     }
 
     /**
@@ -815,7 +814,7 @@ namespace cw01 {
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
             /*basic.pause(20000)
-
+ 
             basic.showString("#")*/
 
             serial.onDataReceived("\n", function () {
