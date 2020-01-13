@@ -169,7 +169,7 @@ namespace cw01 {
         serial.readString()
 
         do {
-            cw01_vars.res = serial.readLine()
+            cw01_vars.res = serial.readString()
             basic.pause(1000)
         } while (!cw01_vars.res.includes("WIFI CONNECTED"));
 
