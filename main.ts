@@ -1,3 +1,4 @@
+
 enum USER {
     //% block="INDUSTRIAL"
     INDUSTRIAL = 1,
@@ -486,9 +487,9 @@ namespace cw01 {
 
 
 
-        serial.writeString("AT+CIPSEND=" + (request.length).toString() + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPSEND=" + (request.length + 2).toString() + cw01_vars.NEWLINE)
         basic.pause(100)
-        serial.writeString(request)
+        serial.writeString(request + cw01_vars.NEWLINE)
         basic.pause(1000)
 
         /*get_status()
