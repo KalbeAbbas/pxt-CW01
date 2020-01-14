@@ -764,7 +764,7 @@ namespace cw01 {
 
         cw01_mqtt_vars.timer_enable = false
 
-        while (cw01_mqtt_vars.sending_pingreq || cw01_mqtt_vars.receiving_msg) {
+        while (cw01_mqtt_vars.sending_pingreq || cw01_mqtt_vars.receiving_msg || cw01_mqtt_vars.mqtt_busy) {
             basic.pause(100)
         }
 
@@ -806,6 +806,10 @@ namespace cw01 {
     //% group="MQTT"
     //% blockId="IoTMQTTSubscribe" block="CW01 subscribe to topic %Topic"
     export function IoTMQTTSubscribe(Topic: string): void {
+
+        while (cw01_mqtt_vars.sending_pingreq || cw01_mqtt_vars.receiving_msg || cw01_mqtt_vars.mqtt_busy) {
+            basic.pause(100)
+        }
 
         //Msg part two
         let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
@@ -860,6 +864,13 @@ namespace cw01 {
             basic.showString("#")*/
 
             serial.onDataReceived("\n", function () {
+
+                while (cw01_mqtt_vars.sending_payload || cw01_mqtt_vars.sending_pingreq) {
+                    basic.pause(100)
+                }
+
+                cw01_mqtt_vars.mqtt_busy = true
+
                 let serial_res: string = serial.readString()
                 let ctrl_pkt: number
                 ctrl_pkt = 0
@@ -875,7 +886,6 @@ namespace cw01 {
 
                     if (ctrl_pkt == 48) {
                         IoTMQTTGetData()
-                        //if (cw01_mqtt_vars.enable_event_1 || cw01_mqtt_vars.enable_event_2)
                         handler()
                     } else if (ctrl_pkt == 208) {
                         ctrl_pkt = 0
@@ -883,6 +893,9 @@ namespace cw01 {
                         basic.pause(100)
                     }
                 }
+
+                cw01_mqtt_vars.mqtt_busy = false
+
             })
         })
     }
