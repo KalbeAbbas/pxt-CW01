@@ -882,7 +882,6 @@ namespace cw01 {
                     basic.pause(100)
                     serial.readBuffer(17)
                     ctrl_pkt = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
-                    basic.showNumber(ctrl_pkt)
 
                     if (ctrl_pkt == 48) {
                         IoTMQTTGetData()
@@ -934,7 +933,7 @@ namespace cw01 {
 
         cw01_mqtt_vars.sending_payload.toString()
         while (cw01_mqtt_vars.sending_payload || cw01_mqtt_vars.sending_pingreq) {
-            basic.pause(10)
+            basic.pause(100)
         }
 
         cw01_mqtt_vars.receiving_msg = true
