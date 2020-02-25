@@ -654,6 +654,168 @@ namespace cw01 {
     }
 
     /**
+     * Send boolean state to Microsoft Azure cloud computing platform
+     */
+    //% weight=91 color=#4B0082
+    //% group="Azure"
+    //% blockId="IoTSendStateToAzure" block="CW01 update Azure variable %asset with boolean state %value"
+    export function IoTSendStateToAzure(asset: string, value: boolean): void {
+
+        let payload: string = "{\"" + asset + "\": " + value + "}"
+
+        let request: string = "POST /135/" + cw01_vars.azureAccess + " HTTP/1.1" + cw01_vars.NEWLINE +
+            "Host: proxy.xinabox.cc" + cw01_vars.NEWLINE +
+            "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
+            "Content-Type: application/json" + cw01_vars.NEWLINE +
+            "Accept: */*" + cw01_vars.NEWLINE +
+            "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
+
+
+
+        serial.writeString("AT+CIPSEND=" + (request.length).toString() + cw01_vars.NEWLINE)
+        basic.pause(100)
+        serial.writeString(request)
+        basic.pause(10)
+        serial.readString()
+        basic.pause(1000)
+
+        if (!get_status()) {
+            connectToAzure(cw01_vars.azureAccess)
+        }
+    }
+
+    /**
+    * Get value from Microsoft Azure cloud computing platform. Value can be string, numerical and boolean.
+    */
+    //% weight=91 color=#4B0082
+    //% group="Azure"
+    //% blockId="IoTGetValueFromAzure" block="CW01 get latest value of Azure variable %asset"
+    export function IoTGetValueFromAzure(asset: string): string {
+
+        let value: string
+        let index1: number
+        let index2: number
+        let searchString: string = "\"" + asset + "\":"
+        let i: number = 0
+
+        let payload: string = "{}"
+
+        let request: string = "POST /135/" + cw01_vars.azureAccess + " HTTP/1.1" + cw01_vars.NEWLINE +
+            "Host: proxy.xinabox.cc" + cw01_vars.NEWLINE +
+            "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
+            "Content-Type: application/json" + cw01_vars.NEWLINE +
+            "Accept: */*" + cw01_vars.NEWLINE +
+            "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
+
+
+
+        serial.writeString("AT+CIPSEND=" + (request.length).toString() + cw01_vars.NEWLINE)
+        basic.pause(100)
+        serial.writeString(request)
+        basic.pause(10)
+        serial.readString()
+
+        for (; i < 10; i++) {
+            if (getDataLen() < 1000) {
+                continue
+            } else {
+                break
+            }
+        }
+
+        if (i == 10) {
+            connectToAzure(cw01_vars.azureAccess)
+        }
+
+
+        serial.writeString("AT+CIPRECVDATA=1100" + cw01_vars.NEWLINE)
+        basic.pause(200)
+        serial.readString()
+        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
+        basic.pause(200)
+        cw01_vars.res = serial.readString()
+
+        if (cw01_vars.res.includes(asset)) {
+            index1 = cw01_vars.res.indexOf(searchString) + searchString.length
+            index2 = cw01_vars.res.indexOf("}", index1)
+            value = cw01_vars.res.substr(index1, index2 - index1)
+        } else {
+
+            value = ""
+
+        }
+
+        return value
+
+    }
+
+    /**
+    * Send two Values to Microsoft Azure and get response.
+    */
+    //% weight=91 color=#4B0082
+    //% group="Azure"
+    //% blockId="IoTSendTwoValuesSaveResponseAzure" block="CW01 update two variables %asset1 and %asset2 with values %value1 and %value2 and get response"
+    export function IoTSendTwoValuesSaveResponseAzure(asset1: string, asset2: string, value1: number, value2: number): string {
+
+        let value: string
+        let index1: number
+        let index2: number
+        let i: number = 0
+
+        let payload: string = "{\"" + asset1 + "\": " + value1.toString() + "," + "\"" + asset2 + "\": " + value2.toString() +"}"
+
+        let request: string = "POST /135/" + cw01_vars.azureAccess + " HTTP/1.1" + cw01_vars.NEWLINE +
+            "Host: proxy.xinabox.cc" + cw01_vars.NEWLINE +
+            "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
+            "Content-Type: application/json" + cw01_vars.NEWLINE +
+            "Accept: */*" + cw01_vars.NEWLINE +
+            "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
+
+
+
+        serial.writeString("AT+CIPSEND=" + (request.length).toString() + cw01_vars.NEWLINE)
+        basic.pause(100)
+        serial.writeString(request)
+        basic.pause(10)
+        serial.readString()
+
+        /*for (; i < 10; i++) {
+            if (getDataLen() < 1000) {
+                continue
+            } else {
+                break
+            }
+        }
+
+        if (i == 10) {
+            connectToAzure(cw01_vars.azureAccess)
+        }*/
+
+
+        serial.writeString("AT+CIPRECVDATA=1100" + cw01_vars.NEWLINE)
+        basic.pause(200)
+        serial.readString()
+        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
+        basic.pause(200)
+        cw01_vars.res = serial.readString()
+
+        /*if (cw01_vars.res.includes(asset)) {
+            index1 = cw01_vars.res.indexOf(searchString) + searchString.length
+            index2 = cw01_vars.res.indexOf("}", index1)
+            value = cw01_vars.res.substr(index1, index2 - index1)
+        } else {
+
+            value = ""
+
+        }*/
+
+        value = ""
+
+        return value
+
+    }
+
+    /**
     * Connect to MQTT broker through port number 1883
     */
     //% weight=91
@@ -1008,101 +1170,6 @@ namespace cw01 {
     }
 
 
-    /**
-    * Send boolean state to Microsoft Azure cloud computing platform
-    */
-    //% weight=91 color=#4B0082
-    //% group="Azure"
-    //% blockId="IoTSendStateToAzure" block="CW01 update Azure variable %asset with boolean state %value"
-    export function IoTSendStateToAzure(asset: string, value: boolean): void {
-
-        let payload: string = "{\"" + asset + "\": " + value + "}"
-
-        let request: string = "POST /135/" + cw01_vars.azureAccess + " HTTP/1.1" + cw01_vars.NEWLINE +
-            "Host: proxy.xinabox.cc" + cw01_vars.NEWLINE +
-            "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
-            "Content-Type: application/json" + cw01_vars.NEWLINE +
-            "Accept: */*" + cw01_vars.NEWLINE +
-            "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
-
-
-
-        serial.writeString("AT+CIPSEND=" + (request.length).toString() + cw01_vars.NEWLINE)
-        basic.pause(100)
-        serial.writeString(request)
-        basic.pause(10)
-        serial.readString()
-        basic.pause(1000)
-
-        if (!get_status()) {
-            connectToAzure(cw01_vars.azureAccess)
-        }
-    }
-
-    /**
-    * Get value from Microsoft Azure cloud computing platform. Value can be string, numerical and boolean.
-    */
-    //% weight=91 color=#4B0082
-    //% group="Azure"
-    //% blockId="IoTGetValueFromAzure" block="CW01 get latest value of Azure variable %asset"
-    export function IoTGetValueFromAzure(asset: string): string {
-
-        let value: string
-        let index1: number
-        let index2: number
-        let searchString: string = "\"" + asset + "\":"
-        let i: number = 0
-
-        let payload: string = "{}"
-
-        let request: string = "POST /135/" + cw01_vars.azureAccess + " HTTP/1.1" + cw01_vars.NEWLINE +
-            "Host: proxy.xinabox.cc" + cw01_vars.NEWLINE +
-            "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
-            "Content-Type: application/json" + cw01_vars.NEWLINE +
-            "Accept: */*" + cw01_vars.NEWLINE +
-            "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
-
-
-
-        serial.writeString("AT+CIPSEND=" + (request.length).toString() + cw01_vars.NEWLINE)
-        basic.pause(100)
-        serial.writeString(request)
-        basic.pause(10)
-        serial.readString()
-
-        for (; i < 10; i++) {
-            if (getDataLen() < 1000) {
-                continue
-            } else {
-                break
-            }
-        }
-
-        if (i == 10) {
-            connectToAzure(cw01_vars.azureAccess)
-        }
-
-
-        serial.writeString("AT+CIPRECVDATA=1100" + cw01_vars.NEWLINE)
-        basic.pause(200)
-        serial.readString()
-        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
-        basic.pause(200)
-        cw01_vars.res = serial.readString()
-
-        if (cw01_vars.res.includes(asset)) {
-            index1 = cw01_vars.res.indexOf(searchString) + searchString.length
-            index2 = cw01_vars.res.indexOf("}", index1)
-            value = cw01_vars.res.substr(index1, index2 - index1)
-        } else {
-
-            value = ""
-
-        }
-
-        return value
-
-    }
 
     /**
     * Add your GPS location
