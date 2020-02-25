@@ -762,7 +762,7 @@ namespace cw01 {
         let index2: number
         let i: number = 0
 
-        let payload: string = "{\"" + asset1 + "\": " + value1.toString() + "," + "\"" + asset2 + "\": " + value2.toString() +"}"
+        let payload: string = "{\"" + asset1 + "\": " + value1.toString() + "," + "\"" + asset2 + "\": " + value2.toString() + "}"
 
         let request: string = "POST /135/" + cw01_vars.azureAccess + " HTTP/1.1" + cw01_vars.NEWLINE +
             "Host: proxy.xinabox.cc" + cw01_vars.NEWLINE +
@@ -779,6 +779,10 @@ namespace cw01 {
         basic.pause(10)
         serial.readString()
 
+        if (!get_status()) {
+            connectToAzure(cw01_vars.azureAccess)
+        }
+
         /*for (; i < 10; i++) {
             if (getDataLen() < 1000) {
                 continue
@@ -792,12 +796,17 @@ namespace cw01 {
         }*/
 
 
-        serial.writeString("AT+CIPRECVDATA=1100" + cw01_vars.NEWLINE)
-        basic.pause(200)
+        while (true) {
+            serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
+            basic.pause(1)
+            if (serial.readString() == "\r")
+                break
+        }
+
         serial.readString()
         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
         basic.pause(200)
-        cw01_vars.res = serial.readString()
+        value = serial.readString()
 
         /*if (cw01_vars.res.includes(asset)) {
             index1 = cw01_vars.res.indexOf(searchString) + searchString.length
@@ -808,8 +817,6 @@ namespace cw01 {
             value = ""
 
         }*/
-
-        value = ""
 
         return value
 
