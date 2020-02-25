@@ -812,6 +812,8 @@ namespace cw01 {
 
         }*/
 
+        value = ""
+
         return value
 
     }
