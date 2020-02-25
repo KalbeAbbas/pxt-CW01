@@ -797,12 +797,6 @@ namespace cw01 {
         }*/
 
 
-        while (true) {
-            serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
-            if (serial.readString() == "\r")
-                break
-        }
-
         serial.readString()
         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
         basic.pause(200)
