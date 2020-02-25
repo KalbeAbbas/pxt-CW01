@@ -799,7 +799,7 @@ namespace cw01 {
 
         serial.readString()
         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
-        basic.pause(200)
+        basic.pause(200);
         value = serial.readString()
 
         /*if (cw01_vars.res.includes(asset)) {
