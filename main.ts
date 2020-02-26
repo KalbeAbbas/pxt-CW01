@@ -780,6 +780,11 @@ namespace cw01 {
         serial.readString()
         basic.pause(1000)
 
+        do {
+            cw01_vars.res = serial.readString()
+            basic.pause(1000)
+        } while (!cw01_vars.res.includes("+IPD,"));
+
         if (!get_status()) {
             connectToAzure(cw01_vars.azureAccess)
         }
