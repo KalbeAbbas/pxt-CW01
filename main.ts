@@ -813,14 +813,17 @@ namespace cw01 {
         cw01_vars.res = ""
 
         serial.readString()
-        serial.writeString("AT+CIPRECVDATA=2000" + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPRECVDATA=800" + cw01_vars.NEWLINE)
+        basic.pause(200)
+
+        serial.writeString("AT+CIPRECVDATA=800" + cw01_vars.NEWLINE)
         basic.pause(200)
 
         cw01_vars.res = serial.readString()
 
         index1 = cw01_vars.res.indexOf("{")
 
-        value = cw01_vars.res.substr(index1,4)
+        value = cw01_vars.res.substr(index1, 4)
 
         /*if (cw01_vars.res.includes(asset)) {
             index1 = cw01_vars.res.indexOf(searchString) + searchString.length
