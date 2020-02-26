@@ -782,12 +782,16 @@ namespace cw01 {
 
         do {
             cw01_vars.res = serial.readString()
-            basic.pause(1000)
+            basic.pause(100)
         } while (!cw01_vars.res.includes("+IPD,"));
+
+        basic.pause(100)
 
         if (!get_status()) {
             connectToAzure(cw01_vars.azureAccess)
         }
+
+        basic.pause(500)
 
         /*for (; i < 10; i++) {
             if (getDataLen() < 1000) {
@@ -803,7 +807,7 @@ namespace cw01 {
 
 
         serial.readString()
-        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPRECVDATA=2000" + cw01_vars.NEWLINE)
         basic.pause(200)
 
         /*if (cw01_vars.res.includes(asset)) {
