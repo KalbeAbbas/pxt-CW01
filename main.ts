@@ -822,6 +822,8 @@ namespace cw01 {
                 break
         }
 
+        serial.readString()
+
         /*if (cw01_vars.res.includes(asset)) {
             index1 = cw01_vars.res.indexOf(searchString) + searchString.length
             index2 = cw01_vars.res.indexOf("}", index1)
