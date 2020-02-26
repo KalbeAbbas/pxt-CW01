@@ -809,10 +809,18 @@ namespace cw01 {
             connectToAzure(cw01_vars.azureAccess)
         }*/
 
+        cw01_vars.res = ""
 
         serial.readString()
         serial.writeString("AT+CIPRECVDATA=2000" + cw01_vars.NEWLINE)
         basic.pause(200)
+
+        while (true) {
+            cw01_vars.res = serial.readUntil("\n")
+            basic.pause(1)
+            if (cw01_vars.res.compare("\r") == 0)
+                break
+        }
 
         /*if (cw01_vars.res.includes(asset)) {
             index1 = cw01_vars.res.indexOf(searchString) + searchString.length
@@ -1218,7 +1226,7 @@ namespace cw01 {
     function get_status(): boolean {
 
         basic.pause(400)
-        serial.writeString("AT+CIPRECVDATA=2000" + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
         basic.pause(300)
         cw01_vars.res = serial.readString()
 
