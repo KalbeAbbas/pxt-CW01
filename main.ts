@@ -777,7 +777,6 @@ namespace cw01 {
         basic.pause(100)
         serial.writeString(request)
         basic.pause(10)
-        serial.readString()
 
         do {
             basic.pause(1000)
