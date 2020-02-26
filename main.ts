@@ -761,6 +761,7 @@ namespace cw01 {
         let index1: number
         let index2: number
         let i: number = 0
+        let connection: boolean = true
 
         let payload: string = "{\"" + asset1 + "\": " + value1.toString() + "," + "\"" + asset2 + "\": " + value2.toString() + "}"
 
@@ -793,6 +794,7 @@ namespace cw01 {
         basic.pause(100)
 
         if (!get_status()) {
+            connection = false
             connectToAzure(cw01_vars.azureAccess)
         }
 
@@ -810,6 +812,8 @@ namespace cw01 {
             connectToAzure(cw01_vars.azureAccess)
         }*/
 
+        if(connection)
+        {
         cw01_vars.res = ""
 
         serial.readString()
@@ -838,6 +842,11 @@ namespace cw01 {
         }
 
         value = serial.readString()
+        }else{
+            value = ""
+        }
+
+        connection = true
 
         /*if (cw01_vars.res.includes(asset)) {
             index1 = cw01_vars.res.indexOf(searchString) + searchString.length
