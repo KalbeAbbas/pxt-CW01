@@ -782,9 +782,11 @@ namespace cw01 {
         do {
             basic.pause(1000)
             cw01_vars.res = serial.readString()
-            if(cw01_vars.res.includes("ERROR"))
-                break
-        } while (!cw01_vars.res.includes("+IPD,"));
+        } while ((!cw01_vars.res.includes("+IPD,") && !cw01_vars.res.includes("ERROR")));
+
+        cw01_vars.res = ""
+        serial.readString()
+
 
         basic.pause(100)
 
