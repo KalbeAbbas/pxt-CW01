@@ -760,6 +760,7 @@ namespace cw01 {
         let value: string
         let index1: number
         let index2: number
+        let len: number = 0
         let i: number = 0
         let connection: boolean = true
 
@@ -812,41 +813,45 @@ namespace cw01 {
             connectToAzure(cw01_vars.azureAccess)
         }*/
 
-        if(connection)
-        {
-        cw01_vars.res = ""
+        if (connection) {
+            cw01_vars.res = ""
 
-        serial.readString()
-        serial.writeString("AT+CIPRECVDATA=900" + cw01_vars.NEWLINE)
-        basic.pause(200)
+            serial.readString()
+            serial.writeString("AT+CIPRECVDATA=900" + cw01_vars.NEWLINE)
+            basic.pause(200)
 
-        serial.readString()
+            serial.readString()
 
-        serial.writeString("AT+CIPRECVDATA=800" + cw01_vars.NEWLINE)
-        serial.readString()
-        basic.pause(200)
+            serial.writeString("AT+CIPRECVDATA=800" + cw01_vars.NEWLINE)
+            serial.readString()
+            basic.pause(200)
 
-        /*cw01_vars.res = serial.readString()
+            /*cw01_vars.res = serial.readString()
+    
+            index1 = cw01_vars.res.indexOf("{")
+    
+            value = cw01_vars.res*/
 
-        index1 = cw01_vars.res.indexOf("{")
+            cw01_vars.res = ""
 
-        value = cw01_vars.res*/
+            while (true) {
+                cw01_vars.res = serial.readUntil("\n")
+                basic.pause(1)
+                if (cw01_vars.res.compare("\r") == 0)
+                    break
+            }
 
-        cw01_vars.res = ""
+            cw01_vars.res = serial.readString()
+            index1 = 0
+            index2 = cw01_vars.res.indexOf("OK")
+            len = index2 - index1 - 1
 
-        while (true) {
-            cw01_vars.res = serial.readUntil("\n")
-            basic.pause(1)
-            if (cw01_vars.res.compare("\r") == 0)
-                break
-        }
+            value = cw01_vars.res.substr(index1, len)
 
-        value = serial.readString()
-        }else{
+        } else {
             value = ""
         }
 
-        connection = true
 
         /*if (cw01_vars.res.includes(asset)) {
             index1 = cw01_vars.res.indexOf(searchString) + searchString.length
