@@ -768,6 +768,7 @@ namespace cw01 {
             "Host: proxy.xinabox.cc" + cw01_vars.NEWLINE +
             "User-Agent: CW01/1.0" + cw01_vars.NEWLINE +
             "Content-Type: application/json" + cw01_vars.NEWLINE +
+            "Connection: Keep-Alive" + cw01_vars.NEWLINE +
             "Accept: */*" + cw01_vars.NEWLINE +
             "Content-Length: " + (payload.length).toString() + cw01_vars.NEWLINE + cw01_vars.NEWLINE + payload + cw01_vars.NEWLINE
 
@@ -822,7 +823,7 @@ namespace cw01 {
                 break
         }
 
-        serial.readString()
+        value = serial.readString()
 
         /*if (cw01_vars.res.includes(asset)) {
             index1 = cw01_vars.res.indexOf(searchString) + searchString.length
@@ -833,8 +834,6 @@ namespace cw01 {
             value = ""
 
         }*/
-
-        value = ""
 
         return value
 
