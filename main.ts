@@ -778,12 +778,13 @@ namespace cw01 {
         serial.writeString(request)
         basic.pause(10)
         serial.readString()
-        basic.pause(1000)
 
         do {
+            basic.pause(1000)
             cw01_vars.res = serial.readString()
-            basic.pause(100)
-        } while ((!cw01_vars.res.includes("+IPD,") && !cw01_vars.res.includes("link is not valid")));
+            if(cw01_vars.res.includes("ERROR"))
+                break
+        } while (!cw01_vars.res.includes("+IPD,"));
 
         basic.pause(100)
 
