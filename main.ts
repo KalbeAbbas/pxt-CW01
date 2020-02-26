@@ -820,7 +820,7 @@ namespace cw01 {
 
         index1 = cw01_vars.res.indexOf("application/json") + "application/json".length
 
-        value = cw01_vars.res.substr(index1)
+        value = cw01_vars.res.substr(index1,4)
 
         /*if (cw01_vars.res.includes(asset)) {
             index1 = cw01_vars.res.indexOf(searchString) + searchString.length
