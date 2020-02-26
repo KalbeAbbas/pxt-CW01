@@ -814,7 +814,6 @@ namespace cw01 {
 
         serial.readString()
         serial.writeString("AT+CIPRECVDATA=2000" + cw01_vars.NEWLINE)
-        basic.pause(10)
         serial.readString()
         basic.pause(200)
 
