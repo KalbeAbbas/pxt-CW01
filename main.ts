@@ -818,7 +818,7 @@ namespace cw01 {
 
         cw01_vars.res = serial.readString()
 
-        index1 = cw01_vars.res.indexOf("application/json") + "application/json".length
+        index1 = cw01_vars.res.indexOf("{")
 
         value = cw01_vars.res.substr(index1,4)
 
