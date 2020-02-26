@@ -840,6 +840,13 @@ namespace cw01 {
                     break
             }
 
+            while (true) {
+                cw01_vars.res = serial.readUntil("\n")
+                basic.pause(1)
+                if (cw01_vars.res.compare("\r") == 0)
+                    break
+            }
+
             cw01_vars.res = serial.readString()
             index1 = 0
             index2 = cw01_vars.res.indexOf("OK")
