@@ -1214,11 +1214,11 @@ namespace cw01 {
     function get_status(): boolean {
 
         basic.pause(400)
-        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPRECVDATA=2000" + cw01_vars.NEWLINE)
         basic.pause(300)
         cw01_vars.res = serial.readString()
 
-        if (cw01_vars.res.includes("HTTP/1.1 200") || cw01_vars.res.includes("HTTP/1.1 201") || cw01_vars.res.includes("HTTP/1.0 202")) {
+        if (cw01_vars.res.includes("200") || cw01_vars.res.includes("201") || cw01_vars.res.includes("202")) {
             basic.showIcon(IconNames.Yes, 50)
             basic.showString("", 50)
             return true
