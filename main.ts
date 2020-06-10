@@ -165,8 +165,9 @@ namespace cw01 {
         basic.pause(100)
         serial.readString()
         serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"" + cw01_vars.NEWLINE)
-        basic.pause(200)
+        basic.pause(1000)
         serial.readString()
+        basic.pause(1000)
 
         do {
             cw01_vars.res = serial.readString()
