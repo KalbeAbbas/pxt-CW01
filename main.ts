@@ -114,7 +114,7 @@ namespace cw01 {
     let cw01_vars = new cw01_int_var123()
     let cw01_mqtt_vars = new cw01_mqtt()
     let cw01_button_object = new button_class()
-    let enableFeedback: boolean = false
+    let en_Feedback: boolean = false
 
     cw01_vars.start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -161,6 +161,17 @@ namespace cw01 {
         mac_addr = raw_str.substr(index, 17)
 
         return mac_addr
+    }
+
+    /**
+    * Enable feedback through microbit Matrix LEDs
+    */
+    //% weight=91 color=#ad0303
+    //% group="Common"
+    //% blockId="enableFeedback" block="CW01 enable feedback LEDs"
+    export function enableFeedback(): void
+    {
+        en_Feedback = true
     }
 
     /**
@@ -1315,7 +1326,7 @@ namespace cw01 {
         basic.pause(300)
         cw01_vars.res = serial.readString()
 
-        if(enableFeedback)
+        if(en_Feedback)
         {
             if (cw01_vars.res.includes("HTTP/1.1 200") || cw01_vars.res.includes("HTTP/1.0 200") || cw01_vars.res.includes("HTTP/1.1 201") || cw01_vars.res.includes("HTTP/1.0 202")) {
                 basic.showIcon(IconNames.Yes, 50)
