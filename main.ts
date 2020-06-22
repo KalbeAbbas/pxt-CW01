@@ -174,33 +174,6 @@ namespace cw01 {
         en_Feedback = true
     }
 
-    /**
-    * Connect to W-Fi 
-    */
-    //% weight=91 color=#ad0303
-    //% group="Common"
-    //% blockId="connectToWifi" block="CW01 connect to WiFi SSID %SSID password %PSK"
-    export function connectToWifi(SSID: string, PSK: string): void {
-        serial.writeString("AT+CWMODE=1" + cw01_vars.NEWLINE)
-        basic.pause(100)
-        serial.readString()
-        serial.writeString("AT+CWJAP=\"" + SSID + "\",\"" + PSK + "\"" + cw01_vars.NEWLINE)
-        basic.pause(200)
-        serial.readString()
-
-        do {
-            cw01_vars.res = serial.readString()
-            basic.pause(1000)
-        } while (!cw01_vars.res.includes("WIFI CONNECTED"));
-
-        if (cw01_vars.res.includes("WIFI CONNECTED")) {
-            basic.pause(2000)
-            basic.showString("C")
-            cw01_vars.res = ""
-        } else {
-            basic.showString("D")
-        }
-    }
 
     /**
     * Connect to AllThingsTalk IoT platform
