@@ -114,6 +114,7 @@ namespace cw01 {
     let cw01_vars = new cw01_int_var123()
     let cw01_mqtt_vars = new cw01_mqtt()
     let cw01_button_object = new button_class()
+    let enableFeedback: boolean = false
 
     cw01_vars.start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -1314,14 +1315,20 @@ namespace cw01 {
         basic.pause(300)
         cw01_vars.res = serial.readString()
 
-        if (cw01_vars.res.includes("HTTP/1.1 200") || cw01_vars.res.includes("HTTP/1.0 200") || cw01_vars.res.includes("HTTP/1.1 201") || cw01_vars.res.includes("HTTP/1.0 202")) {
-            basic.showIcon(IconNames.Yes, 50)
-            basic.showString("", 50)
+        if(enableFeedback)
+        {
+            if (cw01_vars.res.includes("HTTP/1.1 200") || cw01_vars.res.includes("HTTP/1.0 200") || cw01_vars.res.includes("HTTP/1.1 201") || cw01_vars.res.includes("HTTP/1.0 202")) {
+                basic.showIcon(IconNames.Yes, 50)
+                basic.showString("", 50)
+                return true
+            } else {
+                basic.showIcon(IconNames.No, 50)
+                basic.showString("", 50)
+                return false
+            }
+        }
+        else{
             return true
-        } else {
-            basic.showIcon(IconNames.No, 50)
-            basic.showString("", 50)
-            return false
         }
     }
 
