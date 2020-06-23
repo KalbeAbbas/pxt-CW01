@@ -197,10 +197,10 @@ namespace cw01 {
     */
     //% weight=91 color=#ad0303
     //% group="Common"
-    //% blockId="enableFeedback" block="CW01 enable feedback LEDs"
-    export function enableFeedback(): void
+    //% blockId="enableFeedback" block="CW01 enable feedback LEDs %u"
+    export function enableFeedback(u: boolean): void
     {
-        en_Feedback = true
+        en_Feedback = u
     }
 
 
