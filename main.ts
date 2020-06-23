@@ -163,16 +163,6 @@ namespace cw01 {
         return mac_addr
     }
 
-    /**
-    * Enable feedback through microbit Matrix LEDs
-    */
-    //% weight=91 color=#ad0303
-    //% group="Common"
-    //% blockId="enableFeedback" block="CW01 enable feedback LEDs"
-    export function enableFeedback(): void
-    {
-        en_Feedback = true
-    }
 
     /**
     * Connect to W-Fi 
@@ -200,6 +190,17 @@ namespace cw01 {
         } else {
             basic.showString("D")
         }
+    }
+
+    /**
+    * Enable feedback through microbit Matrix LEDs
+    */
+    //% weight=91 color=#ad0303
+    //% group="Common"
+    //% blockId="enableFeedback" block="CW01 enable feedback LEDs"
+    export function enableFeedback(): void
+    {
+        en_Feedback = true
     }
 
 
