@@ -7,7 +7,7 @@ enum USER {
 }
 
 
-//% groups=["Common",ATT", "Ubidots", "Azure", "MQTT", "others"]
+//% groups='["Common",ATT", "Ubidots", "Azure", "MQTT", "IM01", "others"]'
 //% weight=6 color=#2699BF icon="\uf110" block="CW01"
 namespace cw01 {
     class cw01_int_var123 {
@@ -1302,6 +1302,14 @@ namespace cw01 {
         cw01_vars.latitude = parseFloat(lat)
         cw01_vars.longitude = parseFloat(lng)
     }
+	
+	//%block="IM01 read file %u"
+    //%u.defl="log.txt"
+    //%group="IM01"
+    export function readFile(u: string): string {
+
+        return file_read("/sd/im01/" + u)
+    }
 
     function getDataLen(): number {
 
@@ -1343,6 +1351,11 @@ namespace cw01 {
         else{
             return true
         }
+    }
+	
+	//%shim=im01::_read
+    function file_read(u: string): string {
+        return ""
     }
 
 } 
