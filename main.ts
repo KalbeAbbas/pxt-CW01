@@ -111,6 +111,8 @@ namespace cw01 {
         }
     }
 
+    let sdFlag=false
+
     let cw01_vars = new cw01_int_var123()
     let cw01_mqtt_vars = new cw01_mqtt()
     let cw01_button_object = new button_class()
@@ -1307,8 +1309,22 @@ namespace cw01 {
     //%u.defl="log.txt"
     //%group="IM01"
     export function readFile(u: string): string {
-
+        if(sdFlag==false) {
+            createFolder("im01")
+            sdFlag=true
+        }
         return file_read("/sd/im01/" + u)
+    }
+
+    //%block="IM01 create folder %u"
+    function createFolder(u: string): void {
+        mkdir("/sd/" + u)
+        return;
+    }
+
+    //%shim=im01::_mkdir
+    function mkdir(u: string): void {
+        return
     }
 
     function getDataLen(): number {
