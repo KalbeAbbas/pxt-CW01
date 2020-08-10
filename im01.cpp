@@ -79,11 +79,11 @@ String _read(String s)
 
 	// obtain file size:
 	fseek (fp , 0 , SEEK_END);
-	lSize = ftell(fp) - 1;
+	lSize = ftell(fp);
 	rewind (fp);
 
-	_word = (char*) malloc (sizeof(char)*lSize);
-	b_read = fread(_word, sizeof(char), lSize, fp);
+	_word = (char*) malloc (sizeof(char)*(lSize - 1));
+	b_read = fread(_word, sizeof(char), lSize - 1, fp);
 
 	fclose(fp);
 	}
