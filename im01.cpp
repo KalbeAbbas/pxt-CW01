@@ -82,18 +82,19 @@ String _read(String s)
 	lSize = ftell(fp);
 	rewind (fp);
 
-	_word = (char*) malloc (sizeof(char)*(lSize - 1));
-	b_read = fread(_word, sizeof(char), lSize - 1, fp);
+	_word = (char*) malloc (sizeof(char)*(lSize));
+	b_read = fread(_word, sizeof(char), lSize, fp);
 
 	fclose(fp);
 	}
 
-	if(b_read != (lSize - 1))
+	if(b_read != (lSize))
 	{
         return mkString(cant_read_file, strlen(cant_read_file));
 	}
 
 	String str = mkString(_word, strlen(_word));
+    str.subtr(0, lSize - 1);
 
 	free(_word);
 	return str;
