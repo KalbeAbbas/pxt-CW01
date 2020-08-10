@@ -88,7 +88,7 @@ String _read(String s)
 	fclose(fp);
 	}
 
-	if(b_read != lSize)
+	if(b_read != (lSize - 1))
 	{
         return mkString(cant_read_file, strlen(cant_read_file));
 	}
