@@ -218,7 +218,7 @@ namespace cw01 {
         serial.writeString("AT+CIPMUX=1" + cw01_vars.NEWLINE)
         basic.pause(100)
         serial.writeString("AT+CIPSTART=0,\"TCP\",\"api.allthingstalk.io\",80" + cw01_vars.NEWLINE)
-        basic.pause(100)
+        basic.pause(500)
         IoTMQTTConnect("api.allthingstalk.io", cw01_vars.TOKEN, "xinabox")
         basic.pause(500)
     }
