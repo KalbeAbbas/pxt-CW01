@@ -117,6 +117,7 @@ namespace cw01 {
     let cw01_mqtt_vars = new cw01_mqtt()
     let cw01_button_object = new button_class()
     let en_Feedback: boolean = false
+    let en_doubleLink: boolean = false
 
     cw01_vars.start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -215,6 +216,7 @@ namespace cw01 {
     export function connectToATT(TKN: string, ID: string): void {
         cw01_vars.DEVICE_ID = ID
         cw01_vars.TOKEN = TKN
+        en_doubleLink =  true
         serial.writeString("AT+CIPMUX=1" + cw01_vars.NEWLINE)
         basic.pause(100)
         serial.writeString("AT+CIPSTART=0,\"TCP\",\"api.allthingstalk.io\",80" + cw01_vars.NEWLINE)
@@ -898,7 +900,12 @@ namespace cw01 {
     //% blockId="IoTMQTTConnect" block="CW01 connect to MQTT broker URL %broker with username %Username and password %Password"
     export function IoTMQTTConnect(broker: string, Username: string, Password: string): void {
 
-        serial.writeString("AT+CIPSTART=1,\"TCP\",\"" + broker + "\",1883" + cw01_vars.NEWLINE)
+        if(en_doubleLink)
+        {
+            serial.writeString("AT+CIPSTART=1,\"TCP\",\"" + broker + "\",1883" + cw01_vars.NEWLINE)
+        }else{
+            serial.writeString("AT+CIPSTART=\"TCP\",\"" + broker + "\",1883" + cw01_vars.NEWLINE)
+        }
         basic.pause(7000)
 
         let protocol_name_prior: Buffer = pins.packBuffer("!H", [4])
@@ -922,7 +929,12 @@ namespace cw01 {
         let password_len: Buffer = pins.packBuffer("!H", [password.length])
         //let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
 
-        serial.writeString("AT+CIPSEND=1," + (1 + 1 + protocol_name_prior.length + protocol_name.length + protocol_lvl.length + connect_flags.length + keep_alive.length + client_id_len.length + client_id.length + username_len.length + username.length + password_len.length + password.length) + cw01_vars.NEWLINE)
+        if(en_doubleLink)
+        {
+            serial.writeString("AT+CIPSEND=1," + (1 + 1 + protocol_name_prior.length + protocol_name.length + protocol_lvl.length + connect_flags.length + keep_alive.length + client_id_len.length + client_id.length + username_len.length + username.length + password_len.length + password.length) + cw01_vars.NEWLINE)
+        }else{
+            serial.writeString("AT+CIPSEND=" + (1 + 1 + protocol_name_prior.length + protocol_name.length + protocol_lvl.length + connect_flags.length + keep_alive.length + client_id_len.length + client_id.length + username_len.length + username.length + password_len.length + password.length) + cw01_vars.NEWLINE)
+        }
         basic.pause(1000)
 
         //Msg part one
@@ -946,7 +958,12 @@ namespace cw01 {
 
         cw01_vars.timer = input.runningTime()
 
-        serial.writeString("AT+CIPRECVDATA=1,200" + cw01_vars.NEWLINE)
+        if(en_doubleLink)
+        {
+            serial.writeString("AT+CIPRECVDATA=1,200" + cw01_vars.NEWLINE)
+        }else{
+            serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
+        }
         basic.pause(100)
         serial.readString()
 
@@ -959,7 +976,12 @@ namespace cw01 {
                     let header_one: Buffer = pins.packBuffer("!B", [0xC0])
                     let header_two: Buffer = pins.packBuffer("!B", [0x00])
 
-                    serial.writeString("AT+CIPSEND=1," + (header_one.length + header_two.length) + cw01_vars.NEWLINE)
+                    if(en_doubleLink)
+                    {
+                        serial.writeString("AT+CIPSEND=1," + (header_one.length + header_two.length) + cw01_vars.NEWLINE)
+                    }else{
+                        serial.writeString("AT+CIPSEND=" + (header_one.length + header_two.length) + cw01_vars.NEWLINE)
+                    }
                     basic.pause(100)
 
                     serial.writeBuffer(header_one)
