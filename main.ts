@@ -922,7 +922,7 @@ namespace cw01 {
         let password_len: Buffer = pins.packBuffer("!H", [password.length])
         //let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
 
-        serial.writeString("AT+CIPSEND=" + (1 + 1 + protocol_name_prior.length + protocol_name.length + protocol_lvl.length + connect_flags.length + keep_alive.length + client_id_len.length + client_id.length + username_len.length + username.length + password_len.length + password.length) + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPSEND=1," + (1 + 1 + protocol_name_prior.length + protocol_name.length + protocol_lvl.length + connect_flags.length + keep_alive.length + client_id_len.length + client_id.length + username_len.length + username.length + password_len.length + password.length) + cw01_vars.NEWLINE)
         basic.pause(1000)
 
         //Msg part one
@@ -946,7 +946,7 @@ namespace cw01 {
 
         cw01_vars.timer = input.runningTime()
 
-        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPRECVDATA=1,200" + cw01_vars.NEWLINE)
         basic.pause(100)
         serial.readString()
 
@@ -959,7 +959,7 @@ namespace cw01 {
                     let header_one: Buffer = pins.packBuffer("!B", [0xC0])
                     let header_two: Buffer = pins.packBuffer("!B", [0x00])
 
-                    serial.writeString("AT+CIPSEND=" + (header_one.length + header_two.length) + cw01_vars.NEWLINE)
+                    serial.writeString("AT+CIPSEND=1," + (header_one.length + header_two.length) + cw01_vars.NEWLINE)
                     basic.pause(100)
 
                     serial.writeBuffer(header_one)
