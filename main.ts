@@ -217,7 +217,7 @@ namespace cw01 {
         cw01_vars.TOKEN = TKN
         serial.writeString("AT+CIPMUX=1" + cw01_vars.NEWLINE)
         basic.pause(100)
-        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPSTART=0,\"TCP\",\"api.allthingstalk.io\",80" + cw01_vars.NEWLINE)
         basic.pause(100)
         IoTMQTTConnect("api.allthingstalk.io", cw01_vars.TOKEN, "xinabox")
         basic.pause(500)
@@ -898,7 +898,7 @@ namespace cw01 {
     //% blockId="IoTMQTTConnect" block="CW01 connect to MQTT broker URL %broker with username %Username and password %Password"
     export function IoTMQTTConnect(broker: string, Username: string, Password: string): void {
 
-        serial.writeString("AT+CIPSTART=\"TCP\",\"" + broker + "\",1883" + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPSTART=1,\"TCP\",\"" + broker + "\",1883" + cw01_vars.NEWLINE)
         basic.pause(7000)
 
         let protocol_name_prior: Buffer = pins.packBuffer("!H", [4])
