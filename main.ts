@@ -215,7 +215,11 @@ namespace cw01 {
     export function connectToATT(TKN: string, ID: string): void {
         cw01_vars.DEVICE_ID = ID
         cw01_vars.TOKEN = TKN
+        serial.writeString("AT+CIPMUX=1" + cw01_vars.NEWLINE)
+        basic.pause(100)
         serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + cw01_vars.NEWLINE)
+        basic.pause(100)
+        IoTMQTTConnect("api.allthingstalk.io", cw01_vars.TOKEN, "xinabox")
         basic.pause(500)
     }
 
