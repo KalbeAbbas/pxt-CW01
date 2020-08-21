@@ -458,6 +458,56 @@ namespace cw01 {
     }
 
     /**
+    * Subscribe to ATT asset
+    */
+    //% weight=91
+    //% group="MQTT"
+    //% blockId="IoTATTSubscribe" block="CW01 subscribe to ATT asset command %asset"
+    export function IoTATTSubscribe(asset: string): void {
+
+        while (cw01_mqtt_vars.sending_pingreq || cw01_mqtt_vars.receiving_msg || cw01_mqtt_vars.mqtt_busy) {
+            basic.pause(100)
+        }
+
+        //Msg part two
+        let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
+        let qos: Buffer = pins.packBuffer("!B", [0x00])
+        let topic: string = "device/" + cw01_vars.DEVICE_ID + "/asset/" + asset + "/command"
+        let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
+
+        //Msg part one
+        let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
+        let remain_len: Buffer = pins.packBuffer("!B", [pid.length + topic_len.length + topic.length + qos.length])
+
+        serial.writeString("AT+CIPSEND=" + (ctrl_pkt.length + remain_len.length + pid.length + topic_len.length + topic.length + qos.length) + cw01_vars.NEWLINE)
+
+        basic.pause(1000)
+
+        serial.writeBuffer(ctrl_pkt)
+        serial.writeBuffer(remain_len)
+        serial.writeBuffer(pid)
+        serial.writeBuffer(topic_len)
+        serial.writeString(topic)
+        serial.writeBuffer(qos)
+
+        basic.pause(2000)
+
+        serial.readString()
+
+        /*serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
+        basic.pause(100)
+        serial.readBuffer(17)
+        basic.showNumber((pins.unpackBuffer("!B", serial.readBuffer(1)))[0])*/
+
+        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
+        basic.pause(100)
+        serial.readString()
+
+        basic.pause(100)
+
+    }
+
+    /**
     * Connect to Ubidots IoT platform
     */
     //% weight=91 color=#f2ca00
