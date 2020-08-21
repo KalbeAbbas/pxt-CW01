@@ -508,6 +508,82 @@ namespace cw01 {
     }
 
     /**
+    * The function is a callback function. It executes block inside the function whenever commands from subscribed topic is received
+    */
+    //% weight=91
+    //% group="ATT"
+    //% block="CW01 on ATT asset command received"
+    export function onCommandReceived(handler: () => void) {
+
+        control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
+
+            /*basic.pause(20000)
+ 
+            basic.showString("#")*/
+
+            serial.onDataReceived("\n", function () {
+
+                while (cw01_mqtt_vars.sending_payload || cw01_mqtt_vars.sending_pingreq) {
+                    basic.pause(100)
+                }
+
+                cw01_mqtt_vars.mqtt_busy = true
+
+                let serial_res: string = serial.readString()
+                let ctrl_pkt: number
+                ctrl_pkt = 0
+
+                if (serial_res.includes("IPD")) {
+                    serial.readString()
+
+                    serial.writeString("AT+CIPRECVDATA=1,1" + cw01_vars.NEWLINE)
+                    basic.pause(100)
+                    serial.readBuffer(17)
+                    ctrl_pkt = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
+
+                    if (ctrl_pkt == 48) {
+                        IoTMQTTGetData()
+                        handler()
+                    } else if (ctrl_pkt == 208) {
+                        ctrl_pkt = 0
+                        serial.writeString("AT+CIPRECVDATA=1,200" + cw01_vars.NEWLINE)
+                        basic.pause(100)
+                    }
+                }
+
+                cw01_mqtt_vars.mqtt_busy = false
+
+            })
+        })
+    }
+
+    /**
+    * ATT Payload received 
+    */
+    //% weight=91
+    //% group="ATT"
+    //% blockId="IoTATTGetLatestData" block="payload"
+    export function IoTATTGetLatestData(): string {
+
+        return cw01_mqtt_vars.new_payload
+
+    }
+
+    /**
+    * ATT Topic received 
+    */
+    //% weight=91
+    //% group="ATT"
+    //% blockId="IoTATTGetLatestTopic" block="topic"
+    export function IoTATTGetLatestTopic(): string {
+
+        return cw01_mqtt_vars.new_topic
+
+    }
+
+    
+
+    /**
     * Connect to Ubidots IoT platform
     */
     //% weight=91 color=#f2ca00
