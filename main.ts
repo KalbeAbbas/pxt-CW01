@@ -539,7 +539,7 @@ namespace cw01 {
                     serial.writeString("AT+CIPRECVDATA=1,1" + cw01_vars.NEWLINE)
                     basic.pause(100)
                     //let str = serial.readString()
-                    serial.readBuffer(12)
+                    serial.readBuffer(19)
                     ctrl_pkt = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
                     basic.showNumber(ctrl_pkt)
 
