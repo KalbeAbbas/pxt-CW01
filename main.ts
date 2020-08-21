@@ -539,7 +539,7 @@ namespace cw01 {
 
                     serial.writeString("AT+CIPRECVDATA=1,1" + cw01_vars.NEWLINE)
                     basic.pause(100)
-                    mqtt_buf = serial.readBuffer(50)
+                    /*mqtt_buf = serial.readBuffer(50)
                     for(let i = 0; i < 50; i++)
                     {
                         if(mqtt_buf[i] == 58)
@@ -547,7 +547,7 @@ namespace cw01 {
                             basic.showString("Hello!")
                             break
                         }
-                    }
+                    }*/
                     ctrl_pkt = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
                     basic.showNumber(ctrl_pkt)
 
