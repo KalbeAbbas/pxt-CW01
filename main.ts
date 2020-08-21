@@ -479,7 +479,7 @@ namespace cw01 {
         let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
         let remain_len: Buffer = pins.packBuffer("!B", [pid.length + topic_len.length + topic.length + qos.length])
 
-        serial.writeString("AT+CIPSEND=" + (ctrl_pkt.length + remain_len.length + pid.length + topic_len.length + topic.length + qos.length) + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPSEND=1," + (ctrl_pkt.length + remain_len.length + pid.length + topic_len.length + topic.length + qos.length) + cw01_vars.NEWLINE)
 
         basic.pause(1000)
 
@@ -499,7 +499,7 @@ namespace cw01 {
         serial.readBuffer(17)
         basic.showNumber((pins.unpackBuffer("!B", serial.readBuffer(1)))[0])*/
 
-        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPRECVDATA=1,200" + cw01_vars.NEWLINE)
         basic.pause(100)
         serial.readString()
 
