@@ -118,6 +118,7 @@ namespace cw01 {
     let cw01_button_object = new button_class()
     let en_Feedback: boolean = false
     let en_doubleLink: boolean = false
+    let mqtt_buf: Buffer
 
     cw01_vars.start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -538,10 +539,10 @@ namespace cw01 {
 
                     serial.writeString("AT+CIPRECVDATA=1,1" + cw01_vars.NEWLINE)
                     basic.pause(100)
-                    let buf = serial.readBuffer(50)
+                    mqtt_buf = serial.readBuffer(50)
                     for(let i = 0; i < 50; i++)
                     {
-                        if(buf[i] == 58)
+                        if(mqtt_buf[i] == 58)
                         {
                             basic.showString("Hello!")
                             break
