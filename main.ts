@@ -518,9 +518,9 @@ namespace cw01 {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
-            /*basic.pause(20000)
+            /*basic.pause(20000)*/
  
-            basic.showString("#")*/
+            basic.showString("#")
 
             serial.onDataReceived("\n", function () {
 
