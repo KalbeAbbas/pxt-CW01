@@ -542,6 +542,7 @@ namespace cw01 {
                     ctrl_pkt = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
 
                     if (ctrl_pkt == 48) {
+                        basic.showString("Hello!")
                         IoTMQTTGetData()
                         handler()
                     } else if (ctrl_pkt == 208) {
