@@ -538,7 +538,7 @@ namespace cw01 {
 
                     serial.writeString("AT+CIPRECVDATA=1,1" + cw01_vars.NEWLINE)
                     basic.pause(100)
-                    serial.readBuffer(19)
+                    serial.readBuffer(20)
                     ctrl_pkt = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
                     basic.showNumber(ctrl_pkt)
 
