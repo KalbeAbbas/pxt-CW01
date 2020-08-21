@@ -461,7 +461,7 @@ namespace cw01 {
     * Subscribe to ATT asset
     */
     //% weight=91
-    //% group="MQTT"
+    //% group="ATT"
     //% blockId="IoTATTSubscribe" block="CW01 subscribe to ATT asset command %asset"
     export function IoTATTSubscribe(asset: string): void {
 
