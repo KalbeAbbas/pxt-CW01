@@ -518,6 +518,8 @@ namespace cw01 {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
+            basic.pause(20000)
+
             basic.showString("#")
 
             serial.onDataReceived("\n", function () {
@@ -550,9 +552,6 @@ namespace cw01 {
                         byte = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
                         if((count++) >= 10)break
                     }
-
-                    basic.showString("Out!")
-
                     
                     ctrl_pkt = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
                     basic.showNumber(ctrl_pkt)
