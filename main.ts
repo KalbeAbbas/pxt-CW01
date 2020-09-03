@@ -541,13 +541,14 @@ namespace cw01 {
 
                     basic.showString("pinged")
 
+                    serial.writeString("AT+CIPRECVDATA=1,1" + cw01_vars.NEWLINE)
+                    basic.pause(100)
+
                     while(byte != 58)
                     {
                         byte = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
                     }
 
-                    serial.writeString("AT+CIPRECVDATA=1,1" + cw01_vars.NEWLINE)
-                    basic.pause(100)
                     
                     ctrl_pkt = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
                     basic.showNumber(ctrl_pkt)
