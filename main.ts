@@ -548,10 +548,10 @@ namespace cw01 {
                     while(byte != 58)
                     {
                         byte = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
-                        basic.showString("Byte")
-                        basic.showNumber(byte)
-                        if((count++) >= 100)break
+                        if((count++) >= 10)break
                     }
+
+                    basic.showString("Out!")
 
                     
                     ctrl_pkt = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
