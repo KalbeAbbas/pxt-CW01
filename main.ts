@@ -542,9 +542,12 @@ namespace cw01 {
                     serial.writeString("AT+CIPRECVDATA=1,1" + cw01_vars.NEWLINE)
                     basic.pause(100)
 
+                    let count = 0
+
                     while(byte != 58)
                     {
                         byte = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
+                        if((count++) >= 100)break
                     }
 
                     
