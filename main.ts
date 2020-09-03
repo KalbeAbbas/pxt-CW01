@@ -557,7 +557,7 @@ namespace cw01 {
                         }else{
                             break
                         }
-                        if((count++) >= 30)break
+                        if((count++) >= 15)break
                     }
                     
                     basic.showString("Out!")
