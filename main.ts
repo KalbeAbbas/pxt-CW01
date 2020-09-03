@@ -553,7 +553,7 @@ namespace cw01 {
                         buf.setNumber(NumberFormat.UInt8LE, 0, serial.readBuffer(1)[0])
                         if(buf)
                         {
-                            byte = (pins.unpackBuffer("!B", buf))[0]
+                            byte = buf.getNumber(NumberFormat.Int8LE, 0)
                         }else{
                             break
                         }
