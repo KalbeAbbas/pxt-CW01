@@ -537,6 +537,15 @@ namespace cw01 {
                 if (serial_res.includes("IPD")) {
                     serial.readString()
 
+                    let byte: number = 0
+
+                    basic.showString("pinged")
+
+                    while(byte != 58)
+                    {
+                        byte = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
+                    }
+
                     serial.writeString("AT+CIPRECVDATA=1,1" + cw01_vars.NEWLINE)
                     basic.pause(100)
                     
