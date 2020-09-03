@@ -553,12 +553,10 @@ namespace cw01 {
                         buf.setNumber(NumberFormat.UInt8LE, 0, serial.readBuffer(1)[0])
                         if(buf)
                         {
-                            basic.showNumber(buf.getNumber(NumberFormat.Int8LE, 0))
+                            byte = (pins.unpackBuffer("!B", buf))[0]
                         }else{
                             break
                         }
-                        //buf[0] = serial.readBuffer(1)
-                        //byte = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
                         if((count++) >= 30)break
                     }
                     
