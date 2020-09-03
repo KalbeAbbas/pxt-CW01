@@ -544,13 +544,12 @@ namespace cw01 {
 
                     let count = 0
 
-                    basic.showString("Byte")
-
-                    basic.showNumber(byte)
 
                     while(byte != 58)
                     {
                         byte = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
+                        basic.showString("Byte")
+                        basic.showNumber(byte)
                         if((count++) >= 100)break
                     }
 
