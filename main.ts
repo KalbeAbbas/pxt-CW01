@@ -518,6 +518,8 @@ namespace cw01 {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
+            basic.pause(20000)
+
             basic.showString("#")
 
             serial.onDataReceived("\n", function () {
@@ -543,14 +545,25 @@ namespace cw01 {
                     basic.pause(100)
 
                     let count = 0
+                    let buf = pins.createBuffer(1)
 
 
                     while(byte != 58)
                     {
-                        byte = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
-                        if((count++) >= 20)break
+                        buf.setNumber(NumberFormat.UInt8LE, 0, serial.readBuffer(1)[0])
+                        if(buf)
+                        {
+                            basic.showNumber(buf.getNumber(NumberFormat.Int8LE, 0))
+                        }else{
+                            break
+                        }
+                        //buf[0] = serial.readBuffer(1)
+                        //byte = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
+                        if((count++) >= 30)break
                     }
                     
+                    basic.showString("Out!")
+
                     ctrl_pkt = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
                     basic.showNumber(ctrl_pkt)
 
