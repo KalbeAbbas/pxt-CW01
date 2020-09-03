@@ -550,6 +550,8 @@ namespace cw01 {
                         byte = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
                         if((count++) >= 100)break
                     }
+
+                    basic.showString("Out!")
                     
                     ctrl_pkt = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
                     basic.showNumber(ctrl_pkt)
