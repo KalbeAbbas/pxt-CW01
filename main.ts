@@ -519,7 +519,7 @@ namespace cw01 {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
-            basic.pause(20000)
+            //basic.pause(20000)
 
             basic.showString("#")
 
@@ -546,15 +546,16 @@ namespace cw01 {
                     basic.pause(100)
 
                     let count = 0
-                    let buf = pins.createBuffer(1)
-
+                    let buf : Buffer
 
                     while(byte != 58)
                     {
-                        buf.setNumber(NumberFormat.UInt8LE, 0, serial.readBuffer(1)[0])
+                        buf = serial.readBuffer(1)
+                        //buf.setNumber(NumberFormat.UInt8LE, 0, serial.readBuffer(1)[0])
                         if(buf)
                         {
-                            byte = buf.getNumber(NumberFormat.Int8LE, 0)
+                            basic.showString("1")
+                            //byte = buf.getNumber(NumberFormat.Int8LE, 0)
                         }else{
                             break
                         }
@@ -1373,8 +1374,6 @@ namespace cw01 {
         basic.pause(500)
 
         cw01_vars.mqtt_message = serial.readString()
-
-        basic.showString(cw01_vars.mqtt_message)
 
         cw01_mqtt_vars.new_topic = cw01_vars.mqtt_message.substr(cw01_vars.mqtt_message.indexOf(":") + 1, topic_len)
         cw01_mqtt_vars.new_payload = cw01_vars.mqtt_message.substr(cw01_vars.mqtt_message.indexOf(":") + 1 + cw01_mqtt_vars.new_topic.length, cw01_vars.mqtt_message.length - (cw01_vars.mqtt_message.indexOf(":") + cw01_mqtt_vars.new_topic.length + 6))
