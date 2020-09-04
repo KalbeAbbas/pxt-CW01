@@ -514,11 +514,11 @@ namespace cw01 {
     //% weight=91
     //% group="ATT"
     //% block="CW01 on ATT asset command received"
-    export function onCommandReceived(handler: () => void) {
+    export function onCommandReceived(handler: (value: string, asset_name: string) => void) {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
-            //basic.pause(20000)
+            basic.pause(20000)
 
             basic.showString("#")
 
@@ -566,7 +566,7 @@ namespace cw01 {
 
                     if (ctrl_pkt == 48) {
                         IoTMQTTGetData()
-                        handler()
+                        handler(IoTATTGetValue(), IoTATTGetAssetName())
                     } else if (ctrl_pkt == 208) {
                         ctrl_pkt = 0
                         serial.writeString("AT+CIPRECVDATA=1,200" + cw01_vars.NEWLINE)
