@@ -588,8 +588,10 @@ namespace cw01 {
     //% blockId="IoTATTGetLatestData" block="payload"
     export function IoTATTGetLatestData(): string {
 
-        return cw01_mqtt_vars.new_payload
-
+        let index1 = cw01_mqtt_vars.new_payload.indexOf("\"value\": ") + "\"value\": ".length
+        let index2 = cw01_mqtt_vars.new_payload.indexOf(",", index1)
+        let value = cw01_mqtt_vars.new_payload.substr(index1, index2 - index1 - 1)
+        return value
     }
 
     /**
