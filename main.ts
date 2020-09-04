@@ -514,6 +514,7 @@ namespace cw01 {
     //% group="ATT"
     //% block="CW01 on command received"
     //% blockId =onCommandReceived
+    //% draggableParameters=reporter
     export function onCommandReceived(handler: (value: string, asset_name: string) => void) {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
