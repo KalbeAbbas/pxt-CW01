@@ -590,7 +590,7 @@ namespace cw01 {
 
         let index1 = cw01_mqtt_vars.new_payload.indexOf("\"value\":") + "\"value\":".length
         let index2 = cw01_mqtt_vars.new_payload.indexOf(",", index1)
-        let value = cw01_mqtt_vars.new_payload.substr(index1, index2 - index1 - 1)
+        let value = cw01_mqtt_vars.new_payload.substr(index1, index2 - index1)
         return value
     }
 
@@ -604,7 +604,7 @@ namespace cw01 {
 
         let index1 = cw01_mqtt_vars.new_topic.indexOf("/asset/") + "/asset/".length
         let index2 = cw01_mqtt_vars.new_topic.indexOf("/", index1)
-        let asset = cw01_mqtt_vars.new_topic.substr(index1, index2 - index1 - 1)
+        let asset = cw01_mqtt_vars.new_topic.substr(index1, index2 - index1)
 
         return asset
 
