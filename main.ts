@@ -118,6 +118,7 @@ namespace cw01 {
     let en_Feedback: boolean = false
     let en_doubleLink: boolean = false
     let mqtt_buf: number[]
+    let cmd_rcvd_count: number = 0
 
     cw01_vars.start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -519,9 +520,19 @@ namespace cw01 {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
-            //basic.pause(20000)
+            basic.pause(20000)
 
             basic.showString("#")
+
+            if(cmd_rcvd_count == 0)
+            {
+                cmd_rcvd_count = 1
+
+                serial.writeString("AT+CIPRECVDATA=1,2000" + cw01_vars.NEWLINE)
+                basic.pause(100)
+                serial.readString()
+
+            }
 
             serial.onDataReceived("\n", function () {
 
@@ -546,16 +557,14 @@ namespace cw01 {
                     basic.pause(100)
 
                     let count = 0
-                    let buf : Buffer
+                    let buf = pins.createBuffer(1)
 
                     while(byte != 58)
                     {
-                        buf = serial.readBuffer(1)
-                        //buf.setNumber(NumberFormat.UInt8LE, 0, serial.readBuffer(1)[0])
+                        buf.setNumber(NumberFormat.UInt8LE, 0, serial.readBuffer(1)[0])
                         if(buf)
                         {
-                            basic.showString("1")
-                            //byte = buf.getNumber(NumberFormat.Int8LE, 0)
+                            byte = buf.getNumber(NumberFormat.Int8LE, 0)
                         }else{
                             break
                         }
@@ -1371,7 +1380,7 @@ namespace cw01 {
         topic_len = (topic_len_MSB[0] << 8) + topic_len_LSB[0]
 
         serial.writeString("AT+CIPRECVDATA=1,200" + cw01_vars.NEWLINE)
-        basic.pause(500)
+        basic.pause(200)
 
         cw01_vars.mqtt_message = serial.readString()
 
@@ -1379,9 +1388,6 @@ namespace cw01 {
         cw01_mqtt_vars.new_payload = cw01_vars.mqtt_message.substr(cw01_vars.mqtt_message.indexOf(":") + 1 + cw01_mqtt_vars.new_topic.length, cw01_vars.mqtt_message.length - (cw01_vars.mqtt_message.indexOf(":") + cw01_mqtt_vars.new_topic.length + 6))
 
         cw01_mqtt_vars.receiving_msg = false
-
-        serial.writeString("AT+CIPRECVDATA=1,1000" + cw01_vars.NEWLINE)
-        basic.pause(200)
     }
 
 
