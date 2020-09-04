@@ -534,7 +534,7 @@ namespace cw01 {
                 let ctrl_pkt: number
                 ctrl_pkt = 0
 
-                if ((serial_res.includes("IPD") || serial_res.includes("IPD,1,50") || serial_res.includes("IPD,1,500")) && !(serial_res.includes("IPD,1,5"))) {
+                if (serial_res.includes("IPD") && !serial_res.includes("5")) {
                     serial.readString()
 
                     let byte: number = 0
