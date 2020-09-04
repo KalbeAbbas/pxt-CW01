@@ -1370,7 +1370,7 @@ namespace cw01 {
         topic_len = (topic_len_MSB[0] << 8) + topic_len_LSB[0]
 
         serial.writeString("AT+CIPRECVDATA=1,200" + cw01_vars.NEWLINE)
-        basic.pause(200)
+        basic.pause(500)
 
         cw01_vars.mqtt_message = serial.readString()
 
