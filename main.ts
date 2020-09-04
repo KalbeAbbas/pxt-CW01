@@ -1377,6 +1377,9 @@ namespace cw01 {
         cw01_mqtt_vars.new_payload = cw01_vars.mqtt_message.substr(cw01_vars.mqtt_message.indexOf(":") + 1 + cw01_mqtt_vars.new_topic.length, cw01_vars.mqtt_message.length - (cw01_vars.mqtt_message.indexOf(":") + cw01_mqtt_vars.new_topic.length + 6))
 
         cw01_mqtt_vars.receiving_msg = false
+
+        serial.writeString("AT+CIPRECVDATA=1,1000" + cw01_vars.NEWLINE)
+        basic.pause(200)
     }
 
 
