@@ -554,11 +554,9 @@ namespace cw01 {
                         if(buf)
                         {
                             byte = buf.getNumber(NumberFormat.Int8LE, 0)
-                            basic.showNumber(byte)
                         }else{
                             break
                         }
-                        if((count++) >= 15)break
                     }
                     
                     basic.showString("Out!")
