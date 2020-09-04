@@ -567,6 +567,7 @@ namespace cw01 {
 
                     if (ctrl_pkt == 48) {
                         IoTMQTTGetData()
+                        basic.showString(cw01_mqtt_vars.new_payload)
                         handler(IoTATTGetValue(), IoTATTGetAssetName())
                     } else if (ctrl_pkt == 208) {
                         ctrl_pkt = 0
