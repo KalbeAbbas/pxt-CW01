@@ -1,4 +1,3 @@
-
 enum USER {
     //% block="INDUSTRIAL"
     INDUSTRIAL = 1,
@@ -514,6 +513,7 @@ namespace cw01 {
     //% weight=91
     //% group="ATT"
     //% block= "CW01 on command received"
+    //% blockId = "onCommandReceived"
     export function onCommandReceived(handler: (value: string, asset_name: string) => void) {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
