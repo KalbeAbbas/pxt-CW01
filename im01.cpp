@@ -22,7 +22,7 @@ String _read(String s)
 	char* cant_read_file = "ERROR! CANT READ FILE";
     int ch;
 	//char* path = "/sd/im01/";
-	long lSize = 0;
+	int lSize = 0;
 	size_t b_read;
 
     SDFileSystem sd(P0_21, P0_22, P0_23, P0_16, "sd");
@@ -40,7 +40,7 @@ String _read(String s)
         lSize++;
     }
 
-    uBit.display.print(lSize);
+    uBit.display.print(ManagedString(lSize));
 
     rewind(fp);
 
