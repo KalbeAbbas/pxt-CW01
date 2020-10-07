@@ -20,8 +20,9 @@ String _read(String s)
 	char * _word;
 	char* error_no_file = "ERROR! NO FILE";
 	char* cant_read_file = "ERROR! CANT READ FILE";
+    int ch;
 	//char* path = "/sd/im01/";
-	long lSize;
+	long lSize = 0;
 	size_t b_read;
 
     SDFileSystem sd(P0_21, P0_22, P0_23, P0_16, "sd");
@@ -33,9 +34,13 @@ String _read(String s)
 	}else{
 
 	// obtain file size:
-	fseek (fp , 0 , SEEK_END);
-	lSize = ftell(fp);
-	rewind (fp);
+
+    while((ch=fgetc(fp)) != '.')
+    {
+        lSize++;
+    }
+
+    rewind(fp);
 
 	_word = (char*) malloc (sizeof(char)*(lSize));
 	b_read = fread(_word, sizeof(char), lSize, fp);
