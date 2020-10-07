@@ -120,27 +120,35 @@ namespace cw01 {
     let mqtt_buf: number[]
     let cmd_rcvd_count: number = 0
 
-    /*cw01_vars.start = true
-    serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
-    serial.setRxBufferSize(200)
+    //% blockId=begin_cw01
+    //% block="CW00 begin"
+    export function begin()
+    {
 
-    basic.showIcon(IconNames.Chessboard)
-    basic.pause(2000)
-    serial.writeString("ATE0" + cw01_vars.NEWLINE)
-    basic.pause(300)
-    serial.readString()
-    cw01_mqtt_vars.mac_addr = extract_mac()
-    serial.writeString("AT+CWMODE_DEF=3" + cw01_vars.NEWLINE)
-    basic.pause(300)
-    serial.writeString("AT+CIPRECVMODE=1" + cw01_vars.NEWLINE)
-    basic.pause(300)
-    serial.writeString("AT+TEST" + cw01_vars.NEWLINE)
-    basic.pause(300)
-    serial.readString();
-    serial.writeString("AT+CWHOSTNAME?" + cw01_vars.NEWLINE);
-    basic.pause(1000)
+        cw01_vars.start = true
+        serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
+        serial.setRxBufferSize(200)
 
-    read_and_set_name();*/
+        basic.showIcon(IconNames.Chessboard)
+        basic.pause(2000)
+        serial.writeString("ATE0" + cw01_vars.NEWLINE)
+        basic.pause(300)
+        serial.readString()
+        cw01_mqtt_vars.mac_addr = extract_mac()
+        serial.writeString("AT+CWMODE_DEF=3" + cw01_vars.NEWLINE)
+        basic.pause(300)
+        serial.writeString("AT+CIPRECVMODE=1" + cw01_vars.NEWLINE)
+        basic.pause(300)
+        serial.writeString("AT+TEST" + cw01_vars.NEWLINE)
+        basic.pause(300)
+        serial.readString();
+        serial.writeString("AT+CWHOSTNAME?" + cw01_vars.NEWLINE);
+        basic.pause(1000)
+
+        read_and_set_name();
+
+    }
+
 
     function read_and_set_name(): void {
         let name: string = "";
