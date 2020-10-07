@@ -22,7 +22,7 @@ String _read(String s)
 	char* cant_read_file = "ERROR! CANT READ FILE";
     int ch;
 	//char* path = "/sd/im01/";
-	long lSize = 0;
+	long lSize = 10;
 	size_t b_read;
 
     SDFileSystem sd(P0_21, P0_22, P0_23, P0_16, "sd");
@@ -35,12 +35,12 @@ String _read(String s)
 
 	// obtain file size:
 
-    while((ch=fgetc(fp)) != '.')
+    /*while((ch=fgetc(fp)) != '.')
     {
         lSize++;
-    }
+    }*/
 
-    rewind(fp);
+    //rewind(fp);
 
 	_word = (char*) malloc (sizeof(char)*(lSize));
 	b_read = fread(_word, sizeof(char), lSize, fp);
