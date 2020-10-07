@@ -1498,16 +1498,6 @@ namespace cw01 {
         cw01_vars.longitude = parseFloat(lng)
     }
 	
-	//%block="IM01 read file %u"
-    //%u.defl="log.txt"
-    //%group="IM01"
-    export function readFile(u: string): string {
-        if(sdFlag==false) {
-            createFolder("im01")
-            sdFlag=true
-        }
-        return file_read("/sd/im01/" + u)
-    }
 
     //%block="IM01 create folder %u"
     function createFolder(u: string): void {
@@ -1562,9 +1552,5 @@ namespace cw01 {
         }
     }
 	
-	//%shim=im01::_read
-    function file_read(u: string): string {
-        return ""
-    }
 
 } 
