@@ -40,9 +40,10 @@ String _read(String s)
         lSize++;
     }
 
-    uBit.display.print(ManagedString(lSize));
 
     rewind(fp);
+
+    uBit.display.print(ManagedString(lSize));
 
 	_word = (char*) malloc (sizeof(char)*(lSize));
 	b_read = fread(_word, sizeof(char), lSize, fp);
@@ -50,12 +51,12 @@ String _read(String s)
 	fclose(fp);
 	}
 
-	if(b_read != (lSize))
+	/*if(b_read != (lSize))
 	{
         return mkString(cant_read_file, strlen(cant_read_file));
-	}
+	}*/
 
-	String str = mkString(_word, strlen(_word));
+	String str = mkString(_word, 16);
 
 	free(_word);
 	return str;
