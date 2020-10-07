@@ -1557,24 +1557,12 @@ namespace cw01 {
     //%group="IM01"
     export function readFile(u: string): string {
 
-        let str: string = ""
-        let temp_str: string = ""
-        let str_length: number = 0
-
         if(sdFlag==false) {
             createFolder("im01")
             sdFlag=true
         }
 
-        temp_str = file_read("/sd/im01/" + u)
-        str_length = str.length
-
-        if(temp_str.includes("?"))
-        {
-            str = temp_str.substr(0, str_length - 1)
-        }
-
-        return str
+        return file_read("/sd/im01/" + u)
     }
 
     //%shim=im01::_read
