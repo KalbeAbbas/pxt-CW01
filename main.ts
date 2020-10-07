@@ -120,10 +120,6 @@ namespace cw01 {
     let mqtt_buf: number[]
     let cmd_rcvd_count: number = 0
 
-    //% blockId=begin_cw01
-    //% block="CW00 begin"
-    export function begin()
-    {
 
         cw01_vars.start = true
         serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
@@ -145,9 +141,8 @@ namespace cw01 {
         serial.writeString("AT+CWHOSTNAME?" + cw01_vars.NEWLINE);
         basic.pause(1000)
 
-        read_and_set_name();
+         read_and_set_name();
 
-    }
 
 
     function read_and_set_name(): void {
