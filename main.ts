@@ -1556,11 +1556,24 @@ namespace cw01 {
     //%u.defl="log.txt"
     //%group="IM01"
     export function readFile(u: string): string {
+
+        let str: string = ""
+        let str_length: number = 0
+
         if(sdFlag==false) {
             createFolder("im01")
             sdFlag=true
         }
-        return file_read("/sd/im01/" + u)
+
+        str = file_read("/sd/im01/" + u)
+        str_length = str.length
+
+        if(str.includes("?"))
+        {
+            str = str.substr(0, str_length - 1)
+        }
+
+        return str
     }
 
     //%shim=im01::_read
