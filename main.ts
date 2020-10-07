@@ -1571,7 +1571,6 @@ namespace cw01 {
 
         if(temp_str.includes("?"))
         {
-            basic.showString("Hello!")
             str = temp_str.substr(0, str_length - 1)
         }
 
