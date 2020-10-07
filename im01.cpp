@@ -35,7 +35,7 @@ String _read(String s)
 
 	// obtain file size:
 
-    while((ch=fgetc(fp)) != '.')
+    while((ch=fgetc(fp)) != EOF)
     {
         lSize++;
     }
