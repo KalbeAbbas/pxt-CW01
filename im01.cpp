@@ -53,7 +53,7 @@ String _read(String s)
         return mkString(cant_read_file, strlen(cant_read_file));
 	}
 
-	String str = mkString(_word, strlen(_word));
+	String str = mkString(_word, strlen(_word) - 1);
 
 	free(_word);
 	return str;
