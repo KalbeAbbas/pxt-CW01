@@ -40,6 +40,8 @@ String _read(String s)
         lSize++;
     }
 
+    uBit.display.print(lSize);
+
     rewind(fp);
 
 	_word = (char*) malloc (sizeof(char)*(lSize));
