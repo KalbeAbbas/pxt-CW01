@@ -120,7 +120,7 @@ namespace cw01 {
     let mqtt_buf: number[]
     let cmd_rcvd_count: number = 0
 
-    cw01_vars.start = true
+    /*cw01_vars.start = true
     serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
     serial.setRxBufferSize(200)
 
@@ -140,7 +140,7 @@ namespace cw01 {
     serial.writeString("AT+CWHOSTNAME?" + cw01_vars.NEWLINE);
     basic.pause(1000)
 
-    read_and_set_name();
+    read_and_set_name();*/
 
     function read_and_set_name(): void {
         let name: string = "";
