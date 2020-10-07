@@ -35,7 +35,7 @@ String _read(String s)
 
 	// obtain file size:
 
-    while((ch=fgetc(fp)) != '.')
+    while((ch=fgetc(fp)) != EOF)
     {
         lSize++;
     }
@@ -53,7 +53,7 @@ String _read(String s)
         return mkString(cant_read_file, strlen(cant_read_file));
 	}
 
-	String str = mkString(_word, strlen(_word) - 2);
+	String str = mkString(_word, strlen(_word));
 
 	free(_word);
 	return str;
