@@ -1,3 +1,4 @@
+
 enum USER {
     //% block="INDUSTRIAL"
     INDUSTRIAL = 1,
@@ -6,7 +7,7 @@ enum USER {
 }
 
 
-//% groups='["Common",ATT", "Ubidots", "Azure", "MQTT", "IM01", "others"]'
+//% groups='["Common",ATT", "Ubidots", "Azure", "MQTT", "SD Card", "others"]'
 //% weight=6 color=#2699BF icon="\uf110" block="CW01"
 namespace cw01 {
     class cw01_int_var123 {
@@ -109,41 +110,35 @@ namespace cw01 {
             this.sending_data = false
         }
     }
-
-    let sdFlag=false
+	
+	let sdFlag=false
 
     let cw01_vars = new cw01_int_var123()
     let cw01_mqtt_vars = new cw01_mqtt()
     let cw01_button_object = new button_class()
-    let en_Feedback: boolean = false
-    let en_doubleLink: boolean = false
-    let mqtt_buf: number[]
-    let cmd_rcvd_count: number = 0
+    let en_Feedback: boolean = true
 
+    cw01_vars.start = true
+    serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
+    serial.setRxBufferSize(200)
 
-        cw01_vars.start = true
-        serial.redirect(SerialPin.P1, SerialPin.P0, 115200)
-        serial.setRxBufferSize(200)
+    basic.showIcon(IconNames.Chessboard)
+    basic.pause(2000)
+    serial.writeString("ATE0" + cw01_vars.NEWLINE)
+    basic.pause(300)
+    serial.readString()
+    cw01_mqtt_vars.mac_addr = extract_mac()
+    serial.writeString("AT+CWMODE_DEF=3" + cw01_vars.NEWLINE)
+    basic.pause(300)
+    serial.writeString("AT+CIPRECVMODE=1" + cw01_vars.NEWLINE)
+    basic.pause(300)
+    serial.writeString("AT+TEST" + cw01_vars.NEWLINE)
+    basic.pause(300)
+    serial.readString();
+    serial.writeString("AT+CWHOSTNAME?" + cw01_vars.NEWLINE);
+    basic.pause(1000)
 
-        basic.showIcon(IconNames.Chessboard)
-        basic.pause(2000)
-        /*serial.writeString("ATE0" + cw01_vars.NEWLINE)
-        basic.pause(300)*/
-        serial.readString()
-        cw01_mqtt_vars.mac_addr = extract_mac()
-        serial.writeString("AT+CWMODE_DEF=3" + cw01_vars.NEWLINE)
-        basic.pause(300)
-        serial.writeString("AT+CIPRECVMODE=1" + cw01_vars.NEWLINE)
-        basic.pause(300)
-        serial.writeString("AT+TEST" + cw01_vars.NEWLINE)
-        basic.pause(300)
-        serial.readString();
-        serial.writeString("AT+CWHOSTNAME?" + cw01_vars.NEWLINE);
-        basic.pause(1000)
-
-         read_and_set_name();
-
-
+    read_and_set_name();
 
     function read_and_set_name(): void {
         let name: string = "";
@@ -170,7 +165,6 @@ namespace cw01 {
         return mac_addr
     }
 
-
     /**
     * Connect to W-Fi 
     */
@@ -185,17 +179,29 @@ namespace cw01 {
         basic.pause(200)
         serial.readString()
 
+        let loop_count = 0
+
         do {
             cw01_vars.res = serial.readString()
             basic.pause(1000)
+            loop_count++
+
+            if(loop_count == 20)
+                break
         } while (!cw01_vars.res.includes("WIFI CONNECTED"));
 
         if (cw01_vars.res.includes("WIFI CONNECTED")) {
-            basic.pause(2000)
             basic.showString("C")
+            basic.pause(2000)
+            basic.showString("")
             cw01_vars.res = ""
-        } else {
+        }
+
+        if(loop_count == 20)
+        {
             basic.showString("D")
+            basic.pause(2000)
+            basic.showString("")
         }
     }
 
@@ -210,7 +216,6 @@ namespace cw01 {
         en_Feedback = u
     }
 
-
     /**
     * Connect to AllThingsTalk IoT platform
     */
@@ -220,12 +225,7 @@ namespace cw01 {
     export function connectToATT(TKN: string, ID: string): void {
         cw01_vars.DEVICE_ID = ID
         cw01_vars.TOKEN = TKN
-        en_doubleLink =  true
-        serial.writeString("AT+CIPMUX=1" + cw01_vars.NEWLINE)
-        basic.pause(100)
-        serial.writeString("AT+CIPSTART=0,\"TCP\",\"api.allthingstalk.io\",80" + cw01_vars.NEWLINE)
-        basic.pause(500)
-        IoTMQTTConnect("api.allthingstalk.io", cw01_vars.TOKEN, "xinabox")
+        serial.writeString("AT+CIPSTART=\"TCP\",\"api.allthingstalk.io\",80" + cw01_vars.NEWLINE)
         basic.pause(500)
     }
 
@@ -460,172 +460,6 @@ namespace cw01 {
         return value
 
     }
-
-    /**
-    * Subscribe to ATT asset
-    */
-    //% weight=91
-    //% group="ATT"
-    //% blockId="IoTATTSubscribe" block="CW01 subscribe to ATT asset command %asset"
-    export function IoTATTSubscribe(asset: string): void {
-
-        while (cw01_mqtt_vars.sending_pingreq || cw01_mqtt_vars.receiving_msg || cw01_mqtt_vars.mqtt_busy) {
-            basic.pause(100)
-        }
-
-        //Msg part two
-        let pid: Buffer = pins.packBuffer("!H", [0xDEAD])
-        let qos: Buffer = pins.packBuffer("!B", [0x00])
-        let topic: string = "device/" + cw01_vars.DEVICE_ID + "/asset/" + asset + "/command"
-        let topic_len: Buffer = pins.packBuffer("!H", [topic.length])
-
-        //Msg part one
-        let ctrl_pkt: Buffer = pins.packBuffer("!B", [0x82])
-        let remain_len: Buffer = pins.packBuffer("!B", [pid.length + topic_len.length + topic.length + qos.length])
-
-        serial.writeString("AT+CIPSEND=1," + (ctrl_pkt.length + remain_len.length + pid.length + topic_len.length + topic.length + qos.length) + cw01_vars.NEWLINE)
-
-        basic.pause(1000)
-
-        serial.writeBuffer(ctrl_pkt)
-        serial.writeBuffer(remain_len)
-        serial.writeBuffer(pid)
-        serial.writeBuffer(topic_len)
-        serial.writeString(topic)
-        serial.writeBuffer(qos)
-
-        basic.pause(2000)
-
-        serial.readString()
-
-        /*serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
-        basic.pause(100)
-        serial.readBuffer(17)
-        basic.showNumber((pins.unpackBuffer("!B", serial.readBuffer(1)))[0])*/
-
-        serial.writeString("AT+CIPRECVDATA=1,200" + cw01_vars.NEWLINE)
-        basic.pause(100)
-        serial.readString()
-
-        basic.pause(100)
-
-    }
-
-    /**
-    * The function is a callback function. It executes block inside the function whenever commands from subscribed topic is received
-    */
-    //% weight=91
-    //% group="ATT"
-    //% block="CW01 on command received"
-    //% blockId =onCommandReceived
-    //% draggableParameters=reporter
-    export function onCommandReceived(handler: (value: string, asset_name: string) => void) {
-
-        control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
-
-            basic.pause(20000)
-
-            basic.showString("#")
-
-            if(cmd_rcvd_count == 0)
-            {
-                cmd_rcvd_count = 1
-
-                serial.writeString("AT+CIPRECVDATA=1,2000" + cw01_vars.NEWLINE)
-                basic.pause(100)
-                serial.readString()
-
-            }
-
-            serial.onDataReceived("\n", function () {
-
-                while (cw01_mqtt_vars.sending_payload || cw01_mqtt_vars.sending_pingreq) {
-                    basic.pause(100)
-                }
-
-                cw01_mqtt_vars.mqtt_busy = true
-
-                let serial_res: string = serial.readString()
-                let ctrl_pkt: number
-                ctrl_pkt = 0
-
-                if (serial_res.includes("IPD")) {
-                    serial.readString()
-
-                    let byte: number = 0
-
-                    basic.showString("pinged")
-
-                    serial.writeString("AT+CIPRECVDATA=1,1" + cw01_vars.NEWLINE)
-                    basic.pause(100)
-
-                    let count = 0
-                    let buf = pins.createBuffer(1)
-
-                    while(byte != 58)
-                    {
-                        buf.setNumber(NumberFormat.UInt8LE, 0, serial.readBuffer(1)[0])
-                        if(buf)
-                        {
-                            byte = buf.getNumber(NumberFormat.Int8LE, 0)
-                        }else{
-                            break
-                        }
-                    }
-                    
-                    basic.showString("Out!")
-
-                    ctrl_pkt = (pins.unpackBuffer("!B", serial.readBuffer(1)))[0]
-                    basic.showNumber(ctrl_pkt)
-
-                    if (ctrl_pkt == 48) {
-                        IoTMQTTGetData()
-                        basic.showString(cw01_mqtt_vars.new_payload)
-                        handler(IoTATTGetValue(), IoTATTGetAssetName())
-                    } else if (ctrl_pkt == 208) {
-                        ctrl_pkt = 0
-                        serial.writeString("AT+CIPRECVDATA=1,200" + cw01_vars.NEWLINE)
-                        basic.pause(100)
-                    }
-                }
-
-                cw01_mqtt_vars.mqtt_busy = false
-
-            })
-        })
-    }
-
-    /**
-    * ATT Payload received 
-    */
-    //% weight=91
-    //% group="ATT"
-    //% blockId="IoTATTGetValue" block="payload"
-    export function IoTATTGetValue(): string {
-
-        let index1 = cw01_mqtt_vars.new_payload.indexOf("\"value\":") + "\"value\":".length
-        let index2 = cw01_mqtt_vars.new_payload.indexOf(",", index1)
-        let value = cw01_mqtt_vars.new_payload.substr(index1, index2 - index1)
-        return value
-    }
-
-    /**
-    * ATT Topic received 
-    */
-    //% weight=91
-    //% group="ATT"
-    //% blockId="IoTATTGetAssetName" block="topic"
-    export function IoTATTGetAssetName(): string {
-
-        let index1 = cw01_mqtt_vars.new_topic.indexOf("/asset/") + "/asset/".length
-        let index2 = cw01_mqtt_vars.new_topic.indexOf("/", index1)
-        let asset = cw01_mqtt_vars.new_topic.substr(index1, index2 - index1)
-
-        return asset
-
-    }
-
-    
 
     /**
     * Connect to Ubidots IoT platform
@@ -1070,12 +904,7 @@ namespace cw01 {
     //% blockId="IoTMQTTConnect" block="CW01 connect to MQTT broker URL %broker with username %Username and password %Password"
     export function IoTMQTTConnect(broker: string, Username: string, Password: string): void {
 
-        if(en_doubleLink)
-        {
-            serial.writeString("AT+CIPSTART=1,\"TCP\",\"" + broker + "\",1883" + cw01_vars.NEWLINE)
-        }else{
-            serial.writeString("AT+CIPSTART=\"TCP\",\"" + broker + "\",1883" + cw01_vars.NEWLINE)
-        }
+        serial.writeString("AT+CIPSTART=\"TCP\",\"" + broker + "\",1883" + cw01_vars.NEWLINE)
         basic.pause(7000)
 
         let protocol_name_prior: Buffer = pins.packBuffer("!H", [4])
@@ -1099,12 +928,7 @@ namespace cw01 {
         let password_len: Buffer = pins.packBuffer("!H", [password.length])
         //let msg_part_two = client_id_len + client_id + username_len + username + password_len + password
 
-        if(en_doubleLink)
-        {
-            serial.writeString("AT+CIPSEND=1," + (1 + 1 + protocol_name_prior.length + protocol_name.length + protocol_lvl.length + connect_flags.length + keep_alive.length + client_id_len.length + client_id.length + username_len.length + username.length + password_len.length + password.length) + cw01_vars.NEWLINE)
-        }else{
-            serial.writeString("AT+CIPSEND=" + (1 + 1 + protocol_name_prior.length + protocol_name.length + protocol_lvl.length + connect_flags.length + keep_alive.length + client_id_len.length + client_id.length + username_len.length + username.length + password_len.length + password.length) + cw01_vars.NEWLINE)
-        }
+        serial.writeString("AT+CIPSEND=" + (1 + 1 + protocol_name_prior.length + protocol_name.length + protocol_lvl.length + connect_flags.length + keep_alive.length + client_id_len.length + client_id.length + username_len.length + username.length + password_len.length + password.length) + cw01_vars.NEWLINE)
         basic.pause(1000)
 
         //Msg part one
@@ -1128,12 +952,7 @@ namespace cw01 {
 
         cw01_vars.timer = input.runningTime()
 
-        if(en_doubleLink)
-        {
-            serial.writeString("AT+CIPRECVDATA=1,200" + cw01_vars.NEWLINE)
-        }else{
-            serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
-        }
+        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
         basic.pause(100)
         serial.readString()
 
@@ -1146,12 +965,7 @@ namespace cw01 {
                     let header_one: Buffer = pins.packBuffer("!B", [0xC0])
                     let header_two: Buffer = pins.packBuffer("!B", [0x00])
 
-                    if(en_doubleLink)
-                    {
-                        serial.writeString("AT+CIPSEND=1," + (header_one.length + header_two.length) + cw01_vars.NEWLINE)
-                    }else{
-                        serial.writeString("AT+CIPSEND=" + (header_one.length + header_two.length) + cw01_vars.NEWLINE)
-                    }
+                    serial.writeString("AT+CIPSEND=" + (header_one.length + header_two.length) + cw01_vars.NEWLINE)
                     basic.pause(100)
 
                     serial.writeBuffer(header_one)
@@ -1213,6 +1027,7 @@ namespace cw01 {
 
         serial.readString()
 
+        if(en_Feedback)
         basic.showIcon(IconNames.Target)
 
         serial.writeBuffer(start_byte)
@@ -1366,15 +1181,15 @@ namespace cw01 {
 
         cw01_mqtt_vars.receiving_msg = true
 
-        serial.writeString("AT+CIPRECVDATA=1,1" + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
         basic.pause(200)
         serial.readString()
-        serial.writeString("AT+CIPRECVDATA=1,1" + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
         basic.pause(200)
         serial.readBuffer(17)
         topic_len_MSB = pins.unpackBuffer("!B", serial.readBuffer(1))
         serial.readString()
-        serial.writeString("AT+CIPRECVDATA=1,1" + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPRECVDATA=1" + cw01_vars.NEWLINE)
         basic.pause(200)
         serial.readBuffer(17)
         topic_len_LSB = pins.unpackBuffer("!B", serial.readBuffer(1))
@@ -1382,7 +1197,7 @@ namespace cw01 {
 
         topic_len = (topic_len_MSB[0] << 8) + topic_len_LSB[0]
 
-        serial.writeString("AT+CIPRECVDATA=1,200" + cw01_vars.NEWLINE)
+        serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
         basic.pause(200)
 
         cw01_vars.mqtt_message = serial.readString()
@@ -1500,18 +1315,6 @@ namespace cw01 {
         cw01_vars.latitude = parseFloat(lat)
         cw01_vars.longitude = parseFloat(lng)
     }
-	
-
-    //%block="IM01 create folder %u"
-    function createFolder(u: string): void {
-        mkdir("/sd/" + u)
-        return;
-    }
-
-    //%shim=im01::_mkdir
-    function mkdir(u: string): void {
-        return
-    }
 
     function getDataLen(): number {
 
@@ -1531,6 +1334,7 @@ namespace cw01 {
 
     }
 
+
     function get_status(): boolean {
 
         basic.pause(400)
@@ -1549,29 +1353,16 @@ namespace cw01 {
                 basic.showString("", 50)
                 return false
             }
-        }
-        else{
-            return true
+        }else {
+            if (cw01_vars.res.includes("HTTP/1.1 200") || cw01_vars.res.includes("HTTP/1.0 200") || cw01_vars.res.includes("HTTP/1.1 201") || cw01_vars.res.includes("HTTP/1.0 202"))
+            {
+                basic.pause(200)
+                return true
+            }else{
+                basic.pause(200)
+                return false
+            }
         }
     }
-
-    //%block="IM01 read file %u"
-    //%u.defl="log.txt"
-    //%group="IM01"
-    export function readFile(u: string): string {
-
-        if(sdFlag==false) {
-            createFolder("im01")
-            sdFlag=true
-        }
-
-        return file_read("/sd/im01/" + u)
-    }
-
-    //%shim=im01::_read
-    function file_read(u: string): string {
-        return ""
-    }
-	
 
 } 
