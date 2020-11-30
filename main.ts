@@ -766,7 +766,7 @@ namespace ITR
             basic.pause(500)
         }while(!rcv.includes("OK"))
 
-        basic.showNumber(2)
+        basic.showNumber(3)
     }
 
     /**
