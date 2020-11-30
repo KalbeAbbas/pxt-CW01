@@ -761,7 +761,7 @@ namespace ITR
 
         do
         {
-            serial.writeString("AT+SLEEP=0" + cw01_vars.NEWLINE)
+            serial.writeString("AT+SLEEP=2" + cw01_vars.NEWLINE)
             rcv = serial.readString()
             basic.pause(500)
         }while(!rcv.includes("OK"))
