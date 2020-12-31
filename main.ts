@@ -1099,6 +1099,7 @@ namespace cw01 {
     //% weight=91
     //% group="MQTT"
     //% block="CW01 on message received"
+    //% draggableParameters=reporter
     export function onMessageReceived(handler: (topic: string, payload: string) => void) {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
