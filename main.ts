@@ -1099,7 +1099,7 @@ namespace cw01 {
     //% weight=91
     //% group="MQTT"
     //% block="CW01 on message received"
-    export function onMessageReceived(handler: () => void) {
+    export function onMessageReceived(handler: (topic: string, payload: string) => void) {
 
         control.onEvent(EventBusSource.MICROBIT_ID_BUTTON_AB, EventBusValue.MICROBIT_BUTTON_EVT_CLICK, function () {
 
@@ -1129,7 +1129,8 @@ namespace cw01 {
 
                     if (ctrl_pkt == 48) {
                         IoTMQTTGetData()
-                        handler()
+                        handler(cw01.IoTMQTTGetLatestTopic(), cw01.IoTMQTTGetLatestData())
+                        
                     } else if (ctrl_pkt == 208) {
                         ctrl_pkt = 0
                         serial.writeString("AT+CIPRECVDATA=200" + cw01_vars.NEWLINE)
@@ -1149,7 +1150,7 @@ namespace cw01 {
     */
     //% weight=91
     //% group="MQTT"
-    //% blockId="IoTMQTTGetLatestData" block="payload"
+    //% blockId="IoTMQTTGetLatestData"
     export function IoTMQTTGetLatestData(): string {
 
         return cw01_mqtt_vars.new_payload
@@ -1161,7 +1162,7 @@ namespace cw01 {
     */
     //% weight=91
     //% group="MQTT"
-    //% blockId="IoTMQTTGetLatestTopic" block="topic"
+    //% blockId="IoTMQTTGetLatestTopic"
     export function IoTMQTTGetLatestTopic(): string {
 
         return cw01_mqtt_vars.new_topic
